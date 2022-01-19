@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "b31f7044",
+   "id": "a095f948",
    "metadata": {},
    "source": [
     "# Analysis of the Z prime boson, using a boosted decision tree with SKlearn library  "
@@ -10,7 +10,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "53628d37",
+   "id": "697feead",
    "metadata": {},
    "source": [
     "Installing requeried packages"
@@ -19,7 +19,7 @@
   {
    "cell_type": "code",
    "execution_count": 2,
-   "id": "9d8d4e95",
+   "id": "03c043be",
    "metadata": {},
    "outputs": [
     {
@@ -65,8 +65,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "ac019930",
+   "execution_count": 8,
+   "id": "4ce12009",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -84,7 +84,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "cf4267b3",
+   "id": "21993cb9",
    "metadata": {},
    "source": [
     "Samples"
@@ -92,10 +92,19 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "d4166d54",
+   "execution_count": 5,
+   "id": "c3495e1b",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "ename": "SyntaxError",
+     "evalue": "invalid syntax (3300807284.py, line 14)",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;36m  File \u001b[0;32m\"/tmp/ipykernel_1841/3300807284.py\"\u001b[0;36m, line \u001b[0;32m14\u001b[0m\n\u001b[0;31m    r'$t\\bar{t}$' : {\u001b[0m\n\u001b[0m    ^\u001b[0m\n\u001b[0;31mSyntaxError\u001b[0m\u001b[0;31m:\u001b[0m invalid syntax\n"
+     ]
+    }
+   ],
    "source": [
     "samples = {\n",
     "\n",
@@ -123,10 +132,112 @@
     "                 'llvv',\n",
     "                 'lvvv',\n",
     "                 ]\n",
-    "        \n",
+    "    },\n",
+    "    \n",
+    "    'singletop' : {\n",
+    "        'list' : ['single_top_tchan',\n",
+    "                 'single_antitop_tchan',\n",
+    "                 'single_top_schan',\n",
+    "                 'single_antitop_schan',\n",
+    "                 'single_top_wtchan',\n",
+    "                 'single_antitop_wtchan',\n",
+    "                 ]\n",
+    "    },\n",
+    "    \n",
+    "    'Z' : {\n",
+    "        'list' : ['Zee',\n",
+    "                 'Zmumu',\n",
+    "                 'Ztautau',\n",
+    "                 'Zmumu_PTV0_70_CVetoBVeto',\n",
+    "                 'Zmumu_PTV0_70_CFilterBVeto', \n",
+    "                 'Zmumu_PTV0_70_BFilter',\n",
+    "                 'Zmumu_PTV70_140_CVetoBVeto',\n",
+    "                 'Zmumu_PTV70_140_CFilterBVeto',\n",
+    "                 'Zmumu_PTV70_140_BFilter', \n",
+    "                 'Zmumu_PTV140_280_CVetoBVeto',\n",
+    "                 'Zmumu_PTV140_280_CFilterBVeto',\n",
+    "                 'Zmumu_PTV140_280_BFilter',\n",
+    "                 'Zmumu_PTV280_500_CVetoBVeto', \n",
+    "                 'Zmumu_PTV280_500_CFilterBVeto',\n",
+    "                 'Zmumu_PTV280_500_BFilter', \n",
+    "                 'Zmumu_PTV500_1000', \n",
+    "                 'Zmumu_PTV1000_E_CMS']\n",
     "    }\n",
     "}"
    ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "db5ed4ac",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "lumi = 10 # data_A+B+C+D\n",
+    "\n",
+    "fraction = 0.03 # reduce to run quicker\n",
+    "\n",
+    "tuple_path = \"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/1largeRjet1lep/\" "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "c5a28e0e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def get_data_from_files():\n",
+    "\n",
+    "    data = {} # empty dictionary\n",
+    "    for s in samples: \n",
+    "        print('Processing '+s+' samples') \n",
+    "        frames = [] \n",
+    "        for val in samples[s]['list']: \n",
+    "            if s == 'data': prefix = \"Data/\" # Data prefix\n",
+    "            else: # MC prefix\n",
+    "                prefix = \"MC/mc_\"+str(infofile.infos[val][\"DSID\"])+\".\"\n",
+    "            fileString = tuple_path+prefix+val+\".1largeRjet1lep.root\" \n",
+    "            temp = read_file(fileString,val) \n",
+    "            frames.append(temp) \n",
+    "        data[s] = pd.concat(frames) \n",
+    "    \n",
+    "    return data # return dictionary of dataframes"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "333f850d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def get_xsec_weight(sample):\n",
+    "    info = infofile.infos[sample] \n",
+    "    xsec_weight = (lumi*1000*info[\"xsec\"])/(info[\"sumw\"]*info[\"red_eff\"]) \n",
+    "    return xsec_weight "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "d7e1e0b5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def calc_weight(xsec_weight, mcWeight, scaleFactor_PILEUP,\n",
+    "                scaleFactor_ELE, scaleFactor_MUON, \n",
+    "                scaleFactor_LepTRIGGER ):\n",
+    "    return xsec_weight*mcWeight*scaleFactor_PILEUP*scaleFactor_ELE*scaleFactor_MUON*scaleFactor_LepTRIGGER"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "54b1e0ef",
+   "metadata": {},
+   "outputs": [],
+   "source": []
   }
  ],
  "metadata": {
