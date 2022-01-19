@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "16d39a24",
+   "id": "84b14f82",
    "metadata": {},
    "source": [
     "# Analysis of the Z prime boson, using a boosted decision tree with SKlearn library  "
@@ -10,7 +10,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "cf578754",
+   "id": "2c8ef890",
    "metadata": {},
    "source": [
     "Installing requeried packages"
@@ -19,7 +19,7 @@
   {
    "cell_type": "code",
    "execution_count": 2,
-   "id": "69e41b61",
+   "id": "3e6ef6e2",
    "metadata": {},
    "outputs": [
     {
@@ -65,12 +65,12 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "4afdf950",
+   "execution_count": 4,
+   "id": "b8ba4733",
    "metadata": {},
    "outputs": [],
    "source": [
-    "import uproot3 \n",
+    "import uproot3\n",
     "import pandas as pd \n",
     "import time \n",
     "import math \n",
@@ -84,18 +84,16 @@
   },
   {
    "cell_type": "markdown",
-   "id": "48b47cbd",
+   "id": "345cff99",
    "metadata": {},
    "source": [
     "Samples"
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "f7a00783",
+   "cell_type": "markdown",
+   "id": "a1f140d6",
    "metadata": {},
-   "outputs": [],
    "source": [
     "samples = {\n",
     "\n",
@@ -108,7 +106,7 @@
     "    \n",
     "    'Zprime1000' : {\n",
     "        'list' : ['ZPrime1000_tt']\n",
-    "    }\n",
+    "    },\n",
     "    \n",
     "    r'$t\\bar{t}$' : {\n",
     "        'list' : ['ttbar_lep']\n",
@@ -159,22 +157,38 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "a5f46b6f",
+   "execution_count": 5,
+   "id": "58e93886",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "samples = {\n",
+    "    \n",
+    "    'Zprime1000' : {\n",
+    "        'list' : ['ZPrime1000_tt']\n",
+    "    }\n",
+    "    \n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "90e43cd2",
    "metadata": {},
    "outputs": [],
    "source": [
     "lumi = 10 # data_A+B+C+D\n",
     "\n",
-    "fraction = 0.03 # reduce to run quicker\n",
+    "fraction = 1 # reduce to run quicker\n",
     "\n",
     "tuple_path = \"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/1largeRjet1lep/\" "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "9219f0bf",
+   "execution_count": 15,
+   "id": "039728e0",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -188,12 +202,173 @@
     "            if s == 'data': prefix = \"Data/\" # Data prefix\n",
     "            else: # MC prefix\n",
     "                prefix = \"MC/mc_\"+str(infofile.infos[val][\"DSID\"])+\".\"\n",
-    "            fileString = tuple_path+prefix+val+\".4lep.root\" # file name to open\n",
-    "            temp = read_file(fileString,val) # call the function read_file defined below\n",
-    "            frames.append(temp) # append dataframe returned from read_file to list of dataframes\n",
-    "        data[s] = pd.concat(frames) # dictionary entry is concatenated dataframes\n",
+    "            fileString = tuple_path+prefix+val+\".1largeRjet1lep.root\" \n",
+    "            print(fileString)\n",
+    "            temp = read_file(fileString,val) \n",
+    "            frames.append(temp) \n",
+    "        data[s] = pd.concat(frames) \n",
     "    \n",
     "    return data # return dictionary of dataframes"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "51f6a2c3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def get_xsec_weight(sample):\n",
+    "    info = infofile.infos[sample] \n",
+    "    xsec_weight = (lumi*1000*info[\"xsec\"])/(info[\"sumw\"]*info[\"red_eff\"]) \n",
+    "    return xsec_weight "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "f575ba86",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def calc_weight(xsec_weight, mcWeight, scaleFactor_PILEUP,\n",
+    "                scaleFactor_ELE, scaleFactor_MUON, \n",
+    "                scaleFactor_LepTRIGGER ):\n",
+    "    return xsec_weight*mcWeight*scaleFactor_PILEUP*scaleFactor_ELE*scaleFactor_MUON*scaleFactor_LepTRIGGER"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7a30112d",
+   "metadata": {},
+   "source": [
+    "Here, we define functions to apply the required cuts"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "0981f1ec",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def read_file(path,sample):\n",
+    "    start = time.time() # start the clock\n",
+    "    print(\"\\tProcessing: \"+sample) # print which sample is being processed\n",
+    "    data_all = pd.DataFrame() # define empty pandas DataFrame to hold all data for this sample\n",
+    "    tree = uproot3.open(path)[\"mini\"] # open the tree called mini\n",
+    "    numevents = uproot3.numentries(path, \"mini\") # number of events\n",
+    "    print(numevents)\n",
+    "    if 'data' not in sample: xsec_weight = get_xsec_weight(sample) # get cross-section weight\n",
+    "    for data in tree.iterate(['lep_charge','lep_type','lep_pt', 'jet_n',\n",
+    "                              # uncomment these variables if you want to calculate masses \n",
+    "                              #,'lep_eta','lep_phi','lep_E', \n",
+    "                              # add more variables here if you make cuts on them \n",
+    "                              'mcWeight','scaleFactor_PILEUP',\n",
+    "                              'scaleFactor_ELE','scaleFactor_MUON',\n",
+    "                              'scaleFactor_LepTRIGGER'\n",
+    "                             ], # variables to calculate Monte Carlo weight\n",
+    "                             outputtype=pd.DataFrame, # choose output type as pandas DataFrame\n",
+    "                             entrystop=numevents*fraction): # process up to numevents*fraction\n",
+    "\n",
+    "        nIn = len(data.index) # number of events in this batch\n",
+    "\n",
+    "        if 'data' not in sample: # only do this for Monte Carlo simulation files\n",
+    "            # multiply all Monte Carlo weights and scale factors together to give total weight\n",
+    "            data['totalWeight'] = np.vectorize(calc_weight)(xsec_weight,\n",
+    "                                                            data.mcWeight,\n",
+    "                                                            data.scaleFactor_PILEUP,\n",
+    "                                                            data.scaleFactor_ELE,\n",
+    "                                                            data.scaleFactor_MUON,\n",
+    "                                                            data.scaleFactor_LepTRIGGER)\n",
+    "\n",
+    "        roof[\"tree1\"].extend({\"branch1\": data.jet_n})\n",
+    "        # cut on lepton charge using the function cut_lep_charge defined above\n",
+    "       # fail = data[ np.vectorize(cut_lep_charge)(data.lep_charge) ].index\n",
+    "        #data.drop(fail, inplace=True)\n",
+    "\n",
+    "        # cut on lepton type using the function cut_lep_type defined above\n",
+    "        #fail = data[ np.vectorize(cut_lep_type)(data.lep_type) ].index\n",
+    "        #data.drop(fail, inplace=True)\n",
+    "\n",
+    "        # return the individual lepton transverse momenta in GeV\n",
+    "        #data['lep_pt_1'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,1)\n",
+    "        #data['lep_pt_2'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,2)\n",
+    "        \n",
+    "        # dataframe contents can be printed at any stage like this\n",
+    "        #print(data)\n",
+    "\n",
+    "        # dataframe column can be printed at any stage like this\n",
+    "        #print(data['lep_pt'])\n",
+    "\n",
+    "        # multiple dataframe columns can be printed at any stage like this\n",
+    "        #print(data[['lep_pt','lep_eta']])\n",
+    "\n",
+    "        nOut = len(data.index) # number of events passing cuts in this batch\n",
+    "        data_all = data_all.append(data) # append dataframe from this batch to the dataframe for the whole sample\n",
+    "        elapsed = time.time() - start # time taken to process\n",
+    "        print(\"\\t\\t nIn: \"+str(nIn)+\",\\t nOut: \\t\"+str(nOut)+\"\\t in \"+str(round(elapsed,1))+\"s\") # events before and after\n",
+    "    \n",
+    "    return data_all # return dataframe containing events passing all cuts"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "9c0e9d66",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<TFileRecreate b'example.root' at 0x7f0c52055e80>"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "roof = uproot3.recreate(\"example.root\")\n",
+    "roof"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "aba117d2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "roof[\"tree1\"] = uproot3.newtree({\"branch1\": int})"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "194b66b2",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Processing Zprime1000 samples\n",
+      "https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/1largeRjet1lep/MC/mc_301325.ZPrime1000_tt.1largeRjet1lep.root\n",
+      "\tProcessing: ZPrime1000_tt\n",
+      "29427\n",
+      "\t\t nIn: 29427,\t nOut: \t29427\t in 7.7s\n",
+      "Time taken: 7.7s\n"
+     ]
+    }
+   ],
+   "source": [
+    "start = time.time() # time at start of whole processing\n",
+    "data = get_data_from_files() # process all files\n",
+    "roof.close()\n",
+    "elapsed = time.time() - start # time after whole processing\n",
+    "print(\"Time taken: \"+str(round(elapsed,1))+\"s\") # print total time taken to process every file"
    ]
   }
  ],

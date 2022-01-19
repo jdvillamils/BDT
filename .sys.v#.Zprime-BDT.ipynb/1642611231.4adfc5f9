@@ -65,7 +65,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 16,
    "id": "b8ba4733",
    "metadata": {},
    "outputs": [],
@@ -92,7 +92,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "a1f140d6",
+   "id": "51de656e",
    "metadata": {},
    "source": [
     "samples = {\n",
@@ -157,8 +157,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
-   "id": "58e93886",
+   "execution_count": 6,
+   "id": "0e9460af",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -173,21 +173,21 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 22,
+   "execution_count": 7,
    "id": "90e43cd2",
    "metadata": {},
    "outputs": [],
    "source": [
     "lumi = 10 # data_A+B+C+D\n",
     "\n",
-    "fraction = 1 # reduce to run quicker\n",
+    "fraction = 0.03 # reduce to run quicker\n",
     "\n",
     "tuple_path = \"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/1largeRjet1lep/\" "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 15,
+   "execution_count": 8,
    "id": "039728e0",
    "metadata": {},
    "outputs": [],
@@ -212,7 +212,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 9,
    "id": "51f6a2c3",
    "metadata": {},
    "outputs": [],
@@ -225,7 +225,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 9,
+   "execution_count": 10,
    "id": "f575ba86",
    "metadata": {},
    "outputs": [],
@@ -246,7 +246,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 26,
+   "execution_count": 11,
    "id": "0981f1ec",
    "metadata": {},
    "outputs": [],
@@ -257,10 +257,8 @@
     "    data_all = pd.DataFrame() # define empty pandas DataFrame to hold all data for this sample\n",
     "    tree = uproot3.open(path)[\"mini\"] # open the tree called mini\n",
     "    numevents = uproot3.numentries(path, \"mini\") # number of events\n",
-    "    print(numevents)\n",
-    "    tree.show()\n",
     "    if 'data' not in sample: xsec_weight = get_xsec_weight(sample) # get cross-section weight\n",
-    "    for data in tree.iterate(['lep_charge','lep_type','lep_pt', 'jet_n',\n",
+    "    for data in tree.iterate(['lep_charge','lep_type','lep_pt',\n",
     "                              # uncomment these variables if you want to calculate masses \n",
     "                              #,'lep_eta','lep_phi','lep_E', \n",
     "                              # add more variables here if you make cuts on them \n",
@@ -282,7 +280,8 @@
     "                                                            data.scaleFactor_MUON,\n",
     "                                                            data.scaleFactor_LepTRIGGER)\n",
     "\n",
-    "        roof[\"tree1\"].extend({\"branch1\": data.jet_n})\n",
+    "        roof[\"hist\"]=np.histogram(data.lep_pt)\n",
+    "        roof[\"hist\"]\n",
     "        # cut on lepton charge using the function cut_lep_charge defined above\n",
     "       # fail = data[ np.vectorize(cut_lep_charge)(data.lep_charge) ].index\n",
     "        #data.drop(fail, inplace=True)\n",
@@ -314,40 +313,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 27,
-   "id": "9c0e9d66",
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "<TFileRecreate b'example.root' at 0x7f0c51cad070>"
-      ]
-     },
-     "execution_count": 27,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "roof = uproot3.recreate(\"example.root\")\n",
-    "roof"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 28,
-   "id": "aba117d2",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "roof[\"tree1\"] = uproot3.newtree({\"branch1\": int})"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 29,
-   "id": "194b66b2",
+   "execution_count": 17,
+   "id": "c638df04",
    "metadata": {},
    "outputs": [
     {
@@ -355,99 +322,33 @@
      "output_type": "stream",
      "text": [
       "Processing Zprime1000 samples\n",
-      "https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/1largeRjet1lep/MC/mc_301325.ZPrime1000_tt.1largeRjet1lep.root\n",
-      "\tProcessing: ZPrime1000_tt\n",
-      "29427\n",
-      "runNumber                  (no streamer)              asdtype('>i4')\n",
-      "eventNumber                (no streamer)              asdtype('>i4')\n",
-      "channelNumber              (no streamer)              asdtype('>i4')\n",
-      "mcWeight                   (no streamer)              asdtype('>f4')\n",
-      "scaleFactor_PILEUP         (no streamer)              asdtype('>f4')\n",
-      "scaleFactor_ELE            (no streamer)              asdtype('>f4')\n",
-      "scaleFactor_MUON           (no streamer)              asdtype('>f4')\n",
-      "scaleFactor_PHOTON         (no streamer)              asdtype('>f4')\n",
-      "scaleFactor_TAU            (no streamer)              asdtype('>f4')\n",
-      "scaleFactor_BTAG           (no streamer)              asdtype('>f4')\n",
-      "scaleFactor_LepTRIGGER     (no streamer)              asdtype('>f4')\n",
-      "scaleFactor_PhotonTRIGGER  (no streamer)              asdtype('>f4')\n",
-      "trigE                      (no streamer)              asdtype('bool')\n",
-      "trigM                      (no streamer)              asdtype('bool')\n",
-      "trigP                      (no streamer)              asdtype('bool')\n",
-      "lep_n                      (no streamer)              asdtype('>u4')\n",
-      "lep_truthMatched           TStreamerSTL               asjagged(asdtype('bool'), 10)\n",
-      "lep_trigMatched            TStreamerSTL               asjagged(asdtype('bool'), 10)\n",
-      "lep_pt                     TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "lep_eta                    TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "lep_phi                    TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "lep_E                      TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "lep_z0                     TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "lep_charge                 TStreamerSTL               asjagged(asdtype('>i4'), 10)\n",
-      "lep_type                   TStreamerSTL               asjagged(asdtype('>u4'), 10)\n",
-      "lep_isTightID              TStreamerSTL               asjagged(asdtype('bool'), 10)\n",
-      "lep_ptcone30               TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "lep_etcone20               TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "lep_trackd0pvunbiased      TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "lep_tracksigd0pvunbiased   TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "met_et                     (no streamer)              asdtype('>f4')\n",
-      "met_phi                    (no streamer)              asdtype('>f4')\n",
-      "jet_n                      (no streamer)              asdtype('>u4')\n",
-      "jet_pt                     TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "jet_eta                    TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "jet_phi                    TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "jet_E                      TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "jet_jvt                    TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "jet_trueflav               TStreamerSTL               asjagged(asdtype('>i4'), 10)\n",
-      "jet_truthMatched           TStreamerSTL               asjagged(asdtype('bool'), 10)\n",
-      "jet_MV2c10                 TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "photon_n                   (no streamer)              asdtype('>u4')\n",
-      "photon_truthMatched        TStreamerSTL               asjagged(asdtype('bool'), 10)\n",
-      "photon_trigMatched         TStreamerSTL               asjagged(asdtype('bool'), 10)\n",
-      "photon_pt                  TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "photon_eta                 TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "photon_phi                 TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "photon_E                   TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "photon_isTightID           TStreamerSTL               asjagged(asdtype('bool'), 10)\n",
-      "photon_ptcone30            TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "photon_etcone20            TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "photon_convType            TStreamerSTL               asjagged(asdtype('>i4'), 10)\n",
-      "tau_n                      (no streamer)              asdtype('>u4')\n",
-      "tau_pt                     TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "tau_eta                    TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "tau_phi                    TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "tau_E                      TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "tau_isTightID              TStreamerSTL               asjagged(asdtype('bool'), 10)\n",
-      "tau_truthMatched           TStreamerSTL               asjagged(asdtype('bool'), 10)\n",
-      "tau_trigMatched            TStreamerSTL               asjagged(asdtype('bool'), 10)\n",
-      "tau_nTracks                TStreamerSTL               asjagged(asdtype('>i4'), 10)\n",
-      "tau_BDTid                  TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "ditau_m                    (no streamer)              asdtype('>f4')\n",
-      "lep_pt_syst                TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "met_et_syst                (no streamer)              asdtype('>f4')\n",
-      "jet_pt_syst                TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "photon_pt_syst             TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "tau_pt_syst                TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "XSection                   (no streamer)              asdtype('>f4')\n",
-      "SumWeights                 (no streamer)              asdtype('>f4')\n",
-      "largeRjet_n                (no streamer)              asdtype('>u4')\n",
-      "largeRjet_pt               TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "largeRjet_eta              TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "largeRjet_phi              TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "largeRjet_E                TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "largeRjet_m                TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "largeRjet_truthMatched     TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "largeRjet_D2               TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "largeRjet_tau32            TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "largeRjet_pt_syst          TStreamerSTL               asjagged(asdtype('>f4'), 10)\n",
-      "tau_charge                 TStreamerSTL               asjagged(asdtype('>i4'), 10)\n",
-      "\t\t nIn: 29427,\t nOut: \t29427\t in 6.0s\n",
-      "Time taken: 6.0s\n"
+      "\tProcessing: ZPrime1000_tt\n"
+     ]
+    },
+    {
+     "ename": "ValueError",
+     "evalue": "The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mValueError\u001b[0m                                Traceback (most recent call last)",
+      "\u001b[0;32m/tmp/ipykernel_708/1246393612.py\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      2\u001b[0m \u001b[0mroof\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0muproot3\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrecreate\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"example.root\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      3\u001b[0m \u001b[0mroof\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 4\u001b[0;31m \u001b[0mdata\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mget_data_from_files\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# process all files\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      5\u001b[0m \u001b[0melapsed\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtime\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m-\u001b[0m \u001b[0mstart\u001b[0m \u001b[0;31m# time after whole processing\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      6\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Time taken: \"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mround\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0melapsed\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\"s\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# print total time taken to process every file\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/tmp/ipykernel_708/4073087171.py\u001b[0m in \u001b[0;36mget_data_from_files\u001b[0;34m()\u001b[0m\n\u001b[1;32m     10\u001b[0m                 \u001b[0mprefix\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m\"MC/mc_\"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0minfofile\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0minfos\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"DSID\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     11\u001b[0m             \u001b[0mfileString\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtuple_path\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mprefix\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".1largeRjet1lep.root\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 12\u001b[0;31m             \u001b[0mtemp\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mread_file\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfileString\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     13\u001b[0m             \u001b[0mframes\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtemp\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     14\u001b[0m         \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpd\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconcat\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mframes\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/tmp/ipykernel_708/1338602394.py\u001b[0m in \u001b[0;36mread_file\u001b[0;34m(path, sample)\u001b[0m\n\u001b[1;32m     28\u001b[0m                                                             data.scaleFactor_LepTRIGGER)\n\u001b[1;32m     29\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 30\u001b[0;31m         \u001b[0mroof\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"hist\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mhistogram\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlep_pt\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     31\u001b[0m         \u001b[0mroof\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"hist\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     32\u001b[0m         \u001b[0;31m# cut on lepton charge using the function cut_lep_charge defined above\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m<__array_function__ internals>\u001b[0m in \u001b[0;36mhistogram\u001b[0;34m(*args, **kwargs)\u001b[0m\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/numpy/lib/histograms.py\u001b[0m in \u001b[0;36mhistogram\u001b[0;34m(a, bins, range, normed, weights, density)\u001b[0m\n\u001b[1;32m    791\u001b[0m     \u001b[0ma\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mweights\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_ravel_and_check_weights\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ma\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mweights\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    792\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 793\u001b[0;31m     \u001b[0mbin_edges\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0muniform_bins\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_get_bin_edges\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ma\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mbins\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mrange\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mweights\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    794\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    795\u001b[0m     \u001b[0;31m# Histogram is an integer or a float array depending on the weights.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/numpy/lib/histograms.py\u001b[0m in \u001b[0;36m_get_bin_edges\u001b[0;34m(a, bins, range, weights)\u001b[0m\n\u001b[1;32m    424\u001b[0m             \u001b[0;32mraise\u001b[0m \u001b[0mValueError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'`bins` must be positive, when an integer'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    425\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 426\u001b[0;31m         \u001b[0mfirst_edge\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlast_edge\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_get_outer_edges\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ma\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mrange\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    427\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    428\u001b[0m     \u001b[0;32melif\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mndim\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mbins\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/numpy/lib/histograms.py\u001b[0m in \u001b[0;36m_get_outer_edges\u001b[0;34m(a, range)\u001b[0m\n\u001b[1;32m    319\u001b[0m         \u001b[0mfirst_edge\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlast_edge\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;36m0\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    320\u001b[0m     \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 321\u001b[0;31m         \u001b[0mfirst_edge\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlast_edge\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0ma\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmin\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0ma\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmax\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    322\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;34m(\u001b[0m\u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0misfinite\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfirst_edge\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32mand\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0misfinite\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mlast_edge\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    323\u001b[0m             raise ValueError(\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/numpy/core/_methods.py\u001b[0m in \u001b[0;36m_amin\u001b[0;34m(a, axis, out, keepdims, initial, where)\u001b[0m\n\u001b[1;32m     42\u001b[0m def _amin(a, axis=None, out=None, keepdims=False,\n\u001b[1;32m     43\u001b[0m           initial=_NoValue, where=True):\n\u001b[0;32m---> 44\u001b[0;31m     \u001b[0;32mreturn\u001b[0m \u001b[0mumr_minimum\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ma\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0maxis\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mout\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mkeepdims\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0minitial\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mwhere\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     45\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     46\u001b[0m def _sum(a, axis=None, dtype=None, out=None, keepdims=False,\n",
+      "\u001b[0;31mValueError\u001b[0m: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()"
      ]
     }
    ],
    "source": [
     "start = time.time() # time at start of whole processing\n",
+    "roof = uproot3.recreate(\"example.root\")\n",
+    "roof\n",
     "data = get_data_from_files() # process all files\n",
-    "roof.close()\n",
     "elapsed = time.time() - start # time after whole processing\n",
     "print(\"Time taken: \"+str(round(elapsed,1))+\"s\") # print total time taken to process every file"
    ]

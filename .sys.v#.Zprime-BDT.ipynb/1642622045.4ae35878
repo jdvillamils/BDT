@@ -203,6 +203,7 @@
     "            else: # MC prefix\n",
     "                prefix = \"MC/mc_\"+str(infofile.infos[val][\"DSID\"])+\".\"\n",
     "            fileString = tuple_path+prefix+val+\".1largeRjet1lep.root\" \n",
+    "            print(fileString)\n",
     "            temp = read_file(fileString,val) \n",
     "            frames.append(temp) \n",
     "        data[s] = pd.concat(frames) \n",
