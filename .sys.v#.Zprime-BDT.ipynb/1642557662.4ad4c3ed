@@ -1,0 +1,153 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "b31f7044",
+   "metadata": {},
+   "source": [
+    "# Analysis of the Z prime boson, using a boosted decision tree with SKlearn library  "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "53628d37",
+   "metadata": {},
+   "source": [
+    "Installing requeried packages"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "9d8d4e95",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: pip in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (21.0.1)\n",
+      "Collecting pip\n",
+      "  Downloading pip-21.3.1-py3-none-any.whl (1.7 MB)\n",
+      "\u001b[K     |████████████████████████████████| 1.7 MB 666 kB/s eta 0:00:01\n",
+      "\u001b[?25hInstalling collected packages: pip\n",
+      "\u001b[33m  WARNING: The scripts pip, pip3 and pip3.9 are installed in '/eos/user/j/jvillami/.local/bin' which is not on PATH.\n",
+      "  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.\u001b[0m\n",
+      "Successfully installed pip-21.3.1\n",
+      "Requirement already satisfied: uproot3 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (3.14.2)\n",
+      "Requirement already satisfied: pandas in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (1.2.2)\n",
+      "Requirement already satisfied: numpy in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (1.21.1)\n",
+      "Requirement already satisfied: matplotlib in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (3.4.3)\n",
+      "Requirement already satisfied: sklearn in /eos/home-j/jvillami/.local/lib/python3.9/site-packages (0.0)\n",
+      "Requirement already satisfied: cycler>=0.10 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from matplotlib) (0.10.0)\n",
+      "Requirement already satisfied: kiwisolver>=1.0.1 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from matplotlib) (1.0.1)\n",
+      "Requirement already satisfied: pillow>=6.2.0 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from matplotlib) (8.2.0)\n",
+      "Requirement already satisfied: pyparsing>=2.2.1 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from matplotlib) (2.4.7)\n",
+      "Requirement already satisfied: python-dateutil>=2.7 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from matplotlib) (2.8.2)\n",
+      "Requirement already satisfied: six in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from cycler>=0.10->matplotlib) (1.16.0)\n",
+      "Requirement already satisfied: setuptools in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from kiwisolver>=1.0.1->matplotlib) (57.1.0)\n",
+      "Requirement already satisfied: pytz>=2017.3 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from pandas) (2021.1)\n",
+      "Requirement already satisfied: scikit-learn in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from sklearn) (0.24.2)\n",
+      "Requirement already satisfied: awkward0 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from uproot3) (0.15.3)\n",
+      "Requirement already satisfied: uproot3-methods in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from uproot3) (0.10.0)\n",
+      "Requirement already satisfied: cachetools in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from uproot3) (3.1.1)\n",
+      "Requirement already satisfied: scipy>=0.19.1 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from scikit-learn->sklearn) (1.7.0)\n",
+      "Requirement already satisfied: joblib>=0.11 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from scikit-learn->sklearn) (1.0.1)\n",
+      "Requirement already satisfied: threadpoolctl>=2.0.0 in /eos/home-j/jvillami/.local/lib/python3.9/site-packages (from scikit-learn->sklearn) (3.0.0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "import sys\n",
+    "!{sys.executable} -m pip install --upgrade --user pip # update the pip package installer\n",
+    "!{sys.executable} -m pip install uproot3 pandas numpy matplotlib sklearn --user # install required packages"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ac019930",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import uproot3 \n",
+    "import pandas as pd \n",
+    "import time \n",
+    "import math \n",
+    "import numpy as np \n",
+    "import matplotlib.pyplot as plt \n",
+    "from matplotlib.ticker import AutoMinorLocator \n",
+    "\n",
+    "#Local information file\n",
+    "import infofile "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "cf4267b3",
+   "metadata": {},
+   "source": [
+    "Samples"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d4166d54",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "samples = {\n",
+    "\n",
+    "    'data' : {\n",
+    "        'list' : ['data_A',\n",
+    "                 'data_B',\n",
+    "                 'data_C',\n",
+    "                 'data_D']\n",
+    "    },\n",
+    "    \n",
+    "    'Zprime1000' : {\n",
+    "        'list' : ['ZPrime1000_tt']\n",
+    "    }\n",
+    "    \n",
+    "    r'$t\\bar{t}$' : {\n",
+    "        'list' : ['ttbar_lep']\n",
+    "    },\n",
+    "    \n",
+    "    'diboson' : {\n",
+    "        'list' : ['ZqqZll',\n",
+    "                 'WqqZll',\n",
+    "                 'WplvWmqq',\n",
+    "                 'WlvZqq',\n",
+    "                 'lllv',\n",
+    "                 'llvv',\n",
+    "                 'lvvv',\n",
+    "                 ]\n",
+    "        \n",
+    "    }\n",
+    "}"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

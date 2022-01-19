@@ -1,0 +1,221 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "16d39a24",
+   "metadata": {},
+   "source": [
+    "# Analysis of the Z prime boson, using a boosted decision tree with SKlearn library  "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "cf578754",
+   "metadata": {},
+   "source": [
+    "Installing requeried packages"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "69e41b61",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: pip in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (21.0.1)\n",
+      "Collecting pip\n",
+      "  Downloading pip-21.3.1-py3-none-any.whl (1.7 MB)\n",
+      "\u001b[K     |████████████████████████████████| 1.7 MB 666 kB/s eta 0:00:01\n",
+      "\u001b[?25hInstalling collected packages: pip\n",
+      "\u001b[33m  WARNING: The scripts pip, pip3 and pip3.9 are installed in '/eos/user/j/jvillami/.local/bin' which is not on PATH.\n",
+      "  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.\u001b[0m\n",
+      "Successfully installed pip-21.3.1\n",
+      "Requirement already satisfied: uproot3 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (3.14.2)\n",
+      "Requirement already satisfied: pandas in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (1.2.2)\n",
+      "Requirement already satisfied: numpy in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (1.21.1)\n",
+      "Requirement already satisfied: matplotlib in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (3.4.3)\n",
+      "Requirement already satisfied: sklearn in /eos/home-j/jvillami/.local/lib/python3.9/site-packages (0.0)\n",
+      "Requirement already satisfied: cycler>=0.10 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from matplotlib) (0.10.0)\n",
+      "Requirement already satisfied: kiwisolver>=1.0.1 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from matplotlib) (1.0.1)\n",
+      "Requirement already satisfied: pillow>=6.2.0 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from matplotlib) (8.2.0)\n",
+      "Requirement already satisfied: pyparsing>=2.2.1 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from matplotlib) (2.4.7)\n",
+      "Requirement already satisfied: python-dateutil>=2.7 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from matplotlib) (2.8.2)\n",
+      "Requirement already satisfied: six in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from cycler>=0.10->matplotlib) (1.16.0)\n",
+      "Requirement already satisfied: setuptools in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from kiwisolver>=1.0.1->matplotlib) (57.1.0)\n",
+      "Requirement already satisfied: pytz>=2017.3 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from pandas) (2021.1)\n",
+      "Requirement already satisfied: scikit-learn in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from sklearn) (0.24.2)\n",
+      "Requirement already satisfied: awkward0 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from uproot3) (0.15.3)\n",
+      "Requirement already satisfied: uproot3-methods in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from uproot3) (0.10.0)\n",
+      "Requirement already satisfied: cachetools in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from uproot3) (3.1.1)\n",
+      "Requirement already satisfied: scipy>=0.19.1 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from scikit-learn->sklearn) (1.7.0)\n",
+      "Requirement already satisfied: joblib>=0.11 in /cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages (from scikit-learn->sklearn) (1.0.1)\n",
+      "Requirement already satisfied: threadpoolctl>=2.0.0 in /eos/home-j/jvillami/.local/lib/python3.9/site-packages (from scikit-learn->sklearn) (3.0.0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "import sys\n",
+    "!{sys.executable} -m pip install --upgrade --user pip # update the pip package installer\n",
+    "!{sys.executable} -m pip install uproot3 pandas numpy matplotlib sklearn --user # install required packages"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4afdf950",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import uproot3 \n",
+    "import pandas as pd \n",
+    "import time \n",
+    "import math \n",
+    "import numpy as np \n",
+    "import matplotlib.pyplot as plt \n",
+    "from matplotlib.ticker import AutoMinorLocator \n",
+    "\n",
+    "#Local information file\n",
+    "import infofile "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "48b47cbd",
+   "metadata": {},
+   "source": [
+    "Samples"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f7a00783",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "samples = {\n",
+    "\n",
+    "    'data' : {\n",
+    "        'list' : ['data_A',\n",
+    "                 'data_B',\n",
+    "                 'data_C',\n",
+    "                 'data_D']\n",
+    "    },\n",
+    "    \n",
+    "    'Zprime1000' : {\n",
+    "        'list' : ['ZPrime1000_tt']\n",
+    "    }\n",
+    "    \n",
+    "    r'$t\\bar{t}$' : {\n",
+    "        'list' : ['ttbar_lep']\n",
+    "    },\n",
+    "    \n",
+    "    'diboson' : {\n",
+    "        'list' : ['ZqqZll',\n",
+    "                 'WqqZll',\n",
+    "                 'WplvWmqq',\n",
+    "                 'WlvZqq',\n",
+    "                 'lllv',\n",
+    "                 'llvv',\n",
+    "                 'lvvv',\n",
+    "                 ]\n",
+    "    },\n",
+    "    \n",
+    "    'singletop' : {\n",
+    "        'list' : ['single_top_tchan',\n",
+    "                 'single_antitop_tchan',\n",
+    "                 'single_top_schan',\n",
+    "                 'single_antitop_schan',\n",
+    "                 'single_top_wtchan',\n",
+    "                 'single_antitop_wtchan',\n",
+    "                 ]\n",
+    "    },\n",
+    "    \n",
+    "    'Z' : {\n",
+    "        'list' : ['Zee',\n",
+    "                 'Zmumu',\n",
+    "                 'Ztautau',\n",
+    "                 'Zmumu_PTV0_70_CVetoBVeto',\n",
+    "                 'Zmumu_PTV0_70_CFilterBVeto', \n",
+    "                 'Zmumu_PTV0_70_BFilter',\n",
+    "                 'Zmumu_PTV70_140_CVetoBVeto',\n",
+    "                 'Zmumu_PTV70_140_CFilterBVeto',\n",
+    "                 'Zmumu_PTV70_140_BFilter', \n",
+    "                 'Zmumu_PTV140_280_CVetoBVeto',\n",
+    "                 'Zmumu_PTV140_280_CFilterBVeto',\n",
+    "                 'Zmumu_PTV140_280_BFilter',\n",
+    "                 'Zmumu_PTV280_500_CVetoBVeto', \n",
+    "                 'Zmumu_PTV280_500_CFilterBVeto',\n",
+    "                 'Zmumu_PTV280_500_BFilter', \n",
+    "                 'Zmumu_PTV500_1000', \n",
+    "                 'Zmumu_PTV1000_E_CMS']\n",
+    "    }\n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a5f46b6f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "lumi = 10 # data_A+B+C+D\n",
+    "\n",
+    "fraction = 0.03 # reduce to run quicker\n",
+    "\n",
+    "tuple_path = \"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/1largeRjet1lep/\" "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9219f0bf",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def get_data_from_files():\n",
+    "\n",
+    "    data = {} # empty dictionary\n",
+    "    for s in samples: \n",
+    "        print('Processing '+s+' samples') \n",
+    "        frames = [] \n",
+    "        for val in samples[s]['list']: \n",
+    "            if s == 'data': prefix = \"Data/\" # Data prefix\n",
+    "            else: # MC prefix\n",
+    "                prefix = \"MC/mc_\"+str(infofile.infos[val][\"DSID\"])+\".\"\n",
+    "            fileString = tuple_path+prefix+val+\".4lep.root\" # file name to open\n",
+    "            temp = read_file(fileString,val) # call the function read_file defined below\n",
+    "            frames.append(temp) # append dataframe returned from read_file to list of dataframes\n",
+    "        data[s] = pd.concat(frames) # dictionary entry is concatenated dataframes\n",
+    "    \n",
+    "    return data # return dictionary of dataframes"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
