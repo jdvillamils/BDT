@@ -65,7 +65,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 16,
+   "execution_count": 145,
    "id": "b8ba4733",
    "metadata": {},
    "outputs": [],
@@ -157,7 +157,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 146,
    "id": "58e93886",
    "metadata": {},
    "outputs": [],
@@ -173,21 +173,21 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 147,
    "id": "90e43cd2",
    "metadata": {},
    "outputs": [],
    "source": [
     "lumi = 10 # data_A+B+C+D\n",
     "\n",
-    "fraction = 0.03 # reduce to run quicker\n",
+    "fraction = 1 # reduce to run quicker\n",
     "\n",
     "tuple_path = \"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/1largeRjet1lep/\" "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 148,
    "id": "039728e0",
    "metadata": {},
    "outputs": [],
@@ -212,7 +212,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 9,
+   "execution_count": 149,
    "id": "51f6a2c3",
    "metadata": {},
    "outputs": [],
@@ -225,7 +225,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
+   "execution_count": 150,
    "id": "f575ba86",
    "metadata": {},
    "outputs": [],
@@ -246,7 +246,53 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 21,
+   "execution_count": 267,
+   "id": "08e62cdc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def cut_largerjet(largeRjet_n):\n",
+    "    return largeRjet_n < 1 # Throw away when met et is less than 1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 263,
+   "id": "9f14b9af",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def cut_met_et(met_et):\n",
+    "    return met_et < 20000 #Throw away when met et is less than 20k"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 297,
+   "id": "4072ba02",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def cut_trige(trig_e,trig_m):\n",
+    "    return (trig_e != False) or (trig_m != False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 257,
+   "id": "4bc20310",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def cut_lep_pt(lep_pt):\n",
+    "# throw away when lep pt is minor than 71k\n",
+    "# first lepton is [0], 2nd lepton is [1] etc\n",
+    "    return lep_pt[0] < 80000"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 298,
    "id": "0981f1ec",
    "metadata": {},
    "outputs": [],
@@ -257,8 +303,11 @@
     "    data_all = pd.DataFrame() # define empty pandas DataFrame to hold all data for this sample\n",
     "    tree = uproot3.open(path)[\"mini\"] # open the tree called mini\n",
     "    numevents = uproot3.numentries(path, \"mini\") # number of events\n",
+    "    print(numevents)\n",
+    "    #print(np.dtype(tree[\"jet_n\"]))\n",
     "    if 'data' not in sample: xsec_weight = get_xsec_weight(sample) # get cross-section weight\n",
-    "    for data in tree.iterate(['lep_charge','lep_type','lep_pt', 'jet_n',\n",
+    "    for data in tree.iterate(['lep_charge','lep_type','lep_pt', 'jet_n', 'largeRjet_n', 'met_et', \n",
+    "                              'trigE', 'trigM',\n",
     "                              # uncomment these variables if you want to calculate masses \n",
     "                              #,'lep_eta','lep_phi','lep_E', \n",
     "                              # add more variables here if you make cuts on them \n",
@@ -280,10 +329,23 @@
     "                                                            data.scaleFactor_MUON,\n",
     "                                                            data.scaleFactor_LepTRIGGER)\n",
     "\n",
-    "        roof[\"tree1\"].extend({\"branch1\": data.jet_n})\n",
+    "        #roof[\"tree1\"].extend({\"branch1\": data.jet_n})\n",
+    "        #data[\"leppt1\"]= np.vectorize(calc_lep_pt_i)(data.lep_pt,0)\n",
+    "        print(data)\n",
+    "\n",
     "        # cut on lepton charge using the function cut_lep_charge defined above\n",
-    "       # fail = data[ np.vectorize(cut_lep_charge)(data.lep_charge) ].index\n",
-    "        #data.drop(fail, inplace=True)\n",
+    "        fail = data[ np.vectorize(cut_largerjet)(data.largeRjet_n) ].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        fail = data[ np.vectorize(cut_met_et)(data.met_et)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        fail = data[ np.vectorize(cut_trig)(data.trigE,data.trigM) ].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        print('cutttttt')\n",
+    "        \n",
+    "        print(data)\n",
     "\n",
     "        # cut on lepton type using the function cut_lep_type defined above\n",
     "        #fail = data[ np.vectorize(cut_lep_type)(data.lep_type) ].index\n",
@@ -312,17 +374,17 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 22,
+   "execution_count": 244,
    "id": "9c0e9d66",
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<TFileRecreate b'example.root' at 0x7f3a9741fbb0>"
+       "<TFileRecreate b'example.root' at 0x7f0bfc122460>"
       ]
      },
-     "execution_count": 22,
+     "execution_count": 244,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -334,17 +396,17 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 23,
+   "execution_count": 245,
    "id": "aba117d2",
    "metadata": {},
    "outputs": [],
    "source": [
-    "roof[\"tree1\"] = uproot3.newtree({\"branch1\": int})"
+    "roof[\"tree1\"] = uproot3.newtree({\"branch1\": int, \"branch2\": np.float64})"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 24,
+   "execution_count": 299,
    "id": "194b66b2",
    "metadata": {},
    "outputs": [
@@ -354,8 +416,56 @@
      "text": [
       "Processing Zprime1000 samples\n",
       "\tProcessing: ZPrime1000_tt\n",
-      "\t\t nIn: 882,\t nOut: \t882\t in 2.1s\n",
-      "Time taken: 2.1s\n"
+      "29427\n",
+      "      lep_charge  lep_type                 lep_pt  jet_n  largeRjet_n  \\\n",
+      "entry                                                                   \n",
+      "0        [-1, 1]  [11, 13]  [171723.5, 10837.586]      3            1   \n",
+      "1            [1]      [13]            [70814.586]      6            1   \n",
+      "2           [-1]      [13]            [43500.668]      5            1   \n",
+      "3           [-1]      [13]             [158294.7]      4            1   \n",
+      "4           [-1]      [13]           [110652.445]      4            1   \n",
+      "...          ...       ...                    ...    ...          ...   \n",
+      "29422       [-1]      [11]             [131601.7]      4            1   \n",
+      "29423        [1]      [11]             [135833.2]      5            2   \n",
+      "29424       [-1]      [11]             [135156.4]      5            2   \n",
+      "29425        [1]      [13]            [124785.65]      4            1   \n",
+      "29426        [1]      [13]            [251367.95]      6            1   \n",
+      "\n",
+      "              met_et  trigE  trigM  mcWeight  scaleFactor_PILEUP  \\\n",
+      "entry                                                              \n",
+      "0      110063.726562   True  False       1.0            1.214122   \n",
+      "1      295537.343750  False   True       1.0            1.241677   \n",
+      "2       67189.203125  False   True       1.0            1.554649   \n",
+      "3      284007.375000  False   True       1.0            0.000000   \n",
+      "4       94579.984375  False   True       1.0            0.506784   \n",
+      "...              ...    ...    ...       ...                 ...   \n",
+      "29422   14356.919922   True  False       1.0            0.187531   \n",
+      "29423   68193.640625   True  False       1.0            0.402058   \n",
+      "29424   66749.515625   True  False       1.0            1.241677   \n",
+      "29425  159977.234375  False   True       1.0            0.923924   \n",
+      "29426   61157.843750  False   True       1.0            0.738662   \n",
+      "\n",
+      "       scaleFactor_ELE  scaleFactor_MUON  scaleFactor_LepTRIGGER  totalWeight  \n",
+      "entry                                                                          \n",
+      "0              0.98089          0.996001                0.998660     0.066764  \n",
+      "1              1.00000          1.000081                1.013633     0.070942  \n",
+      "2              1.00000          1.001872                0.992762     0.087151  \n",
+      "3              1.00000          0.992404                0.964359     0.000000  \n",
+      "4              1.00000          0.993733                0.724848     0.020574  \n",
+      "...                ...               ...                     ...          ...  \n",
+      "29422          0.98916          1.000000                0.997650     0.010430  \n",
+      "29423          0.98230          1.000000                1.006320     0.022400  \n",
+      "29424          0.99093          1.000000                1.003060     0.069560  \n",
+      "29425          1.00000          0.991474                0.753185     0.038887  \n",
+      "29426          1.00000          0.999528                0.948081     0.039452  \n",
+      "\n",
+      "[29427 rows x 14 columns]\n",
+      "cutttttt\n",
+      "Empty DataFrame\n",
+      "Columns: [lep_charge, lep_type, lep_pt, jet_n, largeRjet_n, met_et, trigE, trigM, mcWeight, scaleFactor_PILEUP, scaleFactor_ELE, scaleFactor_MUON, scaleFactor_LepTRIGGER, totalWeight]\n",
+      "Index: []\n",
+      "\t\t nIn: 29427,\t nOut: \t0\t in 1.4s\n",
+      "Time taken: 1.4s\n"
      ]
     }
    ],

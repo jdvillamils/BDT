@@ -247,7 +247,7 @@
   {
    "cell_type": "code",
    "execution_count": 267,
-   "id": "2ceaa6f7",
+   "id": "2ba56a73",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -258,7 +258,7 @@
   {
    "cell_type": "code",
    "execution_count": 263,
-   "id": "8a75b0f9",
+   "id": "82402707",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -268,34 +268,31 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 350,
-   "id": "e1548c3e",
+   "execution_count": 285,
+   "id": "35a022c0",
    "metadata": {},
    "outputs": [],
    "source": [
-    "def cut_trige(trige,trigm):#,trig_m):\n",
-    "    l=1\n",
-    "    if trige==1 or trigm==1:\n",
-    "        l=0\n",
-    "    return(l != 0) #or (trig_m != True)"
+    "def cut_trig(trig_e,trig_m):\n",
+    "    return (trig_e != False) and (trig_m != False)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 257,
-   "id": "a800956d",
+   "id": "badf08c6",
    "metadata": {},
    "outputs": [],
    "source": [
     "def cut_lep_pt(lep_pt):\n",
     "# throw away when lep pt is minor than 71k\n",
     "# first lepton is [0], 2nd lepton is [1] etc\n",
-    "    return lep_pt[0] < 30000"
+    "    return lep_pt[0] < 80000"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 352,
+   "execution_count": 286,
    "id": "0981f1ec",
    "metadata": {},
    "outputs": [],
@@ -343,7 +340,7 @@
     "        fail = data[ np.vectorize(cut_met_et)(data.met_et)].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
-    "        fail = data[ np.vectorize(cut_trige)(data.trigE,data.trigM)].index #,data.trigM) ].index\n",
+    "        fail = data[ np.vectorize(cut_trig)(data.trigE,data.trigM) ].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
     "        print('cutttttt')\n",
@@ -409,7 +406,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 353,
+   "execution_count": 287,
    "id": "194b66b2",
    "metadata": {},
    "outputs": [
@@ -506,9 +503,9 @@
       "29425          1.00000          0.991474                0.753185     0.038887  \n",
       "29426          1.00000          0.999528                0.948081     0.039452  \n",
       "\n",
-      "[28404 rows x 14 columns]\n",
-      "\t\t nIn: 29427,\t nOut: \t28404\t in 1.4s\n",
-      "Time taken: 1.4s\n"
+      "[27589 rows x 14 columns]\n",
+      "\t\t nIn: 29427,\t nOut: \t27589\t in 1.5s\n",
+      "Time taken: 1.5s\n"
      ]
     }
    ],
