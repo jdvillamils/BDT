@@ -246,8 +246,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 262,
-   "id": "6b9c4d2c",
+   "execution_count": 267,
+   "id": "2ceaa6f7",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -258,7 +258,7 @@
   {
    "cell_type": "code",
    "execution_count": 263,
-   "id": "a20ff3c0",
+   "id": "8a75b0f9",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -268,31 +268,34 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 264,
-   "id": "8e70f804",
+   "execution_count": 350,
+   "id": "e1548c3e",
    "metadata": {},
    "outputs": [],
    "source": [
-    "def cut_trig(tirg_e,trig_m):\n",
-    "    return (trig_e != 0) and (trig_m != 0)"
+    "def cut_trige(trige,trigm):#,trig_m):\n",
+    "    l=1\n",
+    "    if trige==1 or trigm==1:\n",
+    "        l=0\n",
+    "    return(l != 0) #or (trig_m != True)"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 257,
-   "id": "f81cf040",
+   "id": "a800956d",
    "metadata": {},
    "outputs": [],
    "source": [
     "def cut_lep_pt(lep_pt):\n",
     "# throw away when lep pt is minor than 71k\n",
     "# first lepton is [0], 2nd lepton is [1] etc\n",
-    "    return lep_pt[0] < 80000"
+    "    return lep_pt[0] < 30000"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 265,
+   "execution_count": 352,
    "id": "0981f1ec",
    "metadata": {},
    "outputs": [],
@@ -340,9 +343,10 @@
     "        fail = data[ np.vectorize(cut_met_et)(data.met_et)].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
-    "        fail = data[ np.vectorize(cut_trig)(data.trigE,data.trigM) ].index\n",
+    "        fail = data[ np.vectorize(cut_trige)(data.trigE,data.trigM)].index #,data.trigM) ].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
+    "        print('cutttttt')\n",
     "        \n",
     "        print(data)\n",
     "\n",
@@ -405,7 +409,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 266,
+   "execution_count": 353,
    "id": "194b66b2",
    "metadata": {},
    "outputs": [
@@ -458,20 +462,53 @@
       "29425          1.00000          0.991474                0.753185     0.038887  \n",
       "29426          1.00000          0.999528                0.948081     0.039452  \n",
       "\n",
-      "[29427 rows x 14 columns]\n"
-     ]
-    },
-    {
-     "ename": "NameError",
-     "evalue": "name 'cut_largerjet' is not defined",
-     "output_type": "error",
-     "traceback": [
-      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
-      "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
-      "\u001b[0;32m/tmp/ipykernel_513/2934882877.py\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0mstart\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtime\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# time at start of whole processing\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0mdata\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mget_data_from_files\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# process all files\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      3\u001b[0m \u001b[0mroof\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mclose\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0melapsed\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtime\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m-\u001b[0m \u001b[0mstart\u001b[0m \u001b[0;31m# time after whole processing\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      5\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Time taken: \"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mround\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0melapsed\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\"s\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# print total time taken to process every file\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m/tmp/ipykernel_513/4073087171.py\u001b[0m in \u001b[0;36mget_data_from_files\u001b[0;34m()\u001b[0m\n\u001b[1;32m     10\u001b[0m                 \u001b[0mprefix\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m\"MC/mc_\"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0minfofile\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0minfos\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"DSID\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     11\u001b[0m             \u001b[0mfileString\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtuple_path\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mprefix\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".1largeRjet1lep.root\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 12\u001b[0;31m             \u001b[0mtemp\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mread_file\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfileString\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     13\u001b[0m             \u001b[0mframes\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtemp\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     14\u001b[0m         \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpd\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconcat\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mframes\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m/tmp/ipykernel_513/545639534.py\u001b[0m in \u001b[0;36mread_file\u001b[0;34m(path, sample)\u001b[0m\n\u001b[1;32m     36\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     37\u001b[0m         \u001b[0;31m# cut on lepton charge using the function cut_lep_charge defined above\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 38\u001b[0;31m         \u001b[0mfail\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mvectorize\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mcut_largerjet\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlargeRjet_n\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     39\u001b[0m         \u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdrop\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfail\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0minplace\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mTrue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     40\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;31mNameError\u001b[0m: name 'cut_largerjet' is not defined"
+      "[29427 rows x 14 columns]\n",
+      "cutttttt\n",
+      "      lep_charge  lep_type                 lep_pt  jet_n  largeRjet_n  \\\n",
+      "entry                                                                   \n",
+      "0        [-1, 1]  [11, 13]  [171723.5, 10837.586]      3            1   \n",
+      "1            [1]      [13]            [70814.586]      6            1   \n",
+      "2           [-1]      [13]            [43500.668]      5            1   \n",
+      "3           [-1]      [13]             [158294.7]      4            1   \n",
+      "4           [-1]      [13]           [110652.445]      4            1   \n",
+      "...          ...       ...                    ...    ...          ...   \n",
+      "29421       [-1]      [11]            [187655.39]      6            1   \n",
+      "29423        [1]      [11]             [135833.2]      5            2   \n",
+      "29424       [-1]      [11]             [135156.4]      5            2   \n",
+      "29425        [1]      [13]            [124785.65]      4            1   \n",
+      "29426        [1]      [13]            [251367.95]      6            1   \n",
+      "\n",
+      "              met_et  trigE  trigM  mcWeight  scaleFactor_PILEUP  \\\n",
+      "entry                                                              \n",
+      "0      110063.726562   True  False       1.0            1.214122   \n",
+      "1      295537.343750  False   True       1.0            1.241677   \n",
+      "2       67189.203125  False   True       1.0            1.554649   \n",
+      "3      284007.375000  False   True       1.0            0.000000   \n",
+      "4       94579.984375  False   True       1.0            0.506784   \n",
+      "...              ...    ...    ...       ...                 ...   \n",
+      "29421  153197.921875   True  False       1.0            1.214122   \n",
+      "29423   68193.640625   True  False       1.0            0.402058   \n",
+      "29424   66749.515625   True  False       1.0            1.241677   \n",
+      "29425  159977.234375  False   True       1.0            0.923924   \n",
+      "29426   61157.843750  False   True       1.0            0.738662   \n",
+      "\n",
+      "       scaleFactor_ELE  scaleFactor_MUON  scaleFactor_LepTRIGGER  totalWeight  \n",
+      "entry                                                                          \n",
+      "0              0.98089          0.996001                0.998660     0.066764  \n",
+      "1              1.00000          1.000081                1.013633     0.070942  \n",
+      "2              1.00000          1.001872                0.992762     0.087151  \n",
+      "3              1.00000          0.992404                0.964359     0.000000  \n",
+      "4              1.00000          0.993733                0.724848     0.020574  \n",
+      "...                ...               ...                     ...          ...  \n",
+      "29421          0.97996          1.000000                1.012650     0.067907  \n",
+      "29423          0.98230          1.000000                1.006320     0.022400  \n",
+      "29424          0.99093          1.000000                1.003060     0.069560  \n",
+      "29425          1.00000          0.991474                0.753185     0.038887  \n",
+      "29426          1.00000          0.999528                0.948081     0.039452  \n",
+      "\n",
+      "[28404 rows x 14 columns]\n",
+      "\t\t nIn: 29427,\t nOut: \t28404\t in 1.4s\n",
+      "Time taken: 1.4s\n"
      ]
     }
    ],
