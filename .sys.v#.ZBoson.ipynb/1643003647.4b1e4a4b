@@ -1,8 +1,16 @@
 {
  "cells": [
   {
+   "cell_type": "markdown",
+   "id": "4ee7a93e",
+   "metadata": {},
+   "source": [
+    "# Analysis Z Boson"
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 2,
    "id": "4667148d",
    "metadata": {},
    "outputs": [],
@@ -29,61 +37,61 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 22,
    "id": "241c2b80",
    "metadata": {},
    "outputs": [],
    "source": [
     "samples = {\n",
     "    \n",
-    "    'data' : {\n",
-    "        'list' : ['data_A',\n",
-    "                 'data_B',\n",
-    "                 'data_C',\n",
-    "                 'data_D']\n",
-    "    },\n",
+    "    #'data' : {\n",
+    "        #'list' : ['data_A',\n",
+    "         #        'data_B',\n",
+    "          #       'data_C',\n",
+    "           #      'data_D']\n",
+    "    #},\n",
     "    \n",
     "    'Z' : {\n",
     "        'list' : ['Zee',\n",
     "                 'Zmumu',\n",
     "                 'Ztautau']\n",
-    "    },\n",
-    "    \n",
-    "    'diboson' : {\n",
-    "        'list' : ['ZqqZll',\n",
-    "                  'WqqZll',\n",
-    "                  'WpqqWmlv',\n",
-    "                  'WplvWmqq',\n",
-    "                  'WlvZqq',\n",
-    "                  'llll',\n",
-    "                  'lllv',\n",
-    "                  'llvv',\n",
-    "                  'lvvv']\n",
-    "    },\n",
-    "    \n",
-    "    'single_top' : {\n",
-    "        'list' : ['single_top_tchan',\n",
-    "                  'single_antitop_tchan',\n",
-    "                  'single_top_schan',\n",
-    "                  'single_antitop_schan',\n",
-    "                  'single_top_wtchan',\n",
-    "                  'single_antitop_wtchan']\n",
-    "    },\n",
-    "    \n",
-    "    'WJets' : {\n",
-    "        'list' : ['Wplusenu',\n",
-    "                 'Wplusmunu',\n",
-    "                 'Wplustaunu',\n",
-    "                 'Wminusenu',\n",
-    "                 'Wminusmunu',\n",
-    "                 'Wminustaunu']\n",
     "    }\n",
+    "    \n",
+    "    #'diboson' : {\n",
+    "     #   'list' : ['ZqqZll',\n",
+    "      #            'WqqZll',\n",
+    "       #           'WpqqWmlv',\n",
+    "        #          'WplvWmqq',\n",
+    "         #         'WlvZqq',\n",
+    "          #        'llll',\n",
+    "           #       'lllv',\n",
+    "            #      'llvv',\n",
+    "             #     'lvvv']\n",
+    "    #},\n",
+    "    \n",
+    "    #'single_top' : {\n",
+    "     #   'list' : ['single_top_tchan',\n",
+    "      #            'single_antitop_tchan',\n",
+    "       #           'single_top_schan',\n",
+    "        #          'single_antitop_schan',\n",
+    "         #         'single_top_wtchan',\n",
+    "          #        'single_antitop_wtchan']\n",
+    "    #},\n",
+    "    \n",
+    "    #'WJets' : {\n",
+    "     #   'list' : ['Wplusenu',\n",
+    "      #           'Wplusmunu',\n",
+    "       #          'Wplustaunu',\n",
+    "        #         'Wminusenu',\n",
+    "         #        'Wminusmunu',\n",
+    "          #       'Wminustaunu']\n",
+    "    #}\n",
     "}"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 4,
    "id": "5cfb905e",
    "metadata": {},
    "outputs": [],
@@ -97,7 +105,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 18,
    "id": "92d1acd9",
    "metadata": {},
    "outputs": [],
@@ -112,7 +120,7 @@
     "            if s == 'data': prefix = \"Data/\" # Data prefix\n",
     "            else: # MC prefix\n",
     "                prefix = \"MC/mc_\"+str(infofile.infos[val][\"DSID\"])+\".\"\n",
-    "            fileString = tuple_path+prefix+val+\".1largeRjet1lep.root\" \n",
+    "            fileString = tuple_path+prefix+val+\".2lep.root\" \n",
     "            temp = read_file(fileString,val) \n",
     "            frames.append(temp) \n",
     "        data[s] = pd.concat(frames) \n",
@@ -122,7 +130,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 6,
    "id": "2ba1def3",
    "metadata": {},
    "outputs": [],
@@ -135,7 +143,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 7,
    "id": "0f1d517c",
    "metadata": {},
    "outputs": [],
@@ -151,12 +159,12 @@
    "id": "40716206",
    "metadata": {},
    "source": [
-    "Definition of the cut functions"
+    "## Definition of the cut functions"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "f2e5cd74",
+   "id": "f3478b5f",
    "metadata": {},
    "source": [
     "Check satisfied triggers E and M"
@@ -164,7 +172,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 8,
    "id": "8ffa5043",
    "metadata": {},
    "outputs": [],
@@ -178,18 +186,18 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "6a08635b",
+   "execution_count": 24,
+   "id": "74bbed99",
    "metadata": {},
    "outputs": [],
    "source": [
     "def just_two_leptons(lep_n):\n",
-    "    if lep_n == 1 or lep_n > 2: return True #throw away when the number lepton is different of 2"
+    "    if lep_n > 2: return True #throw away when the number lepton is different of 2"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "cf69855b",
+   "id": "39ce7bdf",
    "metadata": {},
    "source": [
     "Find two good leptons"
@@ -197,7 +205,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 10,
    "id": "663d3e53",
    "metadata": {},
    "outputs": [],
@@ -228,8 +236,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "aa91eed7",
+   "execution_count": 11,
+   "id": "cbe9452f",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -239,8 +247,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "21bbb7d8",
+   "execution_count": 12,
+   "id": "9140c331",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -250,7 +258,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "3e899b00",
+   "id": "deb8a573",
    "metadata": {
     "slideshow": {
      "slide_type": "slide"
@@ -262,8 +270,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "c2c8379d",
+   "execution_count": 13,
+   "id": "e252eccf",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -288,19 +296,19 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "3122f17b",
+   "execution_count": 14,
+   "id": "c81f876a",
    "metadata": {},
    "outputs": [],
    "source": [
-    "def mass_Selection(invmass):\n",
+    "def mass_selection(invmass):\n",
     "    if abs(invmass-91.18) > 25: return True #we need when the difference is lesser than 25 "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "37215fa3",
+   "execution_count": 15,
+   "id": "db4ea283",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -309,9 +317,17 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "id": "f5f5480f",
+   "metadata": {},
+   "source": [
+    "### Read section "
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "7e594534",
+   "execution_count": 25,
+   "id": "b0aa5b14",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -358,21 +374,23 @@
     "        fail = data[ np.vectorize(find_good_leptons)(data.lep_pt,data.lep_ptcone30,data.lep_etcone20,data.lep_type,data.lep_eta,data.lep_trackd0pvunbiased,data.lep_tracksigd0pvunbiased,data.lep_z0)].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
-    "        #C\n",
-    "\n",
-    "\n",
-    "        # return the individual lepton transverse momenta in GeV\n",
-    "        #data['lep_pt_1'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,1)\n",
-    "        #data['lep_pt_2'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,2)\n",
+    "        #Check SFOS\n",
+    "        fail = data[ np.vectorize(opposite_charge)(data.lep_charge)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        fail = data[ np.vectorize(same_flavour)(data.lep_type)].index\n",
+    "        data.drop(fail, inplace=True)\n",
     "        \n",
-    "        # dataframe contents can be printed at any stage like this\n",
-    "        #print(data)\n",
-    "\n",
-    "        # dataframe column can be printed at any stage like this\n",
-    "        #print(data['lep_pt'])\n",
-    "\n",
-    "        # multiple dataframe columns can be printed at any stage like this\n",
-    "        #print(data[['lep_pt','lep_eta']])\n",
+    "        #Check no jets\n",
+    "        fail = data[ np.vectorize(check_jets)(data.jet_n)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        #claculation of the invariant mass\n",
+    "        data['mll'] = np.vectorize(calc_mll)(data.lep_pt, data.lep_eta, data.lep_phi, data.lep_E)\n",
+    "        \n",
+    "        #Check good mass range\n",
+    "        fail = data[ np.vectorize(mass_selection)(data.mll)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
     "\n",
     "        nOut = len(data.index) # number of events passing cuts in this batch\n",
     "        data_all = data_all.append(data) # append dataframe from this batch to the dataframe for the whole sample\n",
@@ -380,6 +398,43 @@
     "        print(\"\\t\\t nIn: \"+str(nIn)+\",\\t nOut: \\t\"+str(nOut)+\"\\t in \"+str(round(elapsed,1))+\"s\") # events before and after\n",
     "    \n",
     "    return data_all # return dataframe containing events passing all cuts"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "774c9c89",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Processing Z samples\n",
+      "\tProcessing: Zee\n"
+     ]
+    },
+    {
+     "ename": "ValueError",
+     "evalue": "Cannot mask with non-boolean array containing NA / NaN values",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mValueError\u001b[0m                                Traceback (most recent call last)",
+      "\u001b[0;32m/tmp/ipykernel_580/862785482.py\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0mstart\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtime\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# time at start of whole processing\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0mdata\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mget_data_from_files\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# process all files\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      3\u001b[0m \u001b[0melapsed\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtime\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m-\u001b[0m \u001b[0mstart\u001b[0m \u001b[0;31m# time after whole processing\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Time taken: \"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mround\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0melapsed\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\"s\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# print total time taken to process every file\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/tmp/ipykernel_580/1439532152.py\u001b[0m in \u001b[0;36mget_data_from_files\u001b[0;34m()\u001b[0m\n\u001b[1;32m     10\u001b[0m                 \u001b[0mprefix\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m\"MC/mc_\"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0minfofile\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0minfos\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"DSID\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     11\u001b[0m             \u001b[0mfileString\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtuple_path\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mprefix\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".2lep.root\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 12\u001b[0;31m             \u001b[0mtemp\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mread_file\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfileString\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     13\u001b[0m             \u001b[0mframes\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtemp\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     14\u001b[0m         \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpd\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconcat\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mframes\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/tmp/ipykernel_580/3464654678.py\u001b[0m in \u001b[0;36mread_file\u001b[0;34m(path, sample)\u001b[0m\n\u001b[1;32m     35\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     36\u001b[0m          \u001b[0;31m# cut on lepton number\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 37\u001b[0;31m         \u001b[0mfail\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mvectorize\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mjust_two_leptons\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlep_n\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     38\u001b[0m         \u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdrop\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfail\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0minplace\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mTrue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     39\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36m__getitem__\u001b[0;34m(self, key)\u001b[0m\n\u001b[1;32m   3012\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3013\u001b[0m         \u001b[0;31m# Do we have a (boolean) 1d indexer?\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3014\u001b[0;31m         \u001b[0;32mif\u001b[0m \u001b[0mcom\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mis_bool_indexer\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3015\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_getitem_bool_array\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3016\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/common.py\u001b[0m in \u001b[0;36mis_bool_indexer\u001b[0;34m(key)\u001b[0m\n\u001b[1;32m    112\u001b[0m                     \u001b[0;31m# Don't raise on e.g. [\"A\", \"B\", np.nan], see\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    113\u001b[0m                     \u001b[0;31m#  test_loc_getitem_list_of_labels_categoricalindex_with_na\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 114\u001b[0;31m                     \u001b[0;32mraise\u001b[0m \u001b[0mValueError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mna_msg\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    115\u001b[0m                 \u001b[0;32mreturn\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    116\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0;32mTrue\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;31mValueError\u001b[0m: Cannot mask with non-boolean array containing NA / NaN values"
+     ]
+    }
+   ],
+   "source": [
+    "start = time.time() # time at start of whole processing\n",
+    "data = get_data_from_files() # process all files\n",
+    "elapsed = time.time() - start # time after whole processing\n",
+    "print(\"Time taken: \"+str(round(elapsed,1))+\"s\") # print total time taken to process every file"
    ]
   }
  ],

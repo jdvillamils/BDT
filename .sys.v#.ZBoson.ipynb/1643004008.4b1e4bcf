@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "5462d3bf",
+   "id": "995715d2",
    "metadata": {},
    "source": [
     "# Analysis Z Boson"
@@ -37,7 +37,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 42,
+   "execution_count": 29,
    "id": "241c2b80",
    "metadata": {},
    "outputs": [],
@@ -51,14 +51,14 @@
     "           #      'data_D']\n",
     "    #},\n",
     "    \n",
-    "    'Z' : {\n",
-    "        'list' : ['Zee']#,\n",
+    "    #'Z' : {\n",
+    "     #   'list' : ['Zee',\n",
     "                 #'Zmumu',\n",
     "                 #'Ztautau']\n",
-    "    }\n",
+    "    #}\n",
     "    \n",
-    "    #'diboson' : {\n",
-    "       # 'list' : ['ZqqZll']}\n",
+    "    'diboson' : {\n",
+    "        'list' : ['ZqqZll']}\n",
     "      #            'WqqZll',\n",
     "       #           'WpqqWmlv',\n",
     "        #          'WplvWmqq',\n",
@@ -164,7 +164,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "69081c7c",
+   "id": "e28ddd0f",
    "metadata": {},
    "source": [
     "Check satisfied triggers E and M"
@@ -187,7 +187,7 @@
   {
    "cell_type": "code",
    "execution_count": 30,
-   "id": "5e9c8342",
+   "id": "4963a58a",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -197,7 +197,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "681ec6bc",
+   "id": "8b9d821b",
    "metadata": {},
    "source": [
     "Find two good leptons"
@@ -205,7 +205,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 40,
+   "execution_count": 10,
    "id": "663d3e53",
    "metadata": {},
    "outputs": [],
@@ -231,15 +231,13 @@
     "    theta0 = 2*np.arctan(np.exp(-lep_eta[0]))\n",
     "    theta1 = 2*np.arctan(np.exp(-lep_eta[1]))\n",
     "    if abs(lep_z0[0]*np.sin(theta0))>0.5: return True\n",
-    "    if abs(lep_z0[1]*np.sin(theta1))>0.5: return True\n",
-    "    \n",
-    "    return False"
+    "    if abs(lep_z0[1]*np.sin(theta1))>0.5: return True"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 31,
-   "id": "55530357",
+   "id": "1c313a0a",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -250,7 +248,7 @@
   {
    "cell_type": "code",
    "execution_count": 32,
-   "id": "a98e3a80",
+   "id": "f6e9526a",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -260,7 +258,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "0d01d014",
+   "id": "6e069fb4",
    "metadata": {
     "slideshow": {
      "slide_type": "slide"
@@ -273,7 +271,7 @@
   {
    "cell_type": "code",
    "execution_count": 13,
-   "id": "01d3197b",
+   "id": "d5ec83db",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -298,19 +296,19 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 34,
-   "id": "67b64481",
+   "execution_count": 14,
+   "id": "91da915c",
    "metadata": {},
    "outputs": [],
    "source": [
     "def mass_selection(invmass):\n",
-    "    return abs(invmass-91.18) > 25 #we need when the difference is lesser than 25 "
+    "    if abs(invmass-91.18) > 25: return True #we need when the difference is lesser than 25 "
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 33,
-   "id": "cdcc8bcb",
+   "id": "e3ffec2e",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -320,7 +318,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "84d06e22",
+   "id": "e7d2911e",
    "metadata": {},
    "source": [
     "### Read section "
@@ -328,8 +326,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 36,
-   "id": "85f9cac4",
+   "execution_count": 27,
+   "id": "a773212d",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -369,8 +367,8 @@
     "        data.drop(fail, inplace=True)\n",
     "        \n",
     "         # cut on lepton number\n",
-    "        fail = data[ np.vectorize(just_two_leptons)(data.lep_n)].index\n",
-    "        data.drop(fail, inplace=True)\n",
+    "        #fail = data[ np.vectorize(just_two_leptons)(data.lep_n)].index\n",
+    "        #data.drop(fail, inplace=True)\n",
     "        \n",
     "         # Keep just good leptons\n",
     "        fail = data[ np.vectorize(find_good_leptons)(data.lep_pt,data.lep_ptcone30,data.lep_etcone20,data.lep_type,data.lep_eta,data.lep_trackd0pvunbiased,data.lep_tracksigd0pvunbiased,data.lep_z0)].index\n",
@@ -399,16 +397,13 @@
     "        elapsed = time.time() - start # time taken to process\n",
     "        print(\"\\t\\t nIn: \"+str(nIn)+\",\\t nOut: \\t\"+str(nOut)+\"\\t in \"+str(round(elapsed,1))+\"s\") # events before and after\n",
     "    \n",
-    "    return data_all # return dataframe containing events passing all cuts\n",
-    "\n",
-    "#El siguiente paso es probar con cuales paquetes funciona y con cuales no, para luego hacer que el programa escriba sobre un archivo root, la información, la cual luego debe ser separada y entrenada, repitiendo lo hecho en hzz\n",
-    "#posteriormente habría que revisar si se puede emular el sklearn"
+    "    return data_all # return dataframe containing events passing all cuts"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 43,
-   "id": "bad4237e",
+   "execution_count": 28,
+   "id": "7b221139",
    "metadata": {},
    "outputs": [
     {
@@ -416,40 +411,22 @@
      "output_type": "stream",
      "text": [
       "Processing Z samples\n",
-      "\tProcessing: Zee\n",
-      "\t\t nIn: 143622,\t nOut: \t59155\t in 20.3s\n",
-      "\t\t nIn: 143622,\t nOut: \t58981\t in 48.0s\n",
-      "\t\t nIn: 143622,\t nOut: \t59182\t in 68.8s\n",
-      "\t\t nIn: 143622,\t nOut: \t58953\t in 91.8s\n",
-      "\t\t nIn: 143622,\t nOut: \t58895\t in 110.7s\n",
-      "\t\t nIn: 143622,\t nOut: \t58869\t in 129.3s\n",
-      "\t\t nIn: 143622,\t nOut: \t59048\t in 147.5s\n",
-      "\t\t nIn: 143622,\t nOut: \t58770\t in 173.1s\n",
-      "\t\t nIn: 143622,\t nOut: \t58883\t in 194.8s\n",
-      "\t\t nIn: 143622,\t nOut: \t58964\t in 212.4s\n",
-      "\t\t nIn: 143622,\t nOut: \t59128\t in 231.1s\n",
-      "\t\t nIn: 143622,\t nOut: \t58990\t in 251.5s\n",
-      "\t\t nIn: 143622,\t nOut: \t58706\t in 271.6s\n",
-      "\t\t nIn: 143622,\t nOut: \t59025\t in 290.0s\n",
-      "\t\t nIn: 143622,\t nOut: \t58897\t in 311.3s\n"
+      "\tProcessing: Zee\n"
      ]
     },
     {
-     "ename": "KeyboardInterrupt",
-     "evalue": "",
+     "ename": "ValueError",
+     "evalue": "Cannot mask with non-boolean array containing NA / NaN values",
      "output_type": "error",
      "traceback": [
       "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
-      "\u001b[0;31mKeyboardInterrupt\u001b[0m                         Traceback (most recent call last)",
+      "\u001b[0;31mValueError\u001b[0m                                Traceback (most recent call last)",
       "\u001b[0;32m/tmp/ipykernel_580/862785482.py\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0mstart\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtime\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# time at start of whole processing\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0mdata\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mget_data_from_files\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# process all files\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      3\u001b[0m \u001b[0melapsed\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtime\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m-\u001b[0m \u001b[0mstart\u001b[0m \u001b[0;31m# time after whole processing\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Time taken: \"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mround\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0melapsed\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\"s\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# print total time taken to process every file\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
       "\u001b[0;32m/tmp/ipykernel_580/1439532152.py\u001b[0m in \u001b[0;36mget_data_from_files\u001b[0;34m()\u001b[0m\n\u001b[1;32m     10\u001b[0m                 \u001b[0mprefix\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m\"MC/mc_\"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0minfofile\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0minfos\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"DSID\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     11\u001b[0m             \u001b[0mfileString\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtuple_path\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mprefix\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".2lep.root\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 12\u001b[0;31m             \u001b[0mtemp\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mread_file\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfileString\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     13\u001b[0m             \u001b[0mframes\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtemp\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     14\u001b[0m         \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpd\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconcat\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mframes\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m/tmp/ipykernel_580/3464654678.py\u001b[0m in \u001b[0;36mread_file\u001b[0;34m(path, sample)\u001b[0m\n\u001b[1;32m     57\u001b[0m         \u001b[0;31m#Check good mass range\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     58\u001b[0m         \u001b[0mfail\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mvectorize\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mmass_selection\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmll\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 59\u001b[0;31m         \u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdrop\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfail\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0minplace\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mTrue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     60\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     61\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36mdrop\u001b[0;34m(self, labels, axis, index, columns, level, inplace, errors)\u001b[0m\n\u001b[1;32m   4303\u001b[0m                 \u001b[0mweight\u001b[0m  \u001b[0;36m1.0\u001b[0m     \u001b[0;36m0.8\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4304\u001b[0m         \"\"\"\n\u001b[0;32m-> 4305\u001b[0;31m         return super().drop(\n\u001b[0m\u001b[1;32m   4306\u001b[0m             \u001b[0mlabels\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mlabels\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4307\u001b[0m             \u001b[0maxis\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0maxis\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/generic.py\u001b[0m in \u001b[0;36mdrop\u001b[0;34m(self, labels, axis, index, columns, level, inplace, errors)\u001b[0m\n\u001b[1;32m   4150\u001b[0m         \u001b[0;32mfor\u001b[0m \u001b[0maxis\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlabels\u001b[0m \u001b[0;32min\u001b[0m \u001b[0maxes\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mitems\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4151\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mlabels\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 4152\u001b[0;31m                 \u001b[0mobj\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mobj\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_drop_axis\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mlabels\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0maxis\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlevel\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mlevel\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0merrors\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0merrors\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   4153\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4154\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0minplace\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/generic.py\u001b[0m in \u001b[0;36m_drop_axis\u001b[0;34m(self, labels, axis, level, errors)\u001b[0m\n\u001b[1;32m   4179\u001b[0m         \u001b[0maxis\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_get_axis\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0maxis\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4180\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 4181\u001b[0;31m         \u001b[0;32mif\u001b[0m \u001b[0maxis\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mis_unique\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   4182\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mlevel\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4183\u001b[0m                 \u001b[0;32mif\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0misinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0maxis\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mMultiIndex\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32mpandas/_libs/properties.pyx\u001b[0m in \u001b[0;36mpandas._libs.properties.CachedProperty.__get__\u001b[0;34m()\u001b[0m\n",
-      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/indexes/base.py\u001b[0m in \u001b[0;36mis_unique\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m   1767\u001b[0m         \u001b[0mReturn\u001b[0m \u001b[0;32mif\u001b[0m \u001b[0mthe\u001b[0m \u001b[0mindex\u001b[0m \u001b[0mhas\u001b[0m \u001b[0munique\u001b[0m \u001b[0mvalues\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1768\u001b[0m         \"\"\"\n\u001b[0;32m-> 1769\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_engine\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mis_unique\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1770\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1771\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mproperty\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;31mKeyboardInterrupt\u001b[0m: "
+      "\u001b[0;32m/tmp/ipykernel_580/1831886414.py\u001b[0m in \u001b[0;36mread_file\u001b[0;34m(path, sample)\u001b[0m\n\u001b[1;32m     43\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     44\u001b[0m         \u001b[0;31m#Check SFOS\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 45\u001b[0;31m         \u001b[0mfail\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mvectorize\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mopposite_charge\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlep_charge\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     46\u001b[0m         \u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdrop\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfail\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0minplace\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mTrue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     47\u001b[0m         \u001b[0mfail\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mvectorize\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0msame_flavour\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlep_type\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36m__getitem__\u001b[0;34m(self, key)\u001b[0m\n\u001b[1;32m   3012\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3013\u001b[0m         \u001b[0;31m# Do we have a (boolean) 1d indexer?\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3014\u001b[0;31m         \u001b[0;32mif\u001b[0m \u001b[0mcom\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mis_bool_indexer\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3015\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_getitem_bool_array\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3016\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/common.py\u001b[0m in \u001b[0;36mis_bool_indexer\u001b[0;34m(key)\u001b[0m\n\u001b[1;32m    112\u001b[0m                     \u001b[0;31m# Don't raise on e.g. [\"A\", \"B\", np.nan], see\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    113\u001b[0m                     \u001b[0;31m#  test_loc_getitem_list_of_labels_categoricalindex_with_na\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 114\u001b[0;31m                     \u001b[0;32mraise\u001b[0m \u001b[0mValueError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mna_msg\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    115\u001b[0m                 \u001b[0;32mreturn\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    116\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0;32mTrue\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;31mValueError\u001b[0m: Cannot mask with non-boolean array containing NA / NaN values"
      ]
     }
    ],

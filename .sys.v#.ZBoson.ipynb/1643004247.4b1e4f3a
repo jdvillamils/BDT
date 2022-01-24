@@ -1,8 +1,16 @@
 {
  "cells": [
   {
+   "cell_type": "markdown",
+   "id": "361d38e8",
+   "metadata": {},
+   "source": [
+    "# Analysis Z Boson"
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 2,
    "id": "4667148d",
    "metadata": {},
    "outputs": [],
@@ -29,61 +37,61 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 38,
    "id": "241c2b80",
    "metadata": {},
    "outputs": [],
    "source": [
     "samples = {\n",
     "    \n",
-    "    'data' : {\n",
-    "        'list' : ['data_A',\n",
-    "                 'data_B',\n",
-    "                 'data_C',\n",
-    "                 'data_D']\n",
-    "    },\n",
+    "    #'data' : {\n",
+    "        #'list' : ['data_A',\n",
+    "         #        'data_B',\n",
+    "          #       'data_C',\n",
+    "           #      'data_D']\n",
+    "    #},\n",
     "    \n",
     "    'Z' : {\n",
-    "        'list' : ['Zee',\n",
-    "                 'Zmumu',\n",
+    "        'list' : [#'Zee',\n",
+    "                 #'Zmumu',\n",
     "                 'Ztautau']\n",
-    "    },\n",
-    "    \n",
-    "    'diboson' : {\n",
-    "        'list' : ['ZqqZll',\n",
-    "                  'WqqZll',\n",
-    "                  'WpqqWmlv',\n",
-    "                  'WplvWmqq',\n",
-    "                  'WlvZqq',\n",
-    "                  'llll',\n",
-    "                  'lllv',\n",
-    "                  'llvv',\n",
-    "                  'lvvv']\n",
-    "    },\n",
-    "    \n",
-    "    'single_top' : {\n",
-    "        'list' : ['single_top_tchan',\n",
-    "                  'single_antitop_tchan',\n",
-    "                  'single_top_schan',\n",
-    "                  'single_antitop_schan',\n",
-    "                  'single_top_wtchan',\n",
-    "                  'single_antitop_wtchan']\n",
-    "    },\n",
-    "    \n",
-    "    'WJets' : {\n",
-    "        'list' : ['Wplusenu',\n",
-    "                 'Wplusmunu',\n",
-    "                 'Wplustaunu',\n",
-    "                 'Wminusenu',\n",
-    "                 'Wminusmunu',\n",
-    "                 'Wminustaunu']\n",
     "    }\n",
+    "    \n",
+    "    #'diboson' : {\n",
+    "       # 'list' : ['ZqqZll']}\n",
+    "      #            'WqqZll',\n",
+    "       #           'WpqqWmlv',\n",
+    "        #          'WplvWmqq',\n",
+    "         #         'WlvZqq',\n",
+    "          #        'llll',\n",
+    "           #       'lllv',\n",
+    "            #      'llvv',\n",
+    "             #     'lvvv']\n",
+    "    #},\n",
+    "    \n",
+    "    #'single_top' : {\n",
+    "     #   'list' : ['single_top_tchan',\n",
+    "      #            'single_antitop_tchan',\n",
+    "       #           'single_top_schan',\n",
+    "        #          'single_antitop_schan',\n",
+    "         #         'single_top_wtchan',\n",
+    "          #        'single_antitop_wtchan']\n",
+    "    #},\n",
+    "    \n",
+    "    #'WJets' : {\n",
+    "     #   'list' : ['Wplusenu',\n",
+    "      #           'Wplusmunu',\n",
+    "       #          'Wplustaunu',\n",
+    "        #         'Wminusenu',\n",
+    "         #        'Wminusmunu',\n",
+    "          #       'Wminustaunu']\n",
+    "    #}\n",
     "}"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 4,
    "id": "5cfb905e",
    "metadata": {},
    "outputs": [],
@@ -97,7 +105,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 18,
    "id": "92d1acd9",
    "metadata": {},
    "outputs": [],
@@ -112,7 +120,7 @@
     "            if s == 'data': prefix = \"Data/\" # Data prefix\n",
     "            else: # MC prefix\n",
     "                prefix = \"MC/mc_\"+str(infofile.infos[val][\"DSID\"])+\".\"\n",
-    "            fileString = tuple_path+prefix+val+\".1largeRjet1lep.root\" \n",
+    "            fileString = tuple_path+prefix+val+\".2lep.root\" \n",
     "            temp = read_file(fileString,val) \n",
     "            frames.append(temp) \n",
     "        data[s] = pd.concat(frames) \n",
@@ -122,7 +130,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 6,
    "id": "2ba1def3",
    "metadata": {},
    "outputs": [],
@@ -135,7 +143,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 7,
    "id": "0f1d517c",
    "metadata": {},
    "outputs": [],
@@ -151,12 +159,12 @@
    "id": "40716206",
    "metadata": {},
    "source": [
-    "Definition of the cut functions"
+    "## Definition of the cut functions"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "5354ad2a",
+   "id": "f1d71617",
    "metadata": {},
    "source": [
     "Check satisfied triggers E and M"
@@ -164,7 +172,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 8,
    "id": "8ffa5043",
    "metadata": {},
    "outputs": [],
@@ -178,18 +186,18 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "3f21f6b7",
+   "execution_count": 30,
+   "id": "8d1e7c63",
    "metadata": {},
    "outputs": [],
    "source": [
     "def just_two_leptons(lep_n):\n",
-    "    if lep_n == 1 or lep_n > 2: return True #throw away when the number lepton is different of 2"
+    "    return lep_n != 2 #throw away when the number lepton is different of 2"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "4b139075",
+   "id": "035d9fe4",
    "metadata": {},
    "source": [
     "Find two good leptons"
@@ -197,7 +205,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 10,
    "id": "663d3e53",
    "metadata": {},
    "outputs": [],
@@ -228,29 +236,29 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "f701ac35",
+   "execution_count": 31,
+   "id": "34519e6b",
    "metadata": {},
    "outputs": [],
    "source": [
     "def opposite_charge(lep_charge):\n",
-    "    if lep_charge[0]*lep_charge[1] > 0: return True #delete if there are the same charge, only works if < 0"
+    "    return lep_charge[0]*lep_charge[1] > 0 #throw away when > 0"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "dcaa23ea",
+   "execution_count": 32,
+   "id": "777c3943",
    "metadata": {},
    "outputs": [],
    "source": [
     "def same_flavour(lep_type):\n",
-    "    if lep_type[0]!=lep_type[1]: return True"
+    "    return lep_type[0]!=lep_type[1] #throw away when different flavour"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "2c99fdbf",
+   "id": "cba8957e",
    "metadata": {
     "slideshow": {
      "slide_type": "slide"
@@ -262,8 +270,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "29ed7166",
+   "execution_count": 13,
+   "id": "1ace49de",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -288,30 +296,38 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "97c17159",
+   "execution_count": 34,
+   "id": "9b2ed3f2",
    "metadata": {},
    "outputs": [],
    "source": [
-    "def mass_Selection(invmass):\n",
-    "    if abs(invmass-91.18) > 25: return True #we need when the difference is lesser than 25 "
+    "def mass_selection(invmass):\n",
+    "    return abs(invmass-91.18) > 25 #we need when the difference is lesser than 25 "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "89276b51",
+   "execution_count": 33,
+   "id": "15173e32",
    "metadata": {},
    "outputs": [],
    "source": [
     "def check_jets(jet_n):\n",
-    "    if jet_n != 0: return True #We need no jets"
+    "    return jet_n != 0 #We need no jets"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5a59b0c0",
+   "metadata": {},
+   "source": [
+    "### Read section "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "468f8882",
+   "execution_count": 36,
+   "id": "72c72f26",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -351,23 +367,30 @@
     "        data.drop(fail, inplace=True)\n",
     "        \n",
     "         # cut on lepton number\n",
-    "        fail = data[ np.vectorize(just_two_leptons)(data.trigE,data.trigM)].index\n",
+    "        fail = data[ np.vectorize(just_two_leptons)(data.lep_n)].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
-    "\n",
-    "\n",
-    "        # return the individual lepton transverse momenta in GeV\n",
-    "        #data['lep_pt_1'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,1)\n",
-    "        #data['lep_pt_2'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,2)\n",
+    "         # Keep just good leptons\n",
+    "        fail = data[ np.vectorize(find_good_leptons)(data.lep_pt,data.lep_ptcone30,data.lep_etcone20,data.lep_type,data.lep_eta,data.lep_trackd0pvunbiased,data.lep_tracksigd0pvunbiased,data.lep_z0)].index\n",
+    "        data.drop(fail, inplace=True)\n",
     "        \n",
-    "        # dataframe contents can be printed at any stage like this\n",
-    "        #print(data)\n",
-    "\n",
-    "        # dataframe column can be printed at any stage like this\n",
-    "        #print(data['lep_pt'])\n",
-    "\n",
-    "        # multiple dataframe columns can be printed at any stage like this\n",
-    "        #print(data[['lep_pt','lep_eta']])\n",
+    "        #Check SFOS\n",
+    "        fail = data[ np.vectorize(opposite_charge)(data.lep_charge)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        fail = data[ np.vectorize(same_flavour)(data.lep_type)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        #Check no jets\n",
+    "        fail = data[ np.vectorize(check_jets)(data.jet_n)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        #claculation of the invariant mass\n",
+    "        data['mll'] = np.vectorize(calc_mll)(data.lep_pt, data.lep_eta, data.lep_phi, data.lep_E)\n",
+    "        \n",
+    "        #Check good mass range\n",
+    "        fail = data[ np.vectorize(mass_selection)(data.mll)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
     "\n",
     "        nOut = len(data.index) # number of events passing cuts in this batch\n",
     "        data_all = data_all.append(data) # append dataframe from this batch to the dataframe for the whole sample\n",
@@ -375,6 +398,28 @@
     "        print(\"\\t\\t nIn: \"+str(nIn)+\",\\t nOut: \\t\"+str(nOut)+\"\\t in \"+str(round(elapsed,1))+\"s\") # events before and after\n",
     "    \n",
     "    return data_all # return dataframe containing events passing all cuts"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8191eda5",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Processing Z samples\n",
+      "\tProcessing: Ztautau\n"
+     ]
+    }
+   ],
+   "source": [
+    "start = time.time() # time at start of whole processing\n",
+    "data = get_data_from_files() # process all files\n",
+    "elapsed = time.time() - start # time after whole processing\n",
+    "print(\"Time taken: \"+str(round(elapsed,1))+\"s\") # print total time taken to process every file"
    ]
   }
  ],
