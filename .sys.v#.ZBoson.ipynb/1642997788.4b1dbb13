@@ -21,7 +21,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "d34472b2",
+   "id": "f39c1e51",
    "metadata": {},
    "source": [
     "List with all the sampels"
@@ -136,7 +136,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "0f1d517c",
+   "id": "46b4e349",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -148,7 +148,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "40716206",
+   "id": "7b92bf25",
    "metadata": {},
    "source": [
     "Definition of the cut functions"
@@ -157,7 +157,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "8ffa5043",
+   "id": "bfb6526d",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -171,7 +171,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "663d3e53",
+   "id": "57e08dba",
    "metadata": {},
    "outputs": [],
    "source": [
