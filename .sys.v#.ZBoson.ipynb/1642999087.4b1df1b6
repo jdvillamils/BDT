@@ -21,7 +21,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "bf67f5c4",
+   "id": "d34472b2",
    "metadata": {},
    "source": [
     "List with all the sampels"
@@ -136,7 +136,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "79a8bd01",
+   "id": "0f1d517c",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -148,7 +148,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "1375d186",
+   "id": "40716206",
    "metadata": {},
    "source": [
     "Definition of the cut functions"
@@ -157,7 +157,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "f96b083b",
+   "id": "8ffa5043",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -171,7 +171,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "6e1a63b2",
+   "id": "663d3e53",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -185,11 +185,13 @@
     "    #electron in fiducial region\n",
     "    if lep_type[0]==11 and (abs(lep_eta[0]>2.47) or abs(lep_eta[0]>1.37)) : return True\n",
     "    if lep_type[1]==11 and (abs(lep_eta[1]>2.47) or abs(lep_eta[1]>1.37)) : return True\n",
+    "    #Longitudinal impact parameter\n",
     "    theta0 = 2*np.arctan(np.exp(-lep_eta[0]))\n",
     "    theta1 = 2*np.arctan(np.exp(-lep_eta[1]))\n",
     "    if lep_trackd0pvunbiased[0]/lep_tracksigd0pvunbiased[0] > 5 and abs(lep_z0[0]*np.sin(theta0))>0.5: return True\n",
     "    if lep_trackd0pvunbiased[1]/lep_tracksigd0pvunbiased[1] > 5 and abs(lep_z0[1]*np.sin(theta1))>0.5: return True\n",
-    "    "
+    "    if lep_type[0]==13 and abs(lep_eta[0]>2.5): return True\n",
+    "    if lep_type[1]==13 and abs(lep_eta[1]>2.5): return True"
    ]
   }
  ],

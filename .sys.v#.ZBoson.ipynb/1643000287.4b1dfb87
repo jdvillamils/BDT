@@ -21,7 +21,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "c702beac",
+   "id": "d34472b2",
    "metadata": {},
    "source": [
     "List with all the sampels"
@@ -136,7 +136,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "ca243b6f",
+   "id": "0f1d517c",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -148,7 +148,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "f7d6242e",
+   "id": "40716206",
    "metadata": {},
    "source": [
     "Definition of the cut functions"
@@ -157,7 +157,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "b952e3f8",
+   "id": "8ffa5043",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -171,7 +171,18 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "18767bb8",
+   "id": "785351e9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def two_leptons(lep_n):\n",
+    "    if lep_n "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "663d3e53",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -185,11 +196,18 @@
     "    #electron in fiducial region\n",
     "    if lep_type[0]==11 and (abs(lep_eta[0]>2.47) or abs(lep_eta[0]>1.37)) : return True\n",
     "    if lep_type[1]==11 and (abs(lep_eta[1]>2.47) or abs(lep_eta[1]>1.37)) : return True\n",
+    "    if lep_type[0]==11 and lep_trackd0pvunbiased[0]/lep_tracksigd0pvunbiased[0] > 5 : return True\n",
+    "    if lep_type[1]==11 and lep_trackd0pvunbiased[1]/lep_tracksigd0pvunbiased[1] > 5 : return True\n",
+    "    #muon\n",
+    "    if lep_type[0]==13 and abs(lep_eta[0]>2.5): return True\n",
+    "    if lep_type[1]==13 and abs(lep_eta[1]>2.5): return True\n",
+    "    if lep_type[0]==13 and lep_trackd0pvunbiased[0]/lep_tracksigd0pvunbiased[0] > 3 : return True\n",
+    "    if lep_type[1]==13 and lep_trackd0pvunbiased[1]/lep_tracksigd0pvunbiased[1] > 3 : return True\n",
+    "    #Longitudinal impact parameter\n",
     "    theta0 = 2*np.arctan(np.exp(-lep_eta[0]))\n",
     "    theta1 = 2*np.arctan(np.exp(-lep_eta[1]))\n",
-    "    if lep_trackd0pvunbiased[0]/lep_tracksigd0pvunbiased[0] > 5 and abs(lep_z0[0]*np.sin(theta0))>0.5: return True\n",
-    "    if lep_trackd0pvunbiased[1]/lep_tracksigd0pvunbiased[1] > 5 and abs(lep_z0[1]*np.sin(theta1))>0.5: return True\n",
-    "    "
+    "    if abs(lep_z0[0]*np.sin(theta0))>0.5: return True\n",
+    "    if abs(lep_z0[1]*np.sin(theta1))>0.5: return True"
    ]
   }
  ],

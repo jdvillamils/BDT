@@ -185,11 +185,18 @@
     "    #electron in fiducial region\n",
     "    if lep_type[0]==11 and (abs(lep_eta[0]>2.47) or abs(lep_eta[0]>1.37)) : return True\n",
     "    if lep_type[1]==11 and (abs(lep_eta[1]>2.47) or abs(lep_eta[1]>1.37)) : return True\n",
+    "    if lep_type[0]==11 and lep_trackd0pvunbiased[0]/lep_tracksigd0pvunbiased[0] > 5 : return True\n",
+    "    if lep_type[1]==11 and lep_trackd0pvunbiased[1]/lep_tracksigd0pvunbiased[1] > 5 : return True\n",
+    "    #muon\n",
+    "    if lep_type[0]==13 and abs(lep_eta[0]>2.5): return True\n",
+    "    if lep_type[1]==13 and abs(lep_eta[1]>2.5): return True\n",
+    "    if lep_type[0]==13 and lep_trackd0pvunbiased[0]/lep_tracksigd0pvunbiased[0] > 3 : return True\n",
+    "    if lep_type[1]==13 and lep_trackd0pvunbiased[1]/lep_tracksigd0pvunbiased[1] > 3 : return True\n",
+    "    #Longitudinal impact parameter\n",
     "    theta0 = 2*np.arctan(np.exp(-lep_eta[0]))\n",
     "    theta1 = 2*np.arctan(np.exp(-lep_eta[1]))\n",
-    "    if lep_trackd0pvunbiased[0]/lep_tracksigd0pvunbiased[0] > 5 and abs(lep_z0[0]*np.sin(theta0))>0.5: return True\n",
-    "    if lep_trackd0pvunbiased[1]/lep_tracksigd0pvunbiased[1] > 5 and abs(lep_z0[1]*np.sin(theta1))>0.5: return True\n",
-    "    "
+    "    if abs(lep_z0[0]*np.sin(theta0))>0.5: return True\n",
+    "    if abs(lep_z0[1]*np.sin(theta1))>0.5: return True"
    ]
   }
  ],
