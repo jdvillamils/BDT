@@ -156,7 +156,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "eb30aa13",
+   "id": "905521af",
    "metadata": {},
    "source": [
     "Check satisfied triggers E and M"
@@ -179,7 +179,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "63e62513",
+   "id": "6c3d3b06",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -189,7 +189,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "0541c6df",
+   "id": "1b7c781f",
    "metadata": {},
    "source": [
     "Find two good leptons"
@@ -202,7 +202,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "def find_good_leptons(lep_pt,lep_ptcone30,lep_etcone20,lep_type,lep_eta,lep_trackd0pvunbiased,lep_tracksigd0pvunbiased,lep_z0):\n",
+    "def find_good_leptons(lep_pt,lep_ptcone30,lep_etcone20,lep_type,lep_eta,lep_trackd0pvunbiased,lep_tracksigd0pvunbiased,lep_eta,lep_z0):\n",
     "    if lep_pt[0] < 25000 : return True  #pt required to be bigger than 25GeV\n",
     "    #isolated leptons (good when <0.15)\n",
     "    if lep_ptcone30[0]/lep_pt[0] > 0.15: return True\n",
@@ -229,7 +229,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "f429cd3d",
+   "id": "bc094ea5",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -240,7 +240,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "8f809f09",
+   "id": "4f31ecb3",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -250,7 +250,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "fb0d05a8",
+   "id": "16825c24",
    "metadata": {
     "slideshow": {
      "slide_type": "slide"
@@ -263,7 +263,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "0e94496d",
+   "id": "7e1b1dca",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -289,18 +289,18 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "f26758e9",
+   "id": "e750c532",
    "metadata": {},
    "outputs": [],
    "source": [
-    "def mass_selection(invmass):\n",
+    "def mass_Selection(invmass):\n",
     "    if abs(invmass-91.18) > 25: return True #we need when the difference is lesser than 25 "
    ]
   },
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "3ab89eb6",
+   "id": "ee70aa0a",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -311,7 +311,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "6ec83690",
+   "id": "8628582d",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -322,13 +322,15 @@
     "    tree = uproot3.open(path)[\"mini\"] # open the tree called mini\n",
     "    numevents = uproot3.numentries(path, \"mini\") # number of events\n",
     "    if 'data' not in sample: xsec_weight = get_xsec_weight(sample) # get cross-section weight\n",
-    "    for data in tree.iterate(['lep_charge','lep_type','lep_pt', 'lep_eta', 'lep_ptcone30',\n",
-    "                              'lep_etcone20', 'lep_trackd0pvunbiased', 'lep_tracksigd0pvunbiased', 'lep_z0', 'jet_n', \n",
-    "                              'trigE', 'trigM', 'lep_n', 'lep_charge', 'lep_phi', 'lep_E',\n",
+    "    for data in tree.iterate(['lep_charge','lep_type','lep_pt', 'jet_n', 'largeRjet_n', 'met_et', \n",
+    "                              'trigE', 'trigM',\n",
+    "                              # uncomment these variables if you want to calculate masses \n",
+    "                              #,'lep_eta','lep_phi','lep_E', \n",
+    "                              # add more variables here if you make cuts on them \n",
     "                              'mcWeight','scaleFactor_PILEUP',\n",
     "                              'scaleFactor_ELE','scaleFactor_MUON',\n",
     "                              'scaleFactor_LepTRIGGER'\n",
-    "                             ],\n",
+    "                             ], # variables to calculate Monte Carlo weight\n",
     "                             outputtype=pd.DataFrame, # choose output type as pandas DataFrame\n",
     "                             entrystop=numevents*fraction): # process up to numevents*fraction\n",
     "\n",
@@ -345,36 +347,38 @@
     "\n",
     "        #roof[\"tree1\"].extend({\"branch1\": data.jet_n})\n",
     "        #data[\"leppt1\"]= np.vectorize(calc_lep_pt_i)(data.lep_pt,0)\n",
+    "        print(data)\n",
     "\n",
-    "        # cut on triggers\n",
-    "        fail = data[ np.vectorize(cut_trig)(data.trigE,data.trigM)].index\n",
+    "        # cut on lepton charge using the function cut_lep_charge defined above\n",
+    "        fail = data[ np.vectorize(cut_largerjet)(data.largeRjet_n) ].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
-    "         # cut on lepton number\n",
-    "        fail = data[ np.vectorize(just_two_leptons)(data.lep_n)].index\n",
+    "        fail = data[ np.vectorize(cut_met_et)(data.met_et)].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
-    "         # Keep just good leptons\n",
-    "        fail = data[ np.vectorize(find_good_leptons)(data.lep_pt,data.lep_ptcone30,data.lep_etcone20,data.lep_type,data.lep_eta,data.lep_trackd0pvunbiased,data.lep_tracksigd0pvunbiased,data.lep_z0)].index\n",
+    "        fail = data[ np.vectorize(cut_trige)(data.trigE,data.trigM)].index #,data.trigM) ].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
-    "        #Check SFOS\n",
-    "        fail = data[ np.vectorize(opposite_charge)(data.lep_charge)].index\n",
-    "        data.drop(fail, inplace=True)\n",
-    "        fail = data[ np.vectorize(same_flavour)(data.lep_type)].index\n",
-    "        data.drop(fail, inplace=True)\n",
+    "        print('cutttttt')\n",
     "        \n",
-    "        #Check no jets\n",
-    "        fail = data[ np.vectorize(check_jets)(data.jet_n)].index\n",
-    "        data.drop(fail, inplace=True)\n",
+    "        print(data)\n",
+    "\n",
+    "        # cut on lepton type using the function cut_lep_type defined above\n",
+    "        #fail = data[ np.vectorize(cut_lep_type)(data.lep_type) ].index\n",
+    "        #data.drop(fail, inplace=True)\n",
+    "\n",
+    "        # return the individual lepton transverse momenta in GeV\n",
+    "        #data['lep_pt_1'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,1)\n",
+    "        #data['lep_pt_2'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,2)\n",
     "        \n",
-    "        #claculation of the invariant mass\n",
-    "        data['mll'] = np.vectorize(calc_mll)(data.lep_pt, data.lep_eta, data.lep_phi, data.lep_E)\n",
-    "        \n",
-    "        #Check good mass range\n",
-    "        fail = data[ np.vectorize(mass_selection)(data.mll)].index\n",
-    "        data.drop(fail, inplace=True)\n",
-    "        \n",
+    "        # dataframe contents can be printed at any stage like this\n",
+    "        #print(data)\n",
+    "\n",
+    "        # dataframe column can be printed at any stage like this\n",
+    "        #print(data['lep_pt'])\n",
+    "\n",
+    "        # multiple dataframe columns can be printed at any stage like this\n",
+    "        #print(data[['lep_pt','lep_eta']])\n",
     "\n",
     "        nOut = len(data.index) # number of events passing cuts in this batch\n",
     "        data_all = data_all.append(data) # append dataframe from this batch to the dataframe for the whole sample\n",

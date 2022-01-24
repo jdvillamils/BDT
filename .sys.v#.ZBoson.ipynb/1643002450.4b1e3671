@@ -156,7 +156,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "eb30aa13",
+   "id": "5354ad2a",
    "metadata": {},
    "source": [
     "Check satisfied triggers E and M"
@@ -179,7 +179,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "63e62513",
+   "id": "3f21f6b7",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -189,7 +189,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "0541c6df",
+   "id": "4b139075",
    "metadata": {},
    "source": [
     "Find two good leptons"
@@ -229,7 +229,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "f429cd3d",
+   "id": "f701ac35",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -240,7 +240,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "8f809f09",
+   "id": "dcaa23ea",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -250,7 +250,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "fb0d05a8",
+   "id": "2c99fdbf",
    "metadata": {
     "slideshow": {
      "slide_type": "slide"
@@ -263,7 +263,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "0e94496d",
+   "id": "29ed7166",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -289,18 +289,18 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "f26758e9",
+   "id": "97c17159",
    "metadata": {},
    "outputs": [],
    "source": [
-    "def mass_selection(invmass):\n",
+    "def mass_Selection(invmass):\n",
     "    if abs(invmass-91.18) > 25: return True #we need when the difference is lesser than 25 "
    ]
   },
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "3ab89eb6",
+   "id": "89276b51",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -311,7 +311,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "6ec83690",
+   "id": "468f8882",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -351,30 +351,23 @@
     "        data.drop(fail, inplace=True)\n",
     "        \n",
     "         # cut on lepton number\n",
-    "        fail = data[ np.vectorize(just_two_leptons)(data.lep_n)].index\n",
+    "        fail = data[ np.vectorize(just_two_leptons)(data.trigE,data.trigM)].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
-    "         # Keep just good leptons\n",
-    "        fail = data[ np.vectorize(find_good_leptons)(data.lep_pt,data.lep_ptcone30,data.lep_etcone20,data.lep_type,data.lep_eta,data.lep_trackd0pvunbiased,data.lep_tracksigd0pvunbiased,data.lep_z0)].index\n",
-    "        data.drop(fail, inplace=True)\n",
+    "\n",
+    "\n",
+    "        # return the individual lepton transverse momenta in GeV\n",
+    "        #data['lep_pt_1'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,1)\n",
+    "        #data['lep_pt_2'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,2)\n",
     "        \n",
-    "        #Check SFOS\n",
-    "        fail = data[ np.vectorize(opposite_charge)(data.lep_charge)].index\n",
-    "        data.drop(fail, inplace=True)\n",
-    "        fail = data[ np.vectorize(same_flavour)(data.lep_type)].index\n",
-    "        data.drop(fail, inplace=True)\n",
-    "        \n",
-    "        #Check no jets\n",
-    "        fail = data[ np.vectorize(check_jets)(data.jet_n)].index\n",
-    "        data.drop(fail, inplace=True)\n",
-    "        \n",
-    "        #claculation of the invariant mass\n",
-    "        data['mll'] = np.vectorize(calc_mll)(data.lep_pt, data.lep_eta, data.lep_phi, data.lep_E)\n",
-    "        \n",
-    "        #Check good mass range\n",
-    "        fail = data[ np.vectorize(mass_selection)(data.mll)].index\n",
-    "        data.drop(fail, inplace=True)\n",
-    "        \n",
+    "        # dataframe contents can be printed at any stage like this\n",
+    "        #print(data)\n",
+    "\n",
+    "        # dataframe column can be printed at any stage like this\n",
+    "        #print(data['lep_pt'])\n",
+    "\n",
+    "        # multiple dataframe columns can be printed at any stage like this\n",
+    "        #print(data[['lep_pt','lep_eta']])\n",
     "\n",
     "        nOut = len(data.index) # number of events passing cuts in this batch\n",
     "        data_all = data_all.append(data) # append dataframe from this batch to the dataframe for the whole sample\n",

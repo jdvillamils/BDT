@@ -156,7 +156,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "eb30aa13",
+   "id": "dd9cf169",
    "metadata": {},
    "source": [
     "Check satisfied triggers E and M"
@@ -179,7 +179,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "63e62513",
+   "id": "6192dcc1",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -189,7 +189,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "0541c6df",
+   "id": "2e8848b3",
    "metadata": {},
    "source": [
     "Find two good leptons"
@@ -229,7 +229,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "f429cd3d",
+   "id": "390da4b8",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -240,7 +240,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "8f809f09",
+   "id": "df206e17",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -250,7 +250,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "fb0d05a8",
+   "id": "fd37df03",
    "metadata": {
     "slideshow": {
      "slide_type": "slide"
@@ -263,7 +263,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "0e94496d",
+   "id": "b65636da",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -289,7 +289,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "f26758e9",
+   "id": "5b7db667",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -300,7 +300,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "3ab89eb6",
+   "id": "dc452698",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -311,7 +311,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "6ec83690",
+   "id": "3ad28dff",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -375,6 +375,20 @@
     "        fail = data[ np.vectorize(mass_selection)(data.mll)].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
+    "\n",
+    "\n",
+    "        # return the individual lepton transverse momenta in GeV\n",
+    "        #data['lep_pt_1'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,1)\n",
+    "        #data['lep_pt_2'] = np.vectorize(calc_lep_pt_i)(data.lep_pt,2)\n",
+    "        \n",
+    "        # dataframe contents can be printed at any stage like this\n",
+    "        #print(data)\n",
+    "\n",
+    "        # dataframe column can be printed at any stage like this\n",
+    "        #print(data['lep_pt'])\n",
+    "\n",
+    "        # multiple dataframe columns can be printed at any stage like this\n",
+    "        #print(data[['lep_pt','lep_eta']])\n",
     "\n",
     "        nOut = len(data.index) # number of events passing cuts in this batch\n",
     "        data_all = data_all.append(data) # append dataframe from this batch to the dataframe for the whole sample\n",
