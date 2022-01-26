@@ -320,7 +320,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "4ce1f765",
+   "id": "b7c15e35",
    "metadata": {},
    "source": [
     "Determine the leading lepton"
@@ -329,29 +329,14 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "9b89b814",
+   "id": "6c8d9766",
    "metadata": {},
    "outputs": [],
    "source": [
     "def lead_lep(lep_pt):\n",
     "    if lep_pt[0]>lep_pt[1]:\n",
     "        return lep_pt[0]/1000\n",
-    "    else:\n",
-    "        return lep_pt[1]/1000"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "0ba879d6",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def  sublead_lep(leo_pt):\n",
-    "    if lep_pt[0]>lep_pt[1]:\n",
-    "        return lep_pt[1]/1000\n",
-    "    else:\n",
-    "        return lep_pt[0]/1000"
+    "    "
    ]
   },
   {

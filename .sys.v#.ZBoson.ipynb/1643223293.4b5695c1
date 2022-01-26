@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "b98e0f18",
+   "id": "5462d3bf",
    "metadata": {},
    "source": [
     "# Analysis Z Boson"
@@ -10,7 +10,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 20,
    "id": "4667148d",
    "metadata": {},
    "outputs": [],
@@ -37,7 +37,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 29,
+   "execution_count": 37,
    "id": "241c2b80",
    "metadata": {},
    "outputs": [],
@@ -51,23 +51,23 @@
     "           #      'data_D']\n",
     "    #},\n",
     "    \n",
-    "    #'Z' : {\n",
-    "     #   'list' : ['Zee',\n",
+    "   # 'Z' : {\n",
+    "  #      'list' : ['Zee']#,\n",
     "                 #'Zmumu',\n",
     "                 #'Ztautau']\n",
-    "    #}\n",
+    "   # }\n",
     "    \n",
     "    'diboson' : {\n",
-    "        'list' : ['ZqqZll']}\n",
-    "      #            'WqqZll',\n",
-    "       #           'WpqqWmlv',\n",
-    "        #          'WplvWmqq',\n",
-    "         #         'WlvZqq',\n",
-    "          #        'llll',\n",
+    "        'list' : ['ZqqZll', \n",
+    "                  'WqqZll',\n",
+    "          #       'WpqqWmlv', \n",
+    "          #       'WplvWmqq',\n",
+    "           #       'WlvZqq',\n",
+    "                  'llll',\n",
     "           #       'lllv',\n",
     "            #      'llvv',\n",
-    "             #     'lvvv']\n",
-    "    #},\n",
+    "             #     'lvvv'\n",
+    "        ]},\n",
     "    \n",
     "    #'single_top' : {\n",
     "     #   'list' : ['single_top_tchan',\n",
@@ -91,21 +91,21 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 33,
    "id": "5cfb905e",
    "metadata": {},
    "outputs": [],
    "source": [
     "lumi = 10 # data_A+B+C+D\n",
     "\n",
-    "fraction = 1 # reduce to run quicker\n",
+    "fraction = 0.5 # fraction for not running the whole data (running it all make the script crash)\n",
     "\n",
     "tuple_path = \"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/\" "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 18,
+   "execution_count": 6,
    "id": "92d1acd9",
    "metadata": {},
    "outputs": [],
@@ -130,7 +130,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 7,
    "id": "2ba1def3",
    "metadata": {},
    "outputs": [],
@@ -143,7 +143,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 8,
    "id": "0f1d517c",
    "metadata": {},
    "outputs": [],
@@ -164,7 +164,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "b0846cfd",
+   "id": "69081c7c",
    "metadata": {},
    "source": [
     "Check satisfied triggers E and M"
@@ -172,7 +172,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 9,
    "id": "8ffa5043",
    "metadata": {},
    "outputs": [],
@@ -186,8 +186,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 24,
-   "id": "a5104115",
+   "execution_count": 10,
+   "id": "5e9c8342",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -197,7 +197,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "5f069cde",
+   "id": "681ec6bc",
    "metadata": {},
    "source": [
     "Find two good leptons"
@@ -205,7 +205,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
+   "execution_count": 11,
    "id": "663d3e53",
    "metadata": {},
    "outputs": [],
@@ -231,34 +231,36 @@
     "    theta0 = 2*np.arctan(np.exp(-lep_eta[0]))\n",
     "    theta1 = 2*np.arctan(np.exp(-lep_eta[1]))\n",
     "    if abs(lep_z0[0]*np.sin(theta0))>0.5: return True\n",
-    "    if abs(lep_z0[1]*np.sin(theta1))>0.5: return True"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 11,
-   "id": "917e7ca7",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def opposite_charge(lep_charge):\n",
-    "    if lep_charge[0]*lep_charge[1] > 0: return True #delete if there are the same charge, only works if < 0"
+    "    if abs(lep_z0[1]*np.sin(theta1))>0.5: return True\n",
+    "    \n",
+    "    return False"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 12,
-   "id": "7fd08c82",
+   "id": "55530357",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def opposite_charge(lep_charge):\n",
+    "    return lep_charge[0]*lep_charge[1] > 0 #throw away when > 0"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "a98e3a80",
    "metadata": {},
    "outputs": [],
    "source": [
     "def same_flavour(lep_type):\n",
-    "    if lep_type[0]!=lep_type[1]: return True"
+    "    return lep_type[0]!=lep_type[1] #throw away when different flavour"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "2cac50db",
+   "id": "0d01d014",
    "metadata": {
     "slideshow": {
      "slide_type": "slide"
@@ -270,8 +272,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
-   "id": "0f1e5054",
+   "execution_count": 14,
+   "id": "01d3197b",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -296,29 +298,48 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 14,
-   "id": "a55ace7e",
+   "execution_count": 15,
+   "id": "67b64481",
    "metadata": {},
    "outputs": [],
    "source": [
     "def mass_selection(invmass):\n",
-    "    if abs(invmass-91.18) > 25: return True #we need when the difference is lesser than 25 "
+    "    return abs(invmass-91.18) > 25 #we need when the difference is lesser than 25 "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 15,
-   "id": "2e35b982",
+   "execution_count": 16,
+   "id": "cdcc8bcb",
    "metadata": {},
    "outputs": [],
    "source": [
     "def check_jets(jet_n):\n",
-    "    if jet_n != 0: return True #We need no jets"
+    "    return jet_n != 0 #We need no jets"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "fa8e784a",
+   "id": "1f07b2ca",
+   "metadata": {},
+   "source": [
+    "Determine the leading lepton"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b641d8fc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def lead_lep(lep_pt):\n",
+    "    "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "84d06e22",
    "metadata": {},
    "source": [
     "### Read section "
@@ -326,8 +347,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 27,
-   "id": "ddde6ca2",
+   "execution_count": 21,
+   "id": "85f9cac4",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -367,8 +388,8 @@
     "        data.drop(fail, inplace=True)\n",
     "        \n",
     "         # cut on lepton number\n",
-    "        #fail = data[ np.vectorize(just_two_leptons)(data.lep_n)].index\n",
-    "        #data.drop(fail, inplace=True)\n",
+    "        fail = data[ np.vectorize(just_two_leptons)(data.lep_n)].index\n",
+    "        data.drop(fail, inplace=True)\n",
     "        \n",
     "         # Keep just good leptons\n",
     "        fail = data[ np.vectorize(find_good_leptons)(data.lep_pt,data.lep_ptcone30,data.lep_etcone20,data.lep_type,data.lep_eta,data.lep_trackd0pvunbiased,data.lep_tracksigd0pvunbiased,data.lep_z0)].index\n",
@@ -397,36 +418,61 @@
     "        elapsed = time.time() - start # time taken to process\n",
     "        print(\"\\t\\t nIn: \"+str(nIn)+\",\\t nOut: \\t\"+str(nOut)+\"\\t in \"+str(round(elapsed,1))+\"s\") # events before and after\n",
     "    \n",
-    "    return data_all # return dataframe containing events passing all cuts"
+    "    return data_all # return dataframe containing events passing all cuts\n",
+    "\n",
+    "#El siguiente paso es probar con cuales paquetes funciona y con cuales no, para luego hacer que el programa escriba sobre un archivo root, la información, la cual luego debe ser separada y entrenada, repitiendo lo hecho en hzz\n",
+    "#posteriormente habría que revisar si se puede emular el sklearn"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 28,
-   "id": "805c7559",
+   "execution_count": 38,
+   "id": "bad4237e",
    "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Processing Z samples\n",
-      "\tProcessing: Zee\n"
-     ]
-    },
-    {
-     "ename": "ValueError",
-     "evalue": "Cannot mask with non-boolean array containing NA / NaN values",
-     "output_type": "error",
-     "traceback": [
-      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
-      "\u001b[0;31mValueError\u001b[0m                                Traceback (most recent call last)",
-      "\u001b[0;32m/tmp/ipykernel_580/862785482.py\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0mstart\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtime\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# time at start of whole processing\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0mdata\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mget_data_from_files\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# process all files\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      3\u001b[0m \u001b[0melapsed\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtime\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m-\u001b[0m \u001b[0mstart\u001b[0m \u001b[0;31m# time after whole processing\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Time taken: \"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mround\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0melapsed\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\"s\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# print total time taken to process every file\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m/tmp/ipykernel_580/1439532152.py\u001b[0m in \u001b[0;36mget_data_from_files\u001b[0;34m()\u001b[0m\n\u001b[1;32m     10\u001b[0m                 \u001b[0mprefix\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m\"MC/mc_\"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0minfofile\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0minfos\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"DSID\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     11\u001b[0m             \u001b[0mfileString\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtuple_path\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mprefix\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".2lep.root\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 12\u001b[0;31m             \u001b[0mtemp\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mread_file\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfileString\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     13\u001b[0m             \u001b[0mframes\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtemp\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     14\u001b[0m         \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpd\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconcat\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mframes\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m/tmp/ipykernel_580/1831886414.py\u001b[0m in \u001b[0;36mread_file\u001b[0;34m(path, sample)\u001b[0m\n\u001b[1;32m     43\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     44\u001b[0m         \u001b[0;31m#Check SFOS\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 45\u001b[0;31m         \u001b[0mfail\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mvectorize\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mopposite_charge\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlep_charge\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     46\u001b[0m         \u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdrop\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfail\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0minplace\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mTrue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     47\u001b[0m         \u001b[0mfail\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mvectorize\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0msame_flavour\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlep_type\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36m__getitem__\u001b[0;34m(self, key)\u001b[0m\n\u001b[1;32m   3012\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3013\u001b[0m         \u001b[0;31m# Do we have a (boolean) 1d indexer?\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 3014\u001b[0;31m         \u001b[0;32mif\u001b[0m \u001b[0mcom\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mis_bool_indexer\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   3015\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_getitem_bool_array\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   3016\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/common.py\u001b[0m in \u001b[0;36mis_bool_indexer\u001b[0;34m(key)\u001b[0m\n\u001b[1;32m    112\u001b[0m                     \u001b[0;31m# Don't raise on e.g. [\"A\", \"B\", np.nan], see\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    113\u001b[0m                     \u001b[0;31m#  test_loc_getitem_list_of_labels_categoricalindex_with_na\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 114\u001b[0;31m                     \u001b[0;32mraise\u001b[0m \u001b[0mValueError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mna_msg\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    115\u001b[0m                 \u001b[0;32mreturn\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    116\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0;32mTrue\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;31mValueError\u001b[0m: Cannot mask with non-boolean array containing NA / NaN values"
+      "Processing diboson samples\n",
+      "\tProcessing: ZqqZll\n",
+      "\t\t nIn: 115245,\t nOut: \t4739\t in 23.4s\n",
+      "\t\t nIn: 115245,\t nOut: \t4912\t in 37.5s\n",
+      "\t\t nIn: 115245,\t nOut: \t4750\t in 53.2s\n",
+      "\t\t nIn: 115245,\t nOut: \t4847\t in 66.0s\n",
+      "\t\t nIn: 115245,\t nOut: \t4924\t in 79.4s\n",
+      "\t\t nIn: 115245,\t nOut: \t4889\t in 91.7s\n",
+      "\t\t nIn: 10103,\t nOut: \t420\t in 95.3s\n",
+      "\tProcessing: WqqZll\n",
+      "\t\t nIn: 115958,\t nOut: \t7854\t in 28.9s\n",
+      "\t\t nIn: 115958,\t nOut: \t7975\t in 42.7s\n",
+      "\t\t nIn: 115958,\t nOut: \t7934\t in 56.8s\n",
+      "\t\t nIn: 115958,\t nOut: \t7939\t in 72.2s\n",
+      "\t\t nIn: 115958,\t nOut: \t7934\t in 86.0s\n",
+      "\t\t nIn: 78519,\t nOut: \t5486\t in 94.8s\n",
+      "\tProcessing: llll\n",
+      "\t\t nIn: 106415,\t nOut: \t6667\t in 23.5s\n",
+      "\t\t nIn: 106415,\t nOut: \t6593\t in 36.3s\n",
+      "\t\t nIn: 106415,\t nOut: \t6602\t in 48.2s\n",
+      "\t\t nIn: 106415,\t nOut: \t6591\t in 59.6s\n",
+      "\t\t nIn: 106415,\t nOut: \t6693\t in 72.5s\n",
+      "\t\t nIn: 106415,\t nOut: \t6536\t in 84.7s\n",
+      "\t\t nIn: 106415,\t nOut: \t6630\t in 98.0s\n",
+      "\t\t nIn: 106415,\t nOut: \t6641\t in 110.2s\n",
+      "\t\t nIn: 106415,\t nOut: \t6656\t in 123.5s\n",
+      "\t\t nIn: 106415,\t nOut: \t6528\t in 132.4s\n",
+      "\t\t nIn: 106415,\t nOut: \t6613\t in 141.8s\n",
+      "\t\t nIn: 106415,\t nOut: \t6598\t in 149.8s\n",
+      "\t\t nIn: 106415,\t nOut: \t6593\t in 159.8s\n",
+      "\t\t nIn: 106415,\t nOut: \t6636\t in 171.4s\n",
+      "\t\t nIn: 106415,\t nOut: \t6473\t in 181.2s\n",
+      "\t\t nIn: 106415,\t nOut: \t6530\t in 191.2s\n",
+      "\t\t nIn: 106415,\t nOut: \t6601\t in 205.9s\n",
+      "\t\t nIn: 106415,\t nOut: \t6588\t in 216.1s\n",
+      "\t\t nIn: 106415,\t nOut: \t6496\t in 226.9s\n",
+      "\t\t nIn: 106415,\t nOut: \t6671\t in 236.8s\n",
+      "\t\t nIn: 4762,\t nOut: \t272\t in 240.6s\n",
+      "Time taken: 431.4s\n"
      ]
     }
    ],

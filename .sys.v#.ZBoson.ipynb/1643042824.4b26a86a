@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "361d38e8",
+   "id": "5462d3bf",
    "metadata": {},
    "source": [
     "# Analysis Z Boson"
@@ -10,7 +10,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 20,
    "id": "4667148d",
    "metadata": {},
    "outputs": [],
@@ -37,7 +37,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 38,
+   "execution_count": 29,
    "id": "241c2b80",
    "metadata": {},
    "outputs": [],
@@ -51,23 +51,23 @@
     "           #      'data_D']\n",
     "    #},\n",
     "    \n",
-    "    'Z' : {\n",
-    "        'list' : [#'Zee',\n",
+    "   # 'Z' : {\n",
+    "  #      'list' : ['Zee']#,\n",
     "                 #'Zmumu',\n",
-    "                 'Ztautau']\n",
-    "    }\n",
+    "                 #'Ztautau']\n",
+    "   # }\n",
     "    \n",
-    "    #'diboson' : {\n",
-    "       # 'list' : ['ZqqZll']}\n",
-    "      #            'WqqZll',\n",
-    "       #           'WpqqWmlv',\n",
-    "        #          'WplvWmqq',\n",
-    "         #         'WlvZqq',\n",
-    "          #        'llll',\n",
-    "           #       'lllv',\n",
-    "            #      'llvv',\n",
-    "             #     'lvvv']\n",
-    "    #},\n",
+    "    'diboson' : {\n",
+    "        'list' : [#'ZqqZll' #not\n",
+    "        #          'WqqZll',#not\n",
+    "          #       'WpqqWmlv', \n",
+    "          #       'WplvWmqq',\n",
+    "           #       'WlvZqq',\n",
+    "          #        'llll', #not\n",
+    "                  'lllv',\n",
+    "                  'llvv',\n",
+    "                  'lvvv'\n",
+    "        ]},\n",
     "    \n",
     "    #'single_top' : {\n",
     "     #   'list' : ['single_top_tchan',\n",
@@ -91,21 +91,21 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 33,
    "id": "5cfb905e",
    "metadata": {},
    "outputs": [],
    "source": [
     "lumi = 10 # data_A+B+C+D\n",
     "\n",
-    "fraction = 1 # reduce to run quicker\n",
+    "fraction = 0.5 # reduce to run quicker\n",
     "\n",
     "tuple_path = \"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/\" "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 18,
+   "execution_count": 6,
    "id": "92d1acd9",
    "metadata": {},
    "outputs": [],
@@ -130,7 +130,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 7,
    "id": "2ba1def3",
    "metadata": {},
    "outputs": [],
@@ -143,7 +143,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 8,
    "id": "0f1d517c",
    "metadata": {},
    "outputs": [],
@@ -164,7 +164,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "f1d71617",
+   "id": "69081c7c",
    "metadata": {},
    "source": [
     "Check satisfied triggers E and M"
@@ -172,7 +172,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 9,
    "id": "8ffa5043",
    "metadata": {},
    "outputs": [],
@@ -186,8 +186,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 30,
-   "id": "8d1e7c63",
+   "execution_count": 10,
+   "id": "5e9c8342",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -197,7 +197,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "035d9fe4",
+   "id": "681ec6bc",
    "metadata": {},
    "source": [
     "Find two good leptons"
@@ -205,7 +205,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
+   "execution_count": 11,
    "id": "663d3e53",
    "metadata": {},
    "outputs": [],
@@ -231,13 +231,15 @@
     "    theta0 = 2*np.arctan(np.exp(-lep_eta[0]))\n",
     "    theta1 = 2*np.arctan(np.exp(-lep_eta[1]))\n",
     "    if abs(lep_z0[0]*np.sin(theta0))>0.5: return True\n",
-    "    if abs(lep_z0[1]*np.sin(theta1))>0.5: return True"
+    "    if abs(lep_z0[1]*np.sin(theta1))>0.5: return True\n",
+    "    \n",
+    "    return False"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 31,
-   "id": "34519e6b",
+   "execution_count": 12,
+   "id": "55530357",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -247,8 +249,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 32,
-   "id": "777c3943",
+   "execution_count": 13,
+   "id": "a98e3a80",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -258,7 +260,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "cba8957e",
+   "id": "0d01d014",
    "metadata": {
     "slideshow": {
      "slide_type": "slide"
@@ -270,8 +272,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
-   "id": "1ace49de",
+   "execution_count": 14,
+   "id": "01d3197b",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -296,8 +298,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 34,
-   "id": "9b2ed3f2",
+   "execution_count": 15,
+   "id": "67b64481",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -307,8 +309,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 33,
-   "id": "15173e32",
+   "execution_count": 16,
+   "id": "cdcc8bcb",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -318,7 +320,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "5a59b0c0",
+   "id": "84d06e22",
    "metadata": {},
    "source": [
     "### Read section "
@@ -326,8 +328,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 36,
-   "id": "72c72f26",
+   "execution_count": 21,
+   "id": "85f9cac4",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -397,21 +399,60 @@
     "        elapsed = time.time() - start # time taken to process\n",
     "        print(\"\\t\\t nIn: \"+str(nIn)+\",\\t nOut: \\t\"+str(nOut)+\"\\t in \"+str(round(elapsed,1))+\"s\") # events before and after\n",
     "    \n",
-    "    return data_all # return dataframe containing events passing all cuts"
+    "    return data_all # return dataframe containing events passing all cuts\n",
+    "\n",
+    "#El siguiente paso es probar con cuales paquetes funciona y con cuales no, para luego hacer que el programa escriba sobre un archivo root, la información, la cual luego debe ser separada y entrenada, repitiendo lo hecho en hzz\n",
+    "#posteriormente habría que revisar si se puede emular el sklearn"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "8191eda5",
+   "execution_count": 34,
+   "id": "bad4237e",
    "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Processing Z samples\n",
-      "\tProcessing: Ztautau\n"
+      "Processing diboson samples\n",
+      "\tProcessing: lllv\n",
+      "\t\t nIn: 106380,\t nOut: \t2729\t in 41.9s\n",
+      "\t\t nIn: 106380,\t nOut: \t2762\t in 49.4s\n",
+      "\t\t nIn: 106380,\t nOut: \t2701\t in 58.0s\n",
+      "\t\t nIn: 106380,\t nOut: \t2741\t in 70.4s\n",
+      "\t\t nIn: 106380,\t nOut: \t2728\t in 83.7s\n",
+      "\t\t nIn: 106380,\t nOut: \t2752\t in 92.9s\n",
+      "\t\t nIn: 106380,\t nOut: \t2724\t in 103.9s\n",
+      "\t\t nIn: 106380,\t nOut: \t2784\t in 121.3s\n",
+      "\t\t nIn: 106380,\t nOut: \t2779\t in 134.0s\n",
+      "\t\t nIn: 106380,\t nOut: \t2673\t in 145.0s\n",
+      "\t\t nIn: 106380,\t nOut: \t2746\t in 157.7s\n",
+      "\t\t nIn: 106380,\t nOut: \t2686\t in 169.1s\n",
+      "\t\t nIn: 106380,\t nOut: \t2713\t in 179.8s\n",
+      "\t\t nIn: 106380,\t nOut: \t2804\t in 190.8s\n",
+      "\t\t nIn: 106380,\t nOut: \t2760\t in 200.1s\n",
+      "\t\t nIn: 106380,\t nOut: \t2765\t in 211.6s\n",
+      "\t\t nIn: 106380,\t nOut: \t2710\t in 222.7s\n",
+      "\t\t nIn: 87437,\t nOut: \t2243\t in 236.7s\n",
+      "\tProcessing: llvv\n",
+      "\t\t nIn: 122479,\t nOut: \t4952\t in 56.4s\n",
+      "\t\t nIn: 122479,\t nOut: \t4919\t in 77.8s\n",
+      "\t\t nIn: 122479,\t nOut: \t4955\t in 94.8s\n",
+      "\t\t nIn: 122479,\t nOut: \t4832\t in 112.5s\n",
+      "\t\t nIn: 122479,\t nOut: \t4951\t in 129.9s\n",
+      "\t\t nIn: 122479,\t nOut: \t4926\t in 145.5s\n",
+      "\t\t nIn: 122479,\t nOut: \t4956\t in 159.7s\n",
+      "\t\t nIn: 122479,\t nOut: \t5028\t in 177.1s\n",
+      "\t\t nIn: 122479,\t nOut: \t4915\t in 191.3s\n",
+      "\t\t nIn: 122479,\t nOut: \t4993\t in 204.3s\n",
+      "\t\t nIn: 122479,\t nOut: \t4832\t in 217.8s\n",
+      "\t\t nIn: 122479,\t nOut: \t4875\t in 231.1s\n",
+      "\t\t nIn: 122479,\t nOut: \t4825\t in 244.3s\n",
+      "\t\t nIn: 112294,\t nOut: \t4507\t in 256.4s\n",
+      "\tProcessing: lvvv\n",
+      "\t\t nIn: 5894,\t nOut: \t5\t in 1.4s\n",
+      "Time taken: 494.8s\n"
      ]
     }
    ],

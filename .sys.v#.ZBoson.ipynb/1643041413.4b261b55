@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "5d476744",
+   "id": "5462d3bf",
    "metadata": {},
    "source": [
     "# Analysis Z Boson"
@@ -15,7 +15,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "import uproot3\n",
+    "import uproot\n",
     "import pandas as pd \n",
     "import time \n",
     "import math \n",
@@ -37,7 +37,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 42,
+   "execution_count": 4,
    "id": "241c2b80",
    "metadata": {},
    "outputs": [],
@@ -51,15 +51,15 @@
     "           #      'data_D']\n",
     "    #},\n",
     "    \n",
-    "    'Z' : {\n",
-    "        'list' : ['Zee']#,\n",
+    "   # 'Z' : {\n",
+    "  #      'list' : ['Zee']#,\n",
     "                 #'Zmumu',\n",
     "                 #'Ztautau']\n",
-    "    }\n",
+    "   # }\n",
     "    \n",
-    "    #'diboson' : {\n",
-    "       # 'list' : ['ZqqZll']}\n",
-    "      #            'WqqZll',\n",
+    "    'diboson' : {\n",
+    "        'list' : [#'ZqqZll'\n",
+    "                  'WqqZll',\n",
     "       #           'WpqqWmlv',\n",
     "        #          'WplvWmqq',\n",
     "         #         'WlvZqq',\n",
@@ -67,7 +67,7 @@
     "           #       'lllv',\n",
     "            #      'llvv',\n",
     "             #     'lvvv']\n",
-    "    #},\n",
+    "        ]},\n",
     "    \n",
     "    #'single_top' : {\n",
     "     #   'list' : ['single_top_tchan',\n",
@@ -91,7 +91,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 5,
    "id": "5cfb905e",
    "metadata": {},
    "outputs": [],
@@ -105,7 +105,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 18,
+   "execution_count": 6,
    "id": "92d1acd9",
    "metadata": {},
    "outputs": [],
@@ -130,7 +130,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 7,
    "id": "2ba1def3",
    "metadata": {},
    "outputs": [],
@@ -143,7 +143,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 8,
    "id": "0f1d517c",
    "metadata": {},
    "outputs": [],
@@ -164,7 +164,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "fd58c3dc",
+   "id": "69081c7c",
    "metadata": {},
    "source": [
     "Check satisfied triggers E and M"
@@ -172,7 +172,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 9,
    "id": "8ffa5043",
    "metadata": {},
    "outputs": [],
@@ -186,8 +186,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 30,
-   "id": "bf9d87eb",
+   "execution_count": 10,
+   "id": "5e9c8342",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -197,7 +197,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "ff3b93b8",
+   "id": "681ec6bc",
    "metadata": {},
    "source": [
     "Find two good leptons"
@@ -205,7 +205,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 40,
+   "execution_count": 11,
    "id": "663d3e53",
    "metadata": {},
    "outputs": [],
@@ -238,8 +238,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 31,
-   "id": "727e8e17",
+   "execution_count": 12,
+   "id": "55530357",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -249,8 +249,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 32,
-   "id": "5339e6ba",
+   "execution_count": 13,
+   "id": "a98e3a80",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -260,7 +260,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "8d5912c3",
+   "id": "0d01d014",
    "metadata": {
     "slideshow": {
      "slide_type": "slide"
@@ -272,8 +272,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
-   "id": "96888297",
+   "execution_count": 14,
+   "id": "01d3197b",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -298,8 +298,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 34,
-   "id": "41f1c571",
+   "execution_count": 15,
+   "id": "67b64481",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -309,8 +309,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 33,
-   "id": "71b4ace9",
+   "execution_count": 16,
+   "id": "cdcc8bcb",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -320,7 +320,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "020a4f93",
+   "id": "84d06e22",
    "metadata": {},
    "source": [
     "### Read section "
@@ -328,8 +328,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 36,
-   "id": "3b7f76a6",
+   "execution_count": 17,
+   "id": "85f9cac4",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -337,8 +337,8 @@
     "    start = time.time() # start the clock\n",
     "    print(\"\\tProcessing: \"+sample) # print which sample is being processed\n",
     "    data_all = pd.DataFrame() # define empty pandas DataFrame to hold all data for this sample\n",
-    "    tree = uproot3.open(path)[\"mini\"] # open the tree called mini\n",
-    "    numevents = uproot3.numentries(path, \"mini\") # number of events\n",
+    "    tree = uproot.open(path)[\"mini\"] # open the tree called mini\n",
+    "    numevents = uproot.numentries(path, \"mini\") # number of events\n",
     "    if 'data' not in sample: xsec_weight = get_xsec_weight(sample) # get cross-section weight\n",
     "    for data in tree.iterate(['lep_charge','lep_type','lep_pt', 'lep_eta', 'lep_ptcone30',\n",
     "                              'lep_etcone20', 'lep_trackd0pvunbiased', 'lep_tracksigd0pvunbiased', 'lep_z0', 'jet_n', \n",
@@ -401,13 +401,14 @@
     "    \n",
     "    return data_all # return dataframe containing events passing all cuts\n",
     "\n",
-    "#El siguiente paso es probar con cuales paquetes funciona y con cuales no, para luego hacer que el programa escriba sobre un archivo root, la información, la cual luego debe ser separada y entrenada, repitiendo lo"
+    "#El siguiente paso es probar con cuales paquetes funciona y con cuales no, para luego hacer que el programa escriba sobre un archivo root, la información, la cual luego debe ser separada y entrenada, repitiendo lo hecho en hzz\n",
+    "#posteriormente habría que revisar si se puede emular el sklearn"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "460d6976",
+   "execution_count": 43,
+   "id": "bad4237e",
    "metadata": {},
    "outputs": [
     {
@@ -427,7 +428,28 @@
       "\t\t nIn: 143622,\t nOut: \t58883\t in 194.8s\n",
       "\t\t nIn: 143622,\t nOut: \t58964\t in 212.4s\n",
       "\t\t nIn: 143622,\t nOut: \t59128\t in 231.1s\n",
-      "\t\t nIn: 143622,\t nOut: \t58990\t in 251.5s\n"
+      "\t\t nIn: 143622,\t nOut: \t58990\t in 251.5s\n",
+      "\t\t nIn: 143622,\t nOut: \t58706\t in 271.6s\n",
+      "\t\t nIn: 143622,\t nOut: \t59025\t in 290.0s\n",
+      "\t\t nIn: 143622,\t nOut: \t58897\t in 311.3s\n"
+     ]
+    },
+    {
+     "ename": "KeyboardInterrupt",
+     "evalue": "",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mKeyboardInterrupt\u001b[0m                         Traceback (most recent call last)",
+      "\u001b[0;32m/tmp/ipykernel_580/862785482.py\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0mstart\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtime\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# time at start of whole processing\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0mdata\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mget_data_from_files\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# process all files\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      3\u001b[0m \u001b[0melapsed\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtime\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtime\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m-\u001b[0m \u001b[0mstart\u001b[0m \u001b[0;31m# time after whole processing\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      4\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Time taken: \"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mround\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0melapsed\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\"s\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;31m# print total time taken to process every file\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/tmp/ipykernel_580/1439532152.py\u001b[0m in \u001b[0;36mget_data_from_files\u001b[0;34m()\u001b[0m\n\u001b[1;32m     10\u001b[0m                 \u001b[0mprefix\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34m\"MC/mc_\"\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0minfofile\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0minfos\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"DSID\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     11\u001b[0m             \u001b[0mfileString\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtuple_path\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mprefix\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m+\u001b[0m\u001b[0;34m\".2lep.root\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 12\u001b[0;31m             \u001b[0mtemp\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mread_file\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfileString\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0mval\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     13\u001b[0m             \u001b[0mframes\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mappend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtemp\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     14\u001b[0m         \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpd\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mconcat\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mframes\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/tmp/ipykernel_580/3464654678.py\u001b[0m in \u001b[0;36mread_file\u001b[0;34m(path, sample)\u001b[0m\n\u001b[1;32m     57\u001b[0m         \u001b[0;31m#Check good mass range\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     58\u001b[0m         \u001b[0mfail\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mdata\u001b[0m\u001b[0;34m[\u001b[0m \u001b[0mnp\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mvectorize\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mmass_selection\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmll\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 59\u001b[0;31m         \u001b[0mdata\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdrop\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfail\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0minplace\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mTrue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     60\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     61\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/frame.py\u001b[0m in \u001b[0;36mdrop\u001b[0;34m(self, labels, axis, index, columns, level, inplace, errors)\u001b[0m\n\u001b[1;32m   4303\u001b[0m                 \u001b[0mweight\u001b[0m  \u001b[0;36m1.0\u001b[0m     \u001b[0;36m0.8\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4304\u001b[0m         \"\"\"\n\u001b[0;32m-> 4305\u001b[0;31m         return super().drop(\n\u001b[0m\u001b[1;32m   4306\u001b[0m             \u001b[0mlabels\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mlabels\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4307\u001b[0m             \u001b[0maxis\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0maxis\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/generic.py\u001b[0m in \u001b[0;36mdrop\u001b[0;34m(self, labels, axis, index, columns, level, inplace, errors)\u001b[0m\n\u001b[1;32m   4150\u001b[0m         \u001b[0;32mfor\u001b[0m \u001b[0maxis\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlabels\u001b[0m \u001b[0;32min\u001b[0m \u001b[0maxes\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mitems\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4151\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mlabels\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 4152\u001b[0;31m                 \u001b[0mobj\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mobj\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_drop_axis\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mlabels\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0maxis\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlevel\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mlevel\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0merrors\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0merrors\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   4153\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4154\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0minplace\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/generic.py\u001b[0m in \u001b[0;36m_drop_axis\u001b[0;34m(self, labels, axis, level, errors)\u001b[0m\n\u001b[1;32m   4179\u001b[0m         \u001b[0maxis\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_get_axis\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0maxis\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4180\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 4181\u001b[0;31m         \u001b[0;32mif\u001b[0m \u001b[0maxis\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mis_unique\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   4182\u001b[0m             \u001b[0;32mif\u001b[0m \u001b[0mlevel\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   4183\u001b[0m                 \u001b[0;32mif\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0misinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0maxis\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mMultiIndex\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;32mpandas/_libs/properties.pyx\u001b[0m in \u001b[0;36mpandas._libs.properties.CachedProperty.__get__\u001b[0;34m()\u001b[0m\n",
+      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/pandas/core/indexes/base.py\u001b[0m in \u001b[0;36mis_unique\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m   1767\u001b[0m         \u001b[0mReturn\u001b[0m \u001b[0;32mif\u001b[0m \u001b[0mthe\u001b[0m \u001b[0mindex\u001b[0m \u001b[0mhas\u001b[0m \u001b[0munique\u001b[0m \u001b[0mvalues\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1768\u001b[0m         \"\"\"\n\u001b[0;32m-> 1769\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_engine\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mis_unique\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1770\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1771\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mproperty\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+      "\u001b[0;31mKeyboardInterrupt\u001b[0m: "
      ]
     }
    ],
