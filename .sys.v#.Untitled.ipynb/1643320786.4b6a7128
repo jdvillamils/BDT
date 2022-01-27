@@ -2,8 +2,8 @@
  "cells": [
   {
    "cell_type": "code",
-   "execution_count": 37,
-   "id": "771a82d5",
+   "execution_count": 94,
+   "id": "4824a3bd",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -11,13 +11,14 @@
     "from ROOT import TMath\n",
     "import time\n",
     "import uproot3\n",
-    "import numpy as np"
+    "import numpy as np\n",
+    "import root_pandas as rp"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 38,
-   "id": "e255b495",
+   "id": "ea67a0ef",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -27,7 +28,7 @@
   {
    "cell_type": "code",
    "execution_count": 39,
-   "id": "f3feb07d",
+   "id": "d6091543",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -39,7 +40,7 @@
   {
    "cell_type": "code",
    "execution_count": 40,
-   "id": "90aa0d06",
+   "id": "f4758e13",
    "metadata": {},
    "outputs": [
     {
@@ -60,17 +61,17 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 66,
-   "id": "56521d6c",
+   "execution_count": 109,
+   "id": "621e5283",
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<TFileRecreate b'example.root' at 0x7f677a9a0820>"
+       "<TFileRecreate b'example.root' at 0x7f67770830a0>"
       ]
      },
-     "execution_count": 66,
+     "execution_count": 109,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -82,85 +83,104 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 67,
-   "id": "82f30833",
+   "execution_count": 110,
+   "id": "3e813e6b",
    "metadata": {},
    "outputs": [],
    "source": [
-    "roof[\"signal\"] = uproot3.newtree({\"mll\": np.float32})#, \"lead\": np.float32, \"sublead\": np.float32})"
+    "roof[\"signal\"] = uproot3.newtree({\"mll\": np.float32, \"lead\": np.float32, \"sublead\": np.float32})"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 68,
-   "id": "c60f6643",
+   "execution_count": 120,
+   "id": "b915e148",
    "metadata": {},
    "outputs": [
     {
-     "ename": "IndexError",
-     "evalue": "tuple index out of range",
-     "output_type": "error",
-     "traceback": [
-      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
-      "\u001b[0;31mIndexError\u001b[0m                                Traceback (most recent call last)",
-      "\u001b[0;32m/tmp/ipykernel_2265/1342858811.py\u001b[0m in \u001b[0;36m<module>\u001b[0;34m\u001b[0m\n\u001b[1;32m     41\u001b[0m                             \u001b[0;31m#print(ptlead)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     42\u001b[0m                             \u001b[0;31m#print(ptsub)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 43\u001b[0;31m                             \u001b[0mroof\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"signal\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mextend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m{\u001b[0m\u001b[0;34m\"mll\"\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0minvmass\u001b[0m\u001b[0;34m}\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;31m#, \"lead\": ptlead, \"sublead\": ptsub})\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     44\u001b[0m                             \u001b[0mkf\u001b[0m\u001b[0;34m+=\u001b[0m\u001b[0;36m1\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     45\u001b[0m     \u001b[0;32mif\u001b[0m \u001b[0mk\u001b[0m\u001b[0;34m==\u001b[0m\u001b[0;36m20000\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0;32mbreak\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;32m/cvmfs/sft.cern.ch/lcg/views/LCG_101swan/x86_64-centos7-gcc10-opt/lib/python3.9/site-packages/uproot3/write/objects/TTree.py\u001b[0m in \u001b[0;36mextend\u001b[0;34m(self, branchdict)\u001b[0m\n\u001b[1;32m    136\u001b[0m                 \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_branches\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mnewbasket\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mvalue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    137\u001b[0m             \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 138\u001b[0;31m                 \u001b[0;32mfor\u001b[0m \u001b[0mi\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mrange\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;36m0\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mvalue\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mshape\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;36m0\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    139\u001b[0m                     \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_branches\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mkey\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mnewbasket\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mvalue\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mi\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mi\u001b[0m \u001b[0;34m+\u001b[0m \u001b[0;36m1\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    140\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
-      "\u001b[0;31mIndexError\u001b[0m: tuple index out of range"
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Initial entries: 182180\n",
+      "Final entries: 2613\n",
+      "Finished in 0 min 21 s\n",
+      "103187 33471 19160 10571 5320 5251 2613\n",
+      "Success closing\n"
      ]
     }
    ],
    "source": [
     "start = time.time()\n",
+    "invM=[]\n",
+    "leadpt=[]\n",
+    "subleadpt=[]\n",
     "leadlepton = ROOT.TLorentzVector()\n",
     "subleadlepton = ROOT.TLorentzVector()\n",
     "lepton12 = ROOT.TLorentzVector()\n",
     "k=0\n",
     "kf=0\n",
+    "c1=0\n",
+    "c2=0\n",
+    "c3=0\n",
+    "c4=0\n",
+    "c5=0\n",
+    "c6=0\n",
+    "c7=0\n",
     "index1=0\n",
     "index2=0\n",
     "for event in tree:\n",
     "    k=k+1\n",
     "    goodlep=0\n",
     "    if(tree.trigE or tree.trigE):\n",
-    "        if(tree.lep_n==2):\n",
+    "        c1+=1\n",
+    "    if(tree.lep_n==2):\n",
     "            for j in range(tree.lep_n):\n",
-    "                if(tree.lep_pt[j]>25000. and tree.lep_ptcone30[j]/tree.lep_pt[j] < 0.15 and tree.lep_etcone20[j]/tree.lep_pt[j] < 0.15):\n",
+    "                if((tree.lep_pt[j]>25000.) and (tree.lep_ptcone30[j]/tree.lep_pt[j] < 0.15) and (tree.lep_etcone20[j]/tree.lep_pt[j] < 0.15)):\n",
     "                    if(tree.lep_type[j]==11 and abs(tree.lep_eta[j])<2.47 and (abs(tree.lep_eta[j])<1.37 or abs(tree.lep_eta[j])>1.52)):\n",
     "                        theta = 2*np.arctan(np.exp(-tree.lep_eta[j]))\n",
     "                        if(tree.lep_trackd0pvunbiased[j]/tree.lep_tracksigd0pvunbiased[j] < 5 and abs(tree.lep_z0[j]*np.sin(theta))<0.5):\n",
     "                            goodlep+=1\n",
     "                            index1=j\n",
-    "                    if(tree.lep_type[j]==13 and abs(tree.lep_eta[j]>2.5)):\n",
+    "                    if(tree.lep_type[j]==13 and abs(tree.lep_eta[j]<2.5)):\n",
     "                        theta = 2*np.arctan(np.exp(-tree.lep_eta[j]))\n",
     "                        if(tree.lep_trackd0pvunbiased[j]/tree.lep_tracksigd0pvunbiased[j] < 3 and abs(tree.lep_z0[j]*np.sin(theta))<0.5):\n",
     "                            goodlep+=1\n",
     "                            index2=j\n",
     "            if(goodlep==2):\n",
+    "                c2+=1\n",
     "                if(tree.jet_n==0):\n",
+    "                    c3+=1\n",
     "                    if(tree.lep_charge[index1]*tree.lep_charge[index2]<0 and tree.lep_type[index1]!=tree.lep_type[index2]):\n",
+    "                        c4+=1\n",
     "                        if(tree.lep_pt[index1]>tree.lep_pt[index2]):\n",
+    "                            c5+=1\n",
     "                            leadlepton.SetPtEtaPhiE(tree.lep_pt[index1], tree.lep_eta[index1], tree.lep_phi[index1], tree.lep_E[index1])\n",
     "                            subleadlepton.SetPtEtaPhiE(tree.lep_pt[index2], tree.lep_eta[index2], tree.lep_phi[index2], tree.lep_E[index2])\n",
     "                        else:\n",
+    "                            c6+=1\n",
     "                            leadlepton.SetPtEtaPhiE(tree.lep_pt[index2]/1000., tree.lep_eta[index2], tree.lep_phi[index2], tree.lep_E[index2]/1000.)\n",
     "                            subleadlepton.SetPtEtaPhiE(tree.lep_pt[index1]/1000., tree.lep_eta[index1], tree.lep_phi[index1], tree.lep_E[index1]/1000.)\n",
     "                        lepton12=leadlepton+subleadlepton\n",
     "                        invmass=lepton12.M()/1000.\n",
     "                        if(abs(invmass-91.18)<25.):\n",
+    "                            c7+=1\n",
     "                            ptlead=leadlepton.Pt()/1000.\n",
     "                            ptsub=subleadlepton.Pt()/1000.\n",
-    "                            #print(invmass)\n",
-    "                            #print(ptlead)\n",
-    "                            #print(ptsub)\n",
-    "                            roof[\"signal\"].extend({\"mll\": invmass})#, \"lead\": ptlead, \"sublead\": ptsub})\n",
+    "                            invM.append(invmass)\n",
+    "                            leadpt.append(ptlead)\n",
+    "                            subleadpt.append(ptsub)\n",
     "                            kf+=1\n",
-    "    if k==20000: break\n",
-    "roof.close()\n",
+    "    #if k==50000: break\n",
+    "#roof.close()\n",
     "end = time.time()\n",
     "duration = end-start\n",
     "print('Initial entries:', k)\n",
     "print('Final entries:', kf)\n",
-    "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))"
+    "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
+    "print(c1,c2,c3,c4,c5,c6,c7)\n",
+    "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
+    "#roof.close()\n",
+    "print('Success closing')"
    ]
   }
  ],
