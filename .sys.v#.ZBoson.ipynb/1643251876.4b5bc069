@@ -320,7 +320,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "1f07b2ca",
+   "id": "4ce1f765",
    "metadata": {},
    "source": [
     "Determine the leading lepton"
@@ -329,12 +329,29 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "b641d8fc",
+   "id": "9b89b814",
    "metadata": {},
    "outputs": [],
    "source": [
     "def lead_lep(lep_pt):\n",
-    "    "
+    "    if lep_pt[0]>lep_pt[1]:\n",
+    "        return lep_pt[0]/1000\n",
+    "    else:\n",
+    "        return lep_pt[1]/1000"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0ba879d6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def  sublead_lep(lep_pt):\n",
+    "    if lep_pt[0]>lep_pt[1]:\n",
+    "        return lep_pt[1]/1000\n",
+    "    else:\n",
+    "        return lep_pt[0]/1000"
    ]
   },
   {
@@ -412,6 +429,13 @@
     "        fail = data[ np.vectorize(mass_selection)(data.mll)].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
+    "        #Save the leading and subleading leptons\n",
+    "        data['lead_pt'] = np.vectorize(lead_lep)(data.lep_pt)\n",
+    "        data['sublead_pt'] = np.vectorize(sublead_lep)(data.lep_pt)\n",
+    "        \n",
+    "        #Now we're going to save relevant information in root files, for being precessed by TMVA\n",
+    "        roof[\"tree1\"].extend({\"branch1\": data.jet_n})\n",
+    "        \n",
     "\n",
     "        nOut = len(data.index) # number of events passing cuts in this batch\n",
     "        data_all = data_all.append(data) # append dataframe from this batch to the dataframe for the whole sample\n",
@@ -422,6 +446,27 @@
     "\n",
     "#El siguiente paso es probar con cuales paquetes funciona y con cuales no, para luego hacer que el programa escriba sobre un archivo root, la información, la cual luego debe ser separada y entrenada, repitiendo lo hecho en hzz\n",
     "#posteriormente habría que revisar si se puede emular el sklearn"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8a142b8f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "roof = uproot3.recreate(\"example.root\")\n",
+    "roof"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "5bff2fe8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "roof[\"tree1\"] = uproot3.newtree({\"branch1\": int, \"branch2\": np.float64})"
    ]
   },
   {

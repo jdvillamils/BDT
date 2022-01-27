@@ -37,7 +37,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 29,
+   "execution_count": 37,
    "id": "241c2b80",
    "metadata": {},
    "outputs": [],
@@ -51,22 +51,22 @@
     "           #      'data_D']\n",
     "    #},\n",
     "    \n",
-    "   # 'Z' : {\n",
+    "   # 'Zsignal' : {\n",
     "  #      'list' : ['Zee']#,\n",
     "                 #'Zmumu',\n",
     "                 #'Ztautau']\n",
     "   # }\n",
     "    \n",
     "    'diboson' : {\n",
-    "        'list' : [#'ZqqZll' #not\n",
-    "        #          'WqqZll',#not\n",
+    "        'list' : ['ZqqZll', \n",
+    "                  'WqqZll',\n",
     "          #       'WpqqWmlv', \n",
     "          #       'WplvWmqq',\n",
     "           #       'WlvZqq',\n",
-    "          #        'llll', #not\n",
-    "                  'lllv',\n",
-    "                  'llvv',\n",
-    "                  'lvvv'\n",
+    "                  'llll',\n",
+    "           #       'lllv',\n",
+    "            #      'llvv',\n",
+    "             #     'lvvv'\n",
     "        ]},\n",
     "    \n",
     "    #'single_top' : {\n",
@@ -91,14 +91,14 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 31,
+   "execution_count": 33,
    "id": "5cfb905e",
    "metadata": {},
    "outputs": [],
    "source": [
     "lumi = 10 # data_A+B+C+D\n",
     "\n",
-    "fraction = 0.8 # reduce to run quicker\n",
+    "fraction = 0.5 # fraction for not running the whole data (running it all make the script crash)\n",
     "\n",
     "tuple_path = \"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/\" "
    ]
@@ -320,6 +320,42 @@
   },
   {
    "cell_type": "markdown",
+   "id": "4ce1f765",
+   "metadata": {},
+   "source": [
+    "Determine the leading lepton"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9b89b814",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def lead_lep(lep_pt):\n",
+    "    if lep_pt[0]>lep_pt[1]:\n",
+    "        return lep_pt[0]/1000\n",
+    "    else:\n",
+    "        return lep_pt[1]/1000"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0ba879d6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def  sublead_lep(lep_pt):\n",
+    "    if lep_pt[0]>lep_pt[1]:\n",
+    "        return lep_pt[1]/1000\n",
+    "    else:\n",
+    "        return lep_pt[0]/1000"
+   ]
+  },
+  {
+   "cell_type": "markdown",
    "id": "84d06e22",
    "metadata": {},
    "source": [
@@ -386,12 +422,24 @@
     "        fail = data[ np.vectorize(check_jets)(data.jet_n)].index\n",
     "        data.drop(fail, inplace=True)\n",
     "        \n",
-    "        #claculation of the invariant mass\n",
-    "        data['mll'] = np.vectorize(calc_mll)(data.lep_pt, data.lep_eta, data.lep_phi, data.lep_E)\n",
-    "        \n",
-    "        #Check good mass range\n",
+    "        #we're going to separate information from signal and background. The invariant mass and the leading and subleading leptons\n",
+    "        if 'Zsignal' in sample:\n",
+    "            data['mllsignal'] = np.vectorize(calc_mll)(data.lep_pt, data.lep_eta, data.lep_phi, data.lep_E)\n",
+    "            data['lead_ptsignal'] = np.vectorize(lead_lep)(data.lep_pt)\n",
+    "            data['sublead_ptsignal'] = np.vectorize(sublead_lep)(data.lep_pt)\n",
+    "            \n",
+    "        #and for the background\n",
+    "        if 'Zsignal' not in sample:\n",
+    "            data['mllbck'] = np.vectorize(calc_mll)(data.lep_pt, data.lep_eta, data.lep_phi, data.lep_E)\n",
+    "            data['lead_ptbck'] = np.vectorize(lead_lep)(data.lep_pt)\n",
+    "            data['sublead_ptbck'] = np.vectorize(sublead_lep)(data.lep_pt)\n",
+    "                \n",
+    "         #Check good mass range\n",
     "        fail = data[ np.vectorize(mass_selection)(data.mll)].index\n",
     "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        #Now we're going to save relevant information in root files, for being precessed by TMVA\n",
+    "        roof[\"signal\"].extend({\"\": data.jet_n})\n",
     "        \n",
     "\n",
     "        nOut = len(data.index) # number of events passing cuts in this batch\n",
@@ -408,6 +456,27 @@
   {
    "cell_type": "code",
    "execution_count": null,
+   "id": "d9033594",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "roof = uproot3.recreate(\"example.root\")\n",
+    "roof"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9641a9b2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "roof[\"tree1\"] = uproot3.newtree({\"branch1\": int, \"branch2\": np.float64})"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
    "id": "bad4237e",
    "metadata": {},
    "outputs": [
@@ -416,8 +485,44 @@
      "output_type": "stream",
      "text": [
       "Processing diboson samples\n",
-      "\tProcessing: lllv\n",
-      "\t\t nIn: 106380,\t nOut: \t2729\t in 43.8s\n"
+      "\tProcessing: ZqqZll\n",
+      "\t\t nIn: 115245,\t nOut: \t4739\t in 23.4s\n",
+      "\t\t nIn: 115245,\t nOut: \t4912\t in 37.5s\n",
+      "\t\t nIn: 115245,\t nOut: \t4750\t in 53.2s\n",
+      "\t\t nIn: 115245,\t nOut: \t4847\t in 66.0s\n",
+      "\t\t nIn: 115245,\t nOut: \t4924\t in 79.4s\n",
+      "\t\t nIn: 115245,\t nOut: \t4889\t in 91.7s\n",
+      "\t\t nIn: 10103,\t nOut: \t420\t in 95.3s\n",
+      "\tProcessing: WqqZll\n",
+      "\t\t nIn: 115958,\t nOut: \t7854\t in 28.9s\n",
+      "\t\t nIn: 115958,\t nOut: \t7975\t in 42.7s\n",
+      "\t\t nIn: 115958,\t nOut: \t7934\t in 56.8s\n",
+      "\t\t nIn: 115958,\t nOut: \t7939\t in 72.2s\n",
+      "\t\t nIn: 115958,\t nOut: \t7934\t in 86.0s\n",
+      "\t\t nIn: 78519,\t nOut: \t5486\t in 94.8s\n",
+      "\tProcessing: llll\n",
+      "\t\t nIn: 106415,\t nOut: \t6667\t in 23.5s\n",
+      "\t\t nIn: 106415,\t nOut: \t6593\t in 36.3s\n",
+      "\t\t nIn: 106415,\t nOut: \t6602\t in 48.2s\n",
+      "\t\t nIn: 106415,\t nOut: \t6591\t in 59.6s\n",
+      "\t\t nIn: 106415,\t nOut: \t6693\t in 72.5s\n",
+      "\t\t nIn: 106415,\t nOut: \t6536\t in 84.7s\n",
+      "\t\t nIn: 106415,\t nOut: \t6630\t in 98.0s\n",
+      "\t\t nIn: 106415,\t nOut: \t6641\t in 110.2s\n",
+      "\t\t nIn: 106415,\t nOut: \t6656\t in 123.5s\n",
+      "\t\t nIn: 106415,\t nOut: \t6528\t in 132.4s\n",
+      "\t\t nIn: 106415,\t nOut: \t6613\t in 141.8s\n",
+      "\t\t nIn: 106415,\t nOut: \t6598\t in 149.8s\n",
+      "\t\t nIn: 106415,\t nOut: \t6593\t in 159.8s\n",
+      "\t\t nIn: 106415,\t nOut: \t6636\t in 171.4s\n",
+      "\t\t nIn: 106415,\t nOut: \t6473\t in 181.2s\n",
+      "\t\t nIn: 106415,\t nOut: \t6530\t in 191.2s\n",
+      "\t\t nIn: 106415,\t nOut: \t6601\t in 205.9s\n",
+      "\t\t nIn: 106415,\t nOut: \t6588\t in 216.1s\n",
+      "\t\t nIn: 106415,\t nOut: \t6496\t in 226.9s\n",
+      "\t\t nIn: 106415,\t nOut: \t6671\t in 236.8s\n",
+      "\t\t nIn: 4762,\t nOut: \t272\t in 240.6s\n",
+      "Time taken: 431.4s\n"
      ]
     }
    ],
