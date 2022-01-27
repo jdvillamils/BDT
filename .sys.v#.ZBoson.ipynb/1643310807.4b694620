@@ -1,0 +1,549 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "5462d3bf",
+   "metadata": {},
+   "source": [
+    "# Analysis Z Boson"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "id": "4667148d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import uproot3\n",
+    "import pandas as pd \n",
+    "import time \n",
+    "import math \n",
+    "import numpy as np \n",
+    "import matplotlib.pyplot as plt \n",
+    "from matplotlib.ticker import AutoMinorLocator \n",
+    "\n",
+    "#Local information file\n",
+    "import infofile "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d34472b2",
+   "metadata": {},
+   "source": [
+    "List with all the sampels"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "id": "66c1dc68",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "samples = {\n",
+    "    \n",
+    "   # 'Zsignal' : {\n",
+    "    #'list' : ['Zee',\n",
+    "             #'Zmumu',\n",
+    "             #'Ztautau'\n",
+    "     #        ]\n",
+    "   #},\n",
+    "    \n",
+    "    'diboson' : {\n",
+    "        'list' : [#'ZqqZll', \n",
+    "                  #'WqqZll',\n",
+    "                  #'WpqqWmlv', \n",
+    "                  #'WplvWmqq',\n",
+    "                  #'WlvZqq',\n",
+    "                  'llll',\n",
+    "                  #'lllv',\n",
+    "                  #'llvv',\n",
+    "                  #'lvvv'\n",
+    "        ]},\n",
+    "    \n",
+    "    'single_top' : {\n",
+    "        'list' : ['single_top_tchan',\n",
+    "                  #'single_antitop_tchan',\n",
+    "                  #'single_top_schan',\n",
+    "                  #'single_antitop_schan',\n",
+    "                  #'single_top_wtchan',\n",
+    "                  #'single_antitop_wtchan'\n",
+    "                 ]\n",
+    "    },\n",
+    "    \n",
+    "    'WJets' : {\n",
+    "    'list' : ['Wplusenu',\n",
+    "             #'Wplusmunu',\n",
+    "             #'Wplustaunu',\n",
+    "             #'Wminusenu',\n",
+    "             #'Wminusmunu',\n",
+    "             #'Wminustaunu'\n",
+    "             ]\n",
+    "             }\n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "id": "5cfb905e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "lumi = 10 # data_A+B+C+D\n",
+    "\n",
+    "fraction = 0.1 # fraction for not running the whole data (running it all make the script crash)\n",
+    "\n",
+    "tuple_path = \"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/\" "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 49,
+   "id": "92d1acd9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def get_data_from_files():\n",
+    "\n",
+    "    data = {} \n",
+    "    for s in samples: \n",
+    "        print('Processing '+s+' samples') \n",
+    "        frames = [] \n",
+    "        for val in samples[s]['list']: \n",
+    "            if s == 'data': prefix = \"Data/\" # Data prefix\n",
+    "            else: # MC prefix\n",
+    "                prefix = \"MC/mc_\"+str(infofile.infos[val][\"DSID\"])+\".\"\n",
+    "            fileString = tuple_path+prefix+val+\".2lep.root\" \n",
+    "            temp = read_file(fileString,val) \n",
+    "            frames.append(temp) \n",
+    "        data[s] = pd.concat(frames) \n",
+    "    \n",
+    "    return data "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "id": "2ba1def3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def get_xsec_weight(sample):\n",
+    "    info = infofile.infos[sample] \n",
+    "    xsec_weight = (lumi*1000*info[\"xsec\"])/(info[\"sumw\"]*info[\"red_eff\"]) \n",
+    "    return xsec_weight "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "id": "0f1d517c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def calc_weight(xsec_weight, mcWeight, scaleFactor_PILEUP,\n",
+    "                scaleFactor_ELE, scaleFactor_MUON, \n",
+    "                scaleFactor_LepTRIGGER ):\n",
+    "    return xsec_weight*mcWeight*scaleFactor_PILEUP*scaleFactor_ELE*scaleFactor_MUON*scaleFactor_LepTRIGGER"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "40716206",
+   "metadata": {},
+   "source": [
+    "## Definition of the cut functions"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "69081c7c",
+   "metadata": {},
+   "source": [
+    "Check satisfied triggers E and M"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "id": "8ffa5043",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def cut_trig(trige,trigm):\n",
+    "    l=1\n",
+    "    if trige==1 or trigm==1:\n",
+    "        l=0\n",
+    "    return(l != 0) "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "id": "5e9c8342",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def just_two_leptons(lep_n):\n",
+    "    return lep_n != 2 #throw away when the number lepton is different of 2"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "681ec6bc",
+   "metadata": {},
+   "source": [
+    "Find two good leptons"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "id": "663d3e53",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def find_good_leptons(lep_pt,lep_ptcone30,lep_etcone20,lep_type,lep_eta,lep_trackd0pvunbiased,lep_tracksigd0pvunbiased,lep_z0):\n",
+    "    if lep_pt[0] < 25000 : return True  #pt required to be bigger than 25GeV\n",
+    "    #isolated leptons (good when <0.15)\n",
+    "    if lep_ptcone30[0]/lep_pt[0] > 0.15: return True\n",
+    "    if lep_ptcone30[1]/lep_pt[1] > 0.15: return True\n",
+    "    if lep_etcone20[0]/lep_pt[0] > 0.15: return True\n",
+    "    if lep_etcone20[1]/lep_pt[1] > 0.15: return True\n",
+    "    #electron in fiducial region\n",
+    "    if lep_type[0]==11 and (abs(lep_eta[0]>2.47) or abs(lep_eta[0]>1.37)) : return True\n",
+    "    if lep_type[1]==11 and (abs(lep_eta[1]>2.47) or abs(lep_eta[1]>1.37)) : return True\n",
+    "    if lep_type[0]==11 and lep_trackd0pvunbiased[0]/lep_tracksigd0pvunbiased[0] > 5 : return True\n",
+    "    if lep_type[1]==11 and lep_trackd0pvunbiased[1]/lep_tracksigd0pvunbiased[1] > 5 : return True\n",
+    "    #muon\n",
+    "    if lep_type[0]==13 and abs(lep_eta[0]>2.5): return True\n",
+    "    if lep_type[1]==13 and abs(lep_eta[1]>2.5): return True\n",
+    "    if lep_type[0]==13 and lep_trackd0pvunbiased[0]/lep_tracksigd0pvunbiased[0] > 3 : return True\n",
+    "    if lep_type[1]==13 and lep_trackd0pvunbiased[1]/lep_tracksigd0pvunbiased[1] > 3 : return True\n",
+    "    #Longitudinal impact parameter\n",
+    "    theta0 = 2*np.arctan(np.exp(-lep_eta[0]))\n",
+    "    theta1 = 2*np.arctan(np.exp(-lep_eta[1]))\n",
+    "    if abs(lep_z0[0]*np.sin(theta0))>0.5: return True\n",
+    "    if abs(lep_z0[1]*np.sin(theta1))>0.5: return True\n",
+    "    \n",
+    "    return False"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "id": "55530357",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def opposite_charge(lep_charge):\n",
+    "    return lep_charge[0]*lep_charge[1] > 0 #throw away when > 0"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 56,
+   "id": "a98e3a80",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def same_flavour(lep_type):\n",
+    "    return lep_type[0]!=lep_type[1] #throw away when different flavour"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0d01d014",
+   "metadata": {
+    "slideshow": {
+     "slide_type": "slide"
+    }
+   },
+   "source": [
+    "Invariant mass"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 57,
+   "id": "01d3197b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def calc_inv_mass_pair(pt_1,eta_1,phi_1,E_1,pt_2,eta_2,phi_2,E_2): # pt,eta,phi,energy of 2 objects\n",
+    "    px_1 = pt_1*np.cos(phi_1) # x-momentum of object 1\n",
+    "    py_1 = pt_1*np.sin(phi_1) # y-momentum of object 1\n",
+    "    pz_1 = pt_1*np.sinh(eta_1) # z-momentum of object 1\n",
+    "    px_2 = pt_2*np.cos(phi_2) # x-momentum of object 2\n",
+    "    py_2 = pt_2*np.sin(phi_2) # y-momentum of object 2\n",
+    "    pz_2 = pt_2*np.sinh(eta_2) # z-momentum of object 2\n",
+    "    sumpx = px_1 + px_2 # x-momentum of combined system\n",
+    "    sumpy = py_1 + py_2 # y-momentum of combined system\n",
+    "    sumpz = pz_1 + pz_2 # z-momentum of combined system\n",
+    "    sump = np.sqrt(sumpx**2 + sumpy**2 + sumpz**2) # total momentum of combined system\n",
+    "    sumE = E_1 + E_2 # total energy of combined system\n",
+    "    return np.sqrt(sumE**2 - sump**2)/1000 # /1000 to go from MeV to GeV\n",
+    "\n",
+    "# calculate dilepton invariant mass\n",
+    "def calc_mll(lep_pt,lep_eta,lep_phi,lep_E): # lepton pt,eta,phi,energy\n",
+    "    return calc_inv_mass_pair(lep_pt[0],lep_eta[0],lep_phi[0],lep_E[0],lep_pt[1],lep_eta[1],lep_phi[1],lep_E[1])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 58,
+   "id": "67b64481",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def mass_selection(invmass):\n",
+    "    return abs(invmass-91.18) > 25 #we need when the difference is lesser than 25 "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "id": "cdcc8bcb",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def check_jets(jet_n):\n",
+    "    return jet_n != 0 #We need no jets"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4ce1f765",
+   "metadata": {},
+   "source": [
+    "Determine the leading lepton"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 60,
+   "id": "9b89b814",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def lead_lep(lep_pt):\n",
+    "    if lep_pt[0]>lep_pt[1]:\n",
+    "        return lep_pt[0]/1000\n",
+    "    else:\n",
+    "        return lep_pt[1]/1000"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "id": "0ba879d6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def  sublead_lep(lep_pt):\n",
+    "    if lep_pt[0]>lep_pt[1]:\n",
+    "        return lep_pt[1]/1000\n",
+    "    else:\n",
+    "        return lep_pt[0]/1000"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "84d06e22",
+   "metadata": {},
+   "source": [
+    "### Read section "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "id": "85f9cac4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def read_file(path,sample):\n",
+    "    start = time.time() # start the clock\n",
+    "    print(\"\\tProcessing: \"+sample) # print which sample is being processed\n",
+    "    data_all = pd.DataFrame() # define empty pandas DataFrame to hold all data for this sample\n",
+    "    tree = uproot3.open(path)[\"mini\"] # open the tree called mini\n",
+    "    numevents = uproot3.numentries(path, \"mini\") # number of events\n",
+    "    if 'data' not in sample: xsec_weight = get_xsec_weight(sample) # get cross-section weight\n",
+    "    for data in tree.iterate(['lep_charge','lep_type','lep_pt', 'lep_eta', 'lep_ptcone30',\n",
+    "                              'lep_etcone20', 'lep_trackd0pvunbiased', 'lep_tracksigd0pvunbiased', 'lep_z0', 'jet_n', \n",
+    "                              'trigE', 'trigM', 'lep_n', 'lep_charge', 'lep_phi', 'lep_E',\n",
+    "                              'mcWeight','scaleFactor_PILEUP',\n",
+    "                              'scaleFactor_ELE','scaleFactor_MUON',\n",
+    "                              'scaleFactor_LepTRIGGER'\n",
+    "                             ],\n",
+    "                             outputtype=pd.DataFrame, # choose output type as pandas DataFrame\n",
+    "                             entrystop=numevents*fraction): # process up to numevents*fraction\n",
+    "\n",
+    "        nIn = len(data.index) # number of events in this batch\n",
+    "\n",
+    "\n",
+    "        # cut on triggers\n",
+    "        fail = data[ np.vectorize(cut_trig)(data.trigE,data.trigM)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        # cut on lepton number\n",
+    "        fail = data[ np.vectorize(just_two_leptons)(data.lep_n)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        # Keep just good leptons\n",
+    "        fail = data[ np.vectorize(find_good_leptons)(data.lep_pt,data.lep_ptcone30,data.lep_etcone20,data.lep_type,data.lep_eta,data.lep_trackd0pvunbiased,data.lep_tracksigd0pvunbiased,data.lep_z0)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        #Check SFOS\n",
+    "        fail = data[ np.vectorize(opposite_charge)(data.lep_charge)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        fail = data[ np.vectorize(same_flavour)(data.lep_type)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        #Check no jets\n",
+    "        fail = data[ np.vectorize(check_jets)(data.jet_n)].index\n",
+    "        data.drop(fail, inplace=True)\n",
+    "        \n",
+    "        #we're going to separate information from signal and background.\n",
+    "        #The invariant mass and the leading and subleading leptons\n",
+    "        #first, for signal\n",
+    "        if ('ee' or 'mumu') in sample:\n",
+    "            data['mllsignal'] = np.vectorize(calc_mll)(data.lep_pt, data.lep_eta, data.lep_phi, data.lep_E)#Calc invariant mass\n",
+    "            fail = data[ np.vectorize(mass_selection)(data.mllsignal)].index\n",
+    "            data.drop(fail, inplace=True)#just keep good masses\n",
+    "            data['lead_ptsignal'] = np.vectorize(lead_lep)(data.lep_pt)#save pt of leading lepton\n",
+    "            data['sublead_ptsignal'] = np.vectorize(sublead_lep)(data.lep_pt)#save pt subleading lepton\n",
+    "            data['totalWeightsignal'] = np.vectorize(calc_weight)(xsec_weight,\n",
+    "                                                            data.mcWeight,\n",
+    "                                                            data.scaleFactor_PILEUP,\n",
+    "                                                            data.scaleFactor_ELE,\n",
+    "                                                            data.scaleFactor_MUON,\n",
+    "                                                            data.scaleFactor_LepTRIGGER)\n",
+    "            #we also save the information in root files, with two trees, for signal and background\n",
+    "            roof[\"signal\"].extend({\"mll\": data.mllsignal, \"lead_lep\": data.lead_ptsignal, \"sublead_lep\": data.sublead_ptsignal, \"weight\": data.totalWeightsignal})\n",
+    "        else:\n",
+    "            data['mllbck'] = np.vectorize(calc_mll)(data.lep_pt, data.lep_eta, data.lep_phi, data.lep_E)\n",
+    "            fail = data[ np.vectorize(mass_selection)(data.mllbck)].index\n",
+    "            data.drop(fail, inplace=True)\n",
+    "            data['lead_ptbck'] = np.vectorize(lead_lep)(data.lep_pt)\n",
+    "            data['sublead_ptbck'] = np.vectorize(sublead_lep)(data.lep_pt)\n",
+    "            data['totalWeightbck'] = np.vectorize(calc_weight)(xsec_weight,\n",
+    "                                                            data.mcWeight,\n",
+    "                                                            data.scaleFactor_PILEUP,\n",
+    "                                                            data.scaleFactor_ELE,\n",
+    "                                                            data.scaleFactor_MUON,\n",
+    "                                                            data.scaleFactor_LepTRIGGER)\n",
+    "            roof[\"background\"].extend({\"mll\": data.mllbck, \"lead_lep\": data.lead_ptbck, \"sublead_lep\": data.sublead_ptbck, \"weight\": data.totalWeightbck})\n",
+    "            \n",
+    "                \n",
+    "\n",
+    "        \n",
+    "        #Now we're going to save relevant information in root files, for being precessed by TMVA\n",
+    "        \n",
+    "\n",
+    "        nOut = len(data.index) # number of events passing cuts in this batch\n",
+    "        data_all = data_all.append(data) # append dataframe from this batch to the dataframe for the whole sample\n",
+    "        elapsed = time.time() - start # time taken to process\n",
+    "        print(\"\\t\\t nIn: \"+str(nIn)+\",\\t nOut: \\t\"+str(nOut)+\"\\t in \"+str(round(elapsed,1))+\"s\") # events before and after\n",
+    "    \n",
+    "    return data_all # return dataframe containing events passing all cuts\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b89b1010",
+   "metadata": {},
+   "source": [
+    "Create the destination root file"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 63,
+   "id": "0f348e9e",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<TFileRecreate b'mcdata1.root' at 0x7fbf8759fa00>"
+      ]
+     },
+     "execution_count": 63,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "roof = uproot3.recreate(\"mcdata1.root\")\n",
+    "roof"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 64,
+   "id": "b7bea6f4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "roof[\"signal\"] = uproot3.newtree({\"mll\": np.float32, \"lead_lep\": np.float32, \"sublead_lep\": np.float32, \"weight\": np.float32})\n",
+    "roof[\"background\"] = uproot3.newtree({\"mll\": np.float32, \"lead_lep\": np.float32, \"sublead_lep\": np.float32, \"weight\": np.float32})"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8429474a",
+   "metadata": {},
+   "source": [
+    "start the analysis"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "bad4237e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Processing diboson samples\n",
+      "\tProcessing: llll\n"
+     ]
+    }
+   ],
+   "source": [
+    "start = time.time() # time at start of whole processing\n",
+    "data = get_data_from_files() # process all files\n",
+    "roof.close()\n",
+    "elapsed = time.time() - start # time after whole processing\n",
+    "print(\"Time taken: \"+str(round(elapsed,1))+\"s\") # print total time taken to process every file"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
