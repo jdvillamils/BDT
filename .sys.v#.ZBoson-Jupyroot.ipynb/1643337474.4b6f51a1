@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "f2841201",
+   "id": "5500458e",
    "metadata": {},
    "source": [
     "# Z Boson Analysis using a Boosted Decision Tree, with TMVA and JupyROOT"
@@ -35,7 +35,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "57ccc5ee",
+   "id": "e9efd02a",
    "metadata": {},
    "source": [
     "## Signal Section\n",
@@ -112,7 +112,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "d7f04b51",
+   "id": "c44fef30",
    "metadata": {},
    "source": [
     "We just keep the invariant mass from the two lepton system, and the Pt of the leading and subleading leptons"
@@ -195,7 +195,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "c272e6fd",
+   "id": "65d91b05",
    "metadata": {},
    "source": [
     "## Now the background section"
@@ -204,7 +204,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "673447f0",
+   "id": "bccf5c3b",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -233,7 +233,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "11dbe01a",
+   "id": "fdcbc46c",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -244,7 +244,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "d61295fd",
+   "id": "fc3ec90c",
    "metadata": {},
    "outputs": [],
    "source": []

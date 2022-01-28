@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "f2841201",
+   "id": "e9b1ec9c",
    "metadata": {},
    "source": [
     "# Z Boson Analysis using a Boosted Decision Tree, with TMVA and JupyROOT"
@@ -10,7 +10,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 20,
    "id": "726c3cc0",
    "metadata": {},
    "outputs": [],
@@ -25,7 +25,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 4,
    "id": "6f09a8d2",
    "metadata": {},
    "outputs": [],
@@ -35,7 +35,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "57ccc5ee",
+   "id": "0e6e0493",
    "metadata": {},
    "source": [
     "## Signal Section\n",
@@ -45,21 +45,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": null,
    "id": "46b2b219",
    "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "1"
-      ]
-     },
-     "execution_count": 4,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
+   "outputs": [],
    "source": [
     "tree = TChain(\"mini\")\n",
     "tree.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361106.Zee.2lep.root\")\n",
@@ -69,38 +58,40 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": null,
    "id": "6b1e1b3a",
    "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "44153520"
-      ]
-     },
-     "execution_count": 5,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
+   "outputs": [],
    "source": [
     "tree.GetEntries()"
    ]
   },
   {
+   "cell_type": "markdown",
+   "id": "edfb2145",
+   "metadata": {},
+   "source": [
+    "k=0\n",
+    "for e in fsig:\n",
+    "    k+=1\n",
+    "    if fsig.trigE:\n",
+    "        print(fsig.lep_pt)\n",
+    "    if k==100: break"
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 7,
    "id": "0b270d15",
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<TFileRecreate b'signal.root' at 0x7fd047e49940>"
+       "<TFileRecreate b'example.root' at 0x7fa3a0086df0>"
       ]
      },
-     "execution_count": 6,
+     "execution_count": 7,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -112,7 +103,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "d7f04b51",
+   "id": "ee7887e1",
    "metadata": {},
    "source": [
     "We just keep the invariant mass from the two lepton system, and the Pt of the leading and subleading leptons"
@@ -120,7 +111,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 8,
    "id": "5a493001",
    "metadata": {},
    "outputs": [],
@@ -188,14 +179,15 @@
     "print('Initial entries:', k)\n",
     "print('Final entries:', kf)\n",
     "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
-    "roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
-    "roof.close()\n",
+    "print(c1,c11,c2,c3,c4,c5,c6,c7)\n",
+    "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
+    "#roof.close()\n",
     "print('Success closing')"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "c272e6fd",
+   "id": "83f3ad9c",
    "metadata": {},
    "source": [
     "## Now the background section"
@@ -203,8 +195,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "673447f0",
+   "execution_count": 16,
+   "id": "df1de6cc",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -232,10 +224,21 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "11dbe01a",
+   "execution_count": 17,
+   "id": "381510c9",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "30307"
+      ]
+     },
+     "execution_count": 17,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
    "source": [
     "treeb = fbck.Get(\"mini\")\n",
     "treeb.GetEntries()"
@@ -244,7 +247,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "d61295fd",
+   "id": "2ae09dcd",
    "metadata": {},
    "outputs": [],
    "source": []

@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "f2841201",
+   "id": "555ddaba",
    "metadata": {},
    "source": [
     "# Z Boson Analysis using a Boosted Decision Tree, with TMVA and JupyROOT"
@@ -35,7 +35,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "57ccc5ee",
+   "id": "4d12c5c7",
    "metadata": {},
    "source": [
     "## Signal Section\n",
@@ -112,7 +112,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "d7f04b51",
+   "id": "9aee2131",
    "metadata": {},
    "source": [
     "We just keep the invariant mass from the two lepton system, and the Pt of the leading and subleading leptons"
@@ -120,7 +120,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": null,
    "id": "5a493001",
    "metadata": {},
    "outputs": [],
@@ -188,14 +188,15 @@
     "print('Initial entries:', k)\n",
     "print('Final entries:', kf)\n",
     "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
-    "roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
-    "roof.close()\n",
+    "print(c1,c11,c2,c3,c4,c5,c6,c7)\n",
+    "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
+    "#roof.close()\n",
     "print('Success closing')"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "c272e6fd",
+   "id": "12162a3a",
    "metadata": {},
    "source": [
     "## Now the background section"
@@ -204,7 +205,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "673447f0",
+   "id": "1906f015",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -233,7 +234,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "11dbe01a",
+   "id": "020805a8",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -244,7 +245,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "d61295fd",
+   "id": "d504dbe8",
    "metadata": {},
    "outputs": [],
    "source": []
