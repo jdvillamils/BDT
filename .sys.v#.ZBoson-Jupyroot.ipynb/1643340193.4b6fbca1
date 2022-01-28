@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "e38587a8",
+   "id": "f2841201",
    "metadata": {},
    "source": [
     "# Z Boson Analysis using a Boosted Decision Tree, with TMVA and JupyROOT"
@@ -10,7 +10,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 20,
+   "execution_count": 2,
    "id": "726c3cc0",
    "metadata": {},
    "outputs": [],
@@ -25,7 +25,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 3,
    "id": "6f09a8d2",
    "metadata": {},
    "outputs": [],
@@ -35,7 +35,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "19bab636",
+   "id": "57ccc5ee",
    "metadata": {},
    "source": [
     "## Signal Section\n",
@@ -45,10 +45,21 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 11,
    "id": "46b2b219",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "1"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
    "source": [
     "tree = TChain(\"mini\")\n",
     "tree.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361106.Zee.2lep.root\")\n",
@@ -58,27 +69,38 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 12,
    "id": "6b1e1b3a",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "44153520"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
    "source": [
     "tree.GetEntries()"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 6,
    "id": "0b270d15",
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<TFileRecreate b'example.root' at 0x7fa3a0086df0>"
+       "<TFileRecreate b'signal.root' at 0x7fd047e49940>"
       ]
      },
-     "execution_count": 7,
+     "execution_count": 6,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -90,7 +112,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "ddc11856",
+   "id": "d7f04b51",
    "metadata": {},
    "source": [
     "We just keep the invariant mass from the two lepton system, and the Pt of the leading and subleading leptons"
@@ -98,7 +120,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 7,
    "id": "5a493001",
    "metadata": {},
    "outputs": [],
@@ -108,10 +130,21 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 13,
    "id": "1c55beb7",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Initial entries: 1000000\n",
+      "Final entries: 68\n",
+      "Finished in 2 min 21 s\n",
+      "Success closing\n"
+     ]
+    }
+   ],
    "source": [
     "start = time.time()\n",
     "invM=[]\n",
@@ -159,14 +192,13 @@
     "                            leadpt.append(ptlead)\n",
     "                            subleadpt.append(ptsub)\n",
     "                            kf+=1\n",
-    "    #if k==50000: break\n",
+    "    if k==1000000: break\n",
     "#roof.close()\n",
     "end = time.time()\n",
     "duration = end-start\n",
     "print('Initial entries:', k)\n",
     "print('Final entries:', kf)\n",
     "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
-    "print(c1,c11,c2,c3,c4,c5,c6,c7)\n",
     "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
     "#roof.close()\n",
     "print('Success closing')"
@@ -174,7 +206,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "a307815e",
+   "id": "c272e6fd",
    "metadata": {},
    "source": [
     "## Now the background section"
@@ -182,59 +214,48 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 16,
-   "id": "dd84f87a",
+   "execution_count": null,
+   "id": "673447f0",
    "metadata": {},
    "outputs": [],
    "source": [
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361106.Zee.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363356.ZqqZll.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363358.WqqZll.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363359.WpqqWmlv.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363360.WplvWmqq.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363489.WlvZqq.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363490.llll.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363491.lllv.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363492.llvv.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363493.lvvv.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410011.single_top_tchan.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410012.single_antitop_tchan.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410013.single_top_wtchan.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410014.single_antitop_wtchan.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361100.Wplusenu.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361101.Wplusmunu.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361102.Wplustaunu.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361103.Wminusenu.2lep.root\")\n",
-    "fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361104.Wminusmunu.2lep.root\")\n",
-    "#fbck = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361105.Wminustaunu.2lep.root\")  "
+    "treeb = TChain(\"mini\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361106.Zee.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363356.ZqqZll.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363358.WqqZll.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363359.WpqqWmlv.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363360.WplvWmqq.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363489.WlvZqq.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363490.llll.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363491.lllv.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363492.llvv.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363493.lvvv.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410011.single_top_tchan.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410012.single_antitop_tchan.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410013.single_top_wtchan.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410014.single_antitop_wtchan.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361100.Wplusenu.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361101.Wplusmunu.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361102.Wplustaunu.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361103.Wminusenu.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361104.Wminusmunu.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361105.Wminustaunu.2lep.root\")  "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 17,
-   "id": "62c16e97",
+   "execution_count": null,
+   "id": "11dbe01a",
    "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "30307"
-      ]
-     },
-     "execution_count": 17,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
+   "outputs": [],
    "source": [
-    "treeb = fbck.Get(\"mini\")\n",
     "treeb.GetEntries()"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "2ad6a081",
+   "id": "d61295fd",
    "metadata": {},
    "outputs": [],
    "source": []

@@ -192,7 +192,7 @@
     "                            leadpt.append(ptlead)\n",
     "                            subleadpt.append(ptsub)\n",
     "                            kf+=1\n",
-    "    #if k==1000000: break\n",
+    "    if k==1000000: break\n",
     "#roof.close()\n",
     "end = time.time()\n",
     "duration = end-start\n",
@@ -288,17 +288,17 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "4d3de78d",
+   "id": "9d522602",
    "metadata": {},
    "outputs": [],
    "source": [
-    "roofb[\"signal\"] = uproot3.newtree({\"mll\": np.float32, \"lead\": np.float32, \"sublead\": np.float32})"
+    "roof[\"signal\"] = uproot3.newtree({\"mll\": np.float32, \"lead\": np.float32, \"sublead\": np.float32})"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "b91f2764",
+   "id": "be15a330",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -313,7 +313,7 @@
     "kf=0\n",
     "index1=0\n",
     "index2=0\n",
-    "for event in treeb:\n",
+    "for event in tree:\n",
     "    k=k+1\n",
     "    goodlep=0\n",
     "    if(tree.trigE or tree.trigM):\n",
@@ -348,14 +348,15 @@
     "                            leadpt.append(ptlead)\n",
     "                            subleadpt.append(ptsub)\n",
     "                            kf+=1\n",
-    "    #if k==1000000: break\n",
+    "    if k==1000000: break\n",
+    "#roof.close()\n",
     "end = time.time()\n",
     "duration = end-start\n",
     "print('Initial entries:', k)\n",
     "print('Final entries:', kf)\n",
     "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
-    "roofb[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
-    "roofb.close()\n",
+    "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
+    "#roof.close()\n",
     "print('Success closing')"
    ]
   }

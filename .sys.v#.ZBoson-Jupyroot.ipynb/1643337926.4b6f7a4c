@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "markdown",
-   "id": "48223621",
+   "id": "f2841201",
    "metadata": {},
    "source": [
     "# Z Boson Analysis using a Boosted Decision Tree, with TMVA and JupyROOT"
@@ -35,7 +35,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "ddf2d351",
+   "id": "57ccc5ee",
    "metadata": {},
    "source": [
     "## Signal Section\n",
@@ -45,7 +45,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 11,
    "id": "46b2b219",
    "metadata": {},
    "outputs": [
@@ -55,7 +55,7 @@
        "1"
       ]
      },
-     "execution_count": 4,
+     "execution_count": 11,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -69,7 +69,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": 12,
    "id": "6b1e1b3a",
    "metadata": {},
    "outputs": [
@@ -79,7 +79,7 @@
        "44153520"
       ]
      },
-     "execution_count": 5,
+     "execution_count": 12,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -112,7 +112,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "1e22175d",
+   "id": "d7f04b51",
    "metadata": {},
    "source": [
     "We just keep the invariant mass from the two lepton system, and the Pt of the leading and subleading leptons"
@@ -130,10 +130,21 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 13,
    "id": "1c55beb7",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Initial entries: 1000000\n",
+      "Final entries: 68\n",
+      "Finished in 2 min 21 s\n",
+      "Success closing\n"
+     ]
+    }
+   ],
    "source": [
     "start = time.time()\n",
     "invM=[]\n",
@@ -181,21 +192,21 @@
     "                            leadpt.append(ptlead)\n",
     "                            subleadpt.append(ptsub)\n",
     "                            kf+=1\n",
-    "    #if k==50000: break\n",
+    "    if k==1000000: break\n",
     "#roof.close()\n",
     "end = time.time()\n",
     "duration = end-start\n",
     "print('Initial entries:', k)\n",
     "print('Final entries:', kf)\n",
     "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
-    "roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
-    "roof.close()\n",
+    "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
+    "#roof.close()\n",
     "print('Success closing')"
    ]
   },
   {
    "cell_type": "markdown",
-   "id": "43ae333e",
+   "id": "c272e6fd",
    "metadata": {},
    "source": [
     "## Now the background section"
@@ -204,7 +215,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "4e52ebce",
+   "id": "673447f0",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -233,7 +244,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "4026ee58",
+   "id": "11dbe01a",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -244,7 +255,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "e6fd7538",
+   "id": "d61295fd",
    "metadata": {},
    "outputs": [],
    "source": []
