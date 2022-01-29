@@ -26,7 +26,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "ab0cba3c",
+   "id": "4de5f179",
    "metadata": {},
    "source": [
     "%jsroot on"
@@ -61,7 +61,7 @@
   {
    "cell_type": "code",
    "execution_count": 50,
-   "id": "5766e68c",
+   "id": "a3c22561",
    "metadata": {
     "scrolled": true
    },
@@ -81,7 +81,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "0ddf878a",
+   "id": "df09c62c",
    "metadata": {},
    "source": [
     "treee = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361107.Zmumu.2lep.root\")"
@@ -89,7 +89,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "87d22aea",
+   "id": "96d9ce4d",
    "metadata": {},
    "source": [
     "tree.GetEntries()"
@@ -132,7 +132,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "roofs[\"signal\"] = uproot3.newtree({\"mll\": np.float32, \"lead\": np.float32, \"sublead\": np.float32, \"weight\": np.float32})"
+    "roof[\"signal\"] = uproot3.newtree({\"mll\": np.float32, \"lead\": np.float32, \"sublead\": np.float32, \"weight\": np.float32})"
    ]
   },
   {
@@ -493,7 +493,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "5705ea8f",
+   "id": "df0cf3ff",
    "metadata": {},
    "source": [
     "## Now, we extract and merge the data into one root file"
@@ -502,7 +502,7 @@
   {
    "cell_type": "code",
    "execution_count": 53,
-   "id": "427f54c5",
+   "id": "e2761654",
    "metadata": {},
    "outputs": [
     {
@@ -526,7 +526,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "7a9c0ff8",
+   "id": "424f5d98",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -537,7 +537,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "80d0f562",
+   "id": "0e551277",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -547,7 +547,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "3b15be91",
+   "id": "376f17d4",
    "metadata": {},
    "outputs": [],
    "source": [
