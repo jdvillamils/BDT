@@ -10,7 +10,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 19,
+   "execution_count": null,
    "id": "726c3cc0",
    "metadata": {},
    "outputs": [],
@@ -26,7 +26,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "7c658379",
+   "id": "844db55a",
    "metadata": {},
    "source": [
     "%jsroot on"
@@ -44,7 +44,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 37,
+   "execution_count": null,
    "id": "46b2b219",
    "metadata": {},
    "outputs": [],
@@ -60,20 +60,12 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 50,
-   "id": "967e28aa",
+   "execution_count": null,
+   "id": "9df4afc8",
    "metadata": {
     "scrolled": true
    },
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "[21848524, 43971340, 44153520]\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "samplesSig = [t1,t2,t3]\n",
     "print(samplesSig)"
@@ -81,7 +73,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "fa16785a",
+   "id": "699a3eea",
    "metadata": {},
    "source": [
     "treee = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361107.Zmumu.2lep.root\")"
@@ -89,7 +81,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "62f89912",
+   "id": "2122fc91",
    "metadata": {},
    "source": [
     "tree.GetEntries()"
@@ -97,24 +89,13 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": null,
    "id": "0b270d15",
    "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "<TFileRecreate b'signal.root' at 0x7f3dcd64c310>"
-      ]
-     },
-     "execution_count": 6,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
+   "outputs": [],
    "source": [
-    "roof = uproot3.recreate(\"RootFiles/signal.root\")\n",
-    "roof"
+    "roofs = uproot3.recreate(\"RootFiles/signal.root\")\n",
+    "roofs"
    ]
   },
   {
@@ -127,81 +108,20 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": null,
    "id": "5a493001",
    "metadata": {},
    "outputs": [],
    "source": [
-    "roof[\"signal\"] = uproot3.newtree({\"mll\": np.float32, \"lead\": np.float32, \"sublead\": np.float32, \"weight\": np.float32})"
+    "roofs[\"signal\"] = uproot3.newtree({\"mll\": np.float32, \"lead\": np.float32, \"sublead\": np.float32, \"weight\": np.float32})"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
+   "execution_count": null,
    "id": "1c55beb7",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "trige 0\n",
-      "trigm 1\n",
-      "paso\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "paso\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "paso\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "paso\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "paso\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "paso\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "paso\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "paso\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "paso\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "paso\n",
-      "trige 0\n",
-      "trigm 1\n",
-      "Initial entries: 10\n",
-      "Final entries: 0\n",
-      "Finished in 0 min 0 s\n",
-      "Successful close\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "start = time.time()\n",
     "invM=[]\n",
@@ -294,8 +214,8 @@
     "print('Initial events:', k)\n",
     "print('Final events:', kf)\n",
     "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
-    "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt, \"weight\": weights})\n",
-    "#roof.close()\n",
+    "#roofs[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt, \"weight\": weights})\n",
+    "#roofs.close()\n",
     "print('Successful close')"
    ]
   },
@@ -309,7 +229,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 51,
+   "execution_count": null,
    "id": "673447f0",
    "metadata": {},
    "outputs": [],
@@ -343,18 +263,10 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 52,
+   "execution_count": null,
    "id": "11dbe01a",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "[1403146, 2719765, 2733140, 2747385, 2775584, 7041708, 10833503, 14242546, 14254335, 14291181, 14330114, 14371616]\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "samplesBck=[b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12]"
    ]
@@ -431,29 +343,29 @@
     "                            invMb.append(invmass)\n",
     "                            leadptb.append(ptlead)\n",
     "                            subleadptb.append(ptsub)\n",
-    "                            if(k<=samplesSig[0]):\n",
+    "                            if(k<=samplesBck[0]):\n",
     "                                sample='ZqqZll'\n",
-    "                            if(k>samplesSig[0] and k<=samplesSig[1]):\n",
+    "                            if(k>samplesBck[0] and k<=samplesBck[1]):\n",
     "                                sample='WqqZll'\n",
-    "                            if(k>samplesSig[1] and k<=samplesSig[2]):\n",
+    "                            if(k>samplesBck[1] and k<=samplesBck[2]):\n",
     "                                sample='WpqqWmlv'\n",
-    "                            if(k>samplesSig[2] and k<=samplesSig[3]):\n",
+    "                            if(k>samplesBck[2] and k<=samplesBck[3]):\n",
     "                                sample='WplvWmqq'\n",
-    "                            if(k>samplesSig[3] and k<=samplesSig[4]):\n",
+    "                            if(k>samplesBck[3] and k<=samplesBck[4]):\n",
     "                                sample='WlvZqq'\n",
-    "                            if(k>samplesSig[4] and k<=samplesSig[5]):\n",
+    "                            if(k>samplesBck[4] and k<=samplesBck[5]):\n",
     "                                sample='llll'\n",
-    "                            if(k>samplesSig[5] and k<=samplesSig[6]):\n",
+    "                            if(k>samplesBck[5] and k<=samplesBck[6]):\n",
     "                                sample='lllv'\n",
-    "                            if(k>samplesSig[6] and k<=samplesSig[7]):\n",
+    "                            if(k>samplesBck[6] and k<=samplesBck[7]):\n",
     "                                sample='llvv'\n",
-    "                            if(k>samplesSig[7] and k<=samplesSig[8]):\n",
+    "                            if(k>samplesBck[7] and k<=samplesBck[8]):\n",
     "                                sample='lvvv'\n",
-    "                            if(k>samplesSig[8] and k<=samplesSig[9]):\n",
+    "                            if(k>samplesBck[8] and k<=samplesBck[9]):\n",
     "                                sample='single_top_tchan'\n",
-    "                            if(k>samplesSig[9] and k<=samplesSig[10]):\n",
+    "                            if(k>samplesBck[9] and k<=samplesBck[10]):\n",
     "                                sample='single_antitop_tchan'\n",
-    "                            if(k>samplesSig[10] and k<=samplesSig[11]):\n",
+    "                            if(k>samplesBck[10] and k<=samplesBck[11]):\n",
     "                                sample='Wplusenu'\n",
     "                            info = infofile.infos[sample]\n",
     "                            xsec_weight = (lumi*1000*info[\"xsec\"])/(info[\"sumw\"]*info[\"red_eff\"])\n",
@@ -465,19 +377,19 @@
     "    if(k=5000000):\n",
     "        xd=time.time()\n",
     "        taked=xd-start\n",
-    "        tre=sampleBck[11]*taked/k\n",
+    "        tre=samplesBck[11]*taked/k\n",
     "        print(\"5M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
     "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
     "    if(k=10000000):\n",
     "        xd=time.time()\n",
     "        taked=xd-start\n",
-    "        tre=sampleBck[11]*taked/k\n",
+    "        tre=samplesBck[11]*taked/k\n",
     "        print(\"10M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
     "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
     "    if(k=14000000):\n",
     "        xd=time.time()\n",
     "        taked=xd-start\n",
-    "        tre=sampleBck[11]*taked/k\n",
+    "        tre=samplesBck[11]*taked/k\n",
     "        print(\"14M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
     "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
     "\n",
@@ -493,7 +405,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "19b54862",
+   "id": "c4861d35",
    "metadata": {},
    "source": [
     "## Now, we extract and merge the data into one root file"
@@ -501,20 +413,12 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 53,
-   "id": "2a8f816d",
+   "execution_count": null,
+   "id": "c51584bf",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "12205790\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
-    "data =TChain(\"mini\")\n",
+    "data = TChain(\"mini\")\n",
     "data.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/Data/data_A.2lep.root\")\n",
     "data.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/Data/data_B.2lep.root\")\n",
     "data.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/Data/data_C.2lep.root\")\n",
@@ -526,7 +430,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "869beb8b",
+   "id": "a2573b47",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -537,7 +441,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "bba863d7",
+   "id": "79bc1ce5",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -547,7 +451,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "d3c2b6a4",
+   "id": "9824459e",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -565,85 +469,56 @@
     "index1=0\n",
     "index2=0\n",
     "print(\"Running a total of \",d,\" events\")\n",
-    "for event in tree:\n",
+    "for event in data:\n",
     "    k=k+1\n",
     "    goodlep=0\n",
-    "    if(tree.trigE or tree.trigM):\n",
-    "        if(tree.lep_n==2):\n",
-    "            for j in range(tree.lep_n):\n",
-    "                if((tree.lep_pt[j]>25000.) and (tree.lep_ptcone30[j]/tree.lep_pt[j] < 0.15) and (tree.lep_etcone20[j]/tree.lep_pt[j] < 0.15)):\n",
-    "                    #Electron in F zone\n",
-    "                    if(tree.lep_type[j]==11 and abs(tree.lep_eta[j])<2.47 and (abs(tree.lep_eta[j])<1.37 or abs(tree.lep_eta[j])>1.52)):\n",
-    "                        theta = 2*np.arctan(np.exp(-tree.lep_eta[j]))\n",
-    "                        if(tree.lep_trackd0pvunbiased[j]/tree.lep_tracksigd0pvunbiased[j] < 5 and abs(tree.lep_z0[j]*np.sin(theta))<0.5):\n",
-    "                            goodlep+=1\n",
-    "                            index1=j\n",
-    "                    if(tree.lep_type[j]==13 and abs(tree.lep_eta[j]<2.5)):\n",
-    "                        theta = 2*np.arctan(np.exp(-tree.lep_eta[j]))\n",
-    "                        if(tree.lep_trackd0pvunbiased[j]/tree.lep_tracksigd0pvunbiased[j] < 3 and abs(tree.lep_z0[j]*np.sin(theta))<0.5):\n",
-    "                            goodlep+=1\n",
-    "                            index2=j\n",
+    "    if(data.trigE or data.trigM):\n",
+    "        if(data.lep_n==2):\n",
+    "            for j in range(data.lep_n):\n",
+    "                if(data.lep_pt[j]>25000.):\n",
+    "                    if(data.lep_type[j]==11):\n",
+    "                        goodlep+=1\n",
+    "                        index1=j\n",
+    "                    if(data.lep_type[j]==13):\n",
+    "                        goodlep+=1\n",
+    "                        index2=j\n",
     "            if(goodlep==2):\n",
-    "                if(tree.jet_n==0):\n",
-    "                    if(tree.lep_charge[index1]*tree.lep_charge[index2] < 0 and tree.lep_type[index1]==tree.lep_type[index2]):\n",
-    "                        if(tree.lep_pt[index1]>tree.lep_pt[index2]):\n",
-    "                            leadlepton.SetPtEtaPhiE(tree.lep_pt[index1], tree.lep_eta[index1], tree.lep_phi[index1], tree.lep_E[index1])\n",
-    "                            subleadlepton.SetPtEtaPhiE(tree.lep_pt[index2], tree.lep_eta[index2], tree.lep_phi[index2], tree.lep_E[index2])\n",
-    "                        else:\n",
-    "                            leadlepton.SetPtEtaPhiE(tree.lep_pt[index2], tree.lep_eta[index2], tree.lep_phi[index2], tree.lep_E[index2])\n",
-    "                            subleadlepton.SetPtEtaPhiE(tree.lep_pt[index1], tree.lep_eta[index1], tree.lep_phi[index1], tree.lep_E[index1])\n",
-    "                        lepton12=leadlepton+subleadlepton\n",
-    "                        invmass=lepton12.M()/1000.\n",
-    "                        if(abs(invmass-91.18)<25.):\n",
-    "                            ptlead=leadlepton.Pt()/1000.\n",
-    "                            ptsub=subleadlepton.Pt()/1000.\n",
-    "                            invM.append(invmass)\n",
-    "                            leadpt.append(ptlead)\n",
-    "                            subleadpt.append(ptsub)\n",
-    "                            if(k<=samplesSig[0]):\n",
-    "                                sample='Zee'\n",
-    "                            if(k>samplesSig[0] and k<=samplesSig[1]):\n",
-    "                                sample='Zmumu'\n",
-    "                            if(k>samplesSig[1] and k<=samplesSig[2]):\n",
-    "                                sample='Ztautau'\n",
-    "                            info = infofile.infos[sample]\n",
-    "                            xsec_weight = (lumi*1000*info[\"xsec\"])/(info[\"sumw\"]*info[\"red_eff\"])\n",
-    "                            weight=xsec_weight*tree.mcWeight*tree.scaleFactor_PILEUP*tree.scaleFactor_ELE*tree.scaleFactor_MUON*tree.scaleFactor_LepTRIGGER\n",
-    "                            weights.append(weight)\n",
-    "                            kf+=1\n",
+    "                if(data.jet_n==0):\n",
+    "                    if(data.lep_pt[index1]>data.lep_pt[index2]):\n",
+    "                        leadlepton.SetPtEtaPhiE(data.lep_pt[index1], data.lep_eta[index1], data.lep_phi[index1], data.lep_E[index1])\n",
+    "                        subleadlepton.SetPtEtaPhiE(data.lep_pt[index2], data.lep_eta[index2], data.lep_phi[index2], data.lep_E[index2])\n",
+    "                    else:\n",
+    "                        leadlepton.SetPtEtaPhiE(data.lep_pt[index2], data.lep_eta[index2], data.lep_phi[index2], data.lep_E[index2])\n",
+    "                        subleadlepton.SetPtEtaPhiE(data.lep_pt[index1], data.lep_eta[index1], data.lep_phi[index1], data.lep_E[index1])\n",
+    "                    lepton12=leadlepton+subleadlepton\n",
+    "                    invmass=lepton12.M()/1000.\n",
+    "                    ptlead=leadlepton.Pt()/1000.\n",
+    "                    ptsub=subleadlepton.Pt()/1000.\n",
+    "                    invMd.append(invmass)\n",
+    "                    leadptd.append(ptlead)\n",
+    "                    subleadptd.append(ptsub)\n",
+    "                    weightsd.append(1)\n",
+    "                    kf+=1\n",
     "    #if k==10: break\n",
+    "    if(k=5000000):\n",
+    "        xd=time.time()\n",
+    "        taked=xd-start\n",
+    "        tre=d*taked/k\n",
+    "        print(\"5M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
+    "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
     "    if(k=10000000):\n",
     "        xd=time.time()\n",
     "        taked=xd-start\n",
-    "        tre=sampleSig[2]*taked/k\n",
+    "        tre=d*taked/k\n",
     "        print(\"10M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
     "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
-    "    if(k=20000000):\n",
-    "        xd=time.time()\n",
-    "        taked=xd-start\n",
-    "        tre=sampleSig[2]*taked/k\n",
-    "        print(\"20M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
-    "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
-    "    if(k=30000000):\n",
-    "        xd=time.time()\n",
-    "        taked=xd-start\n",
-    "        tre=sampleSig[2]*taked/k\n",
-    "        print(\"30M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
-    "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
-    "    if(k=40000000):\n",
-    "        xd=time.time()\n",
-    "        taked=xd-start\n",
-    "        tre=sampleSig[2]*taked/k\n",
-    "        print(\"40M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
-    "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
-    "\n",
     "end = time.time()\n",
     "duration = end-start\n",
     "print('Initial events:', k)\n",
     "print('Final events:', kf)\n",
     "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
-    "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt, \"weight\": weights})\n",
-    "#roof.close()\n",
+    "#roofd[\"data\"].extend({\"mll\": invMd, \"lead\": leadptd, \"sublead\": subleadptd, \"weight\": weightsd})\n",
+    "#roofd.close()\n",
     "print('Successful close')"
    ]
   }
