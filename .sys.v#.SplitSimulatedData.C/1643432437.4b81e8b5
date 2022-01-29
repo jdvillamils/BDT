@@ -45,7 +45,7 @@ int SplitSimulatedData(void){
     TTree *sigtrain = new TTree("SignalTrain","Signal for train");
     TTree *backtrain = new TTree("BackgroundTrain","Background for train");
     
-    Float_t mllste;
+     Float_t mllste;
     Float_t mllbte;
     Float_t leadste;
     Float_t leadbte;
