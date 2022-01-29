@@ -231,27 +231,6 @@
     "   # print(element)\n",
     "print(k)"
    ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 5,
-   "id": "7e4309e0",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "0\n",
-      "1\n"
-     ]
-    }
-   ],
-   "source": [
-    "lep_n=2\n",
-    "for j in range(lep_n):\n",
-    "    print(j)"
-   ]
   }
  ],
  "metadata": {

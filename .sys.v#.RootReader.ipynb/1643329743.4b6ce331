@@ -2,8 +2,8 @@
  "cells": [
   {
    "cell_type": "code",
-   "execution_count": 7,
-   "id": "2b97d995",
+   "execution_count": 8,
+   "id": "2e50689c",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -15,23 +15,36 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
-   "id": "2235ca3e",
+   "execution_count": 9,
+   "id": "abd2929c",
    "metadata": {
     "scrolled": true
    },
    "outputs": [],
    "source": [
-    "sig=rp.read_root('mcdata.root','background')"
+    "sig=rp.read_root('example.root','signal')"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "470ae2af",
+   "execution_count": 11,
+   "id": "672e16ae",
    "metadata": {},
-   "outputs": [],
-   "source": []
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "36.70953369140625\n",
+      "33.28866195678711\n"
+     ]
+    }
+   ],
+   "source": [
+    "rep=sig['lead']\n",
+    "for element in rep:\n",
+    "    print(element)"
+   ]
   }
  ],
  "metadata": {

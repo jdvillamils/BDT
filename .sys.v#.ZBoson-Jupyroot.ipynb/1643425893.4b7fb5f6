@@ -46,7 +46,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 37,
+   "execution_count": 4,
    "id": "46b2b219",
    "metadata": {},
    "outputs": [],
@@ -62,19 +62,63 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 44,
-   "id": "d5c9468c",
+   "execution_count": 16,
+   "id": "691ad115",
    "metadata": {
     "scrolled": true
    },
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[21848524, 43971340, 44153520]\n",
+      "43971340\n"
+     ]
+    }
+   ],
    "source": [
     "samplesSig = [t1,t2,t3]"
    ]
   },
   {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "cb20670a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Finished first samples, time taken 0 min 5 s\n",
+      "Approx time for finishing is 0 min 14 s\n",
+      "going in 0 min 8 s\n",
+      "Finished in 0 min 14 s\n"
+     ]
+    }
+   ],
+   "source": [
+    "start = time.time()\n",
+    "for k in range(100000000):\n",
+    "    if k==40000000:\n",
+    "        xd=time.time()\n",
+    "        taked=xd-start\n",
+    "        tre=100000000*taked/k\n",
+    "        print(\"Finished first samples, time taken {} min {} s\".format(int(taked//60),int(taked%60)))\n",
+    "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60)))\n",
+    "    if k==60000000:\n",
+    "        xd=time.time()\n",
+    "        taked=xd-start\n",
+    "        print(\"going in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
+    "end=time.time()\n",
+    "duration=end-start\n",
+    "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))"
+   ]
+  },
+  {
    "cell_type": "markdown",
-   "id": "0ee1e26a",
+   "id": "61e35771",
    "metadata": {},
    "source": [
     "treee = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361107.Zmumu.2lep.root\")"
@@ -82,7 +126,7 @@
   },
   {
    "cell_type": "markdown",
-   "id": "5c0d314a",
+   "id": "fbab1fa8",
    "metadata": {},
    "source": [
     "tree.GetEntries()"
@@ -209,7 +253,6 @@
     "lumi=10\n",
     "index1=0\n",
     "index2=0\n",
-    "print(\"Running a total of \",samplesSig[2],\" events\")\n",
     "for event in tree:\n",
     "    k=k+1\n",
     "    goodlep=0\n",
@@ -260,32 +303,14 @@
     "    if(k=10000000):\n",
     "        xd=time.time()\n",
     "        taked=xd-start\n",
-    "        tre=sampleSig[2]*taked/k\n",
-    "        print(\"10M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
-    "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
-    "    if(k=20000000):\n",
-    "        xd=time.time()\n",
-    "        taked=xd-start\n",
-    "        tre=sampleSig[2]*taked/k\n",
-    "        print(\"20M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
-    "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
-    "    if(k=30000000):\n",
-    "        xd=time.time()\n",
-    "        taked=xd-start\n",
-    "        tre=sampleSig[2]*taked/k\n",
-    "        print(\"30M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
-    "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
-    "    if(k=40000000):\n",
-    "        xd=time.time()\n",
-    "        taked=xd-start\n",
-    "        tre=sampleSig[2]*taked/k\n",
-    "        print(\"40M completed in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
+    "        tre=100000000*taked/k\n",
+    "        print(\"Finished first samples, time taken {} min {} s\".format(int(taked//60),int(taked%60)))\n",
     "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
     "#roof.close()\n",
     "end = time.time()\n",
     "duration = end-start\n",
-    "print('Initial events:', k)\n",
-    "print('Final events:', kf)\n",
+    "print('Initial entries:', k)\n",
+    "print('Final entries:', kf)\n",
     "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
     "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt, \"weight\": weights})\n",
     "#roof.close()\n",

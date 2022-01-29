@@ -10,7 +10,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 3,
    "id": "726c3cc0",
    "metadata": {},
    "outputs": [],
@@ -45,46 +45,67 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 11,
+   "execution_count": 4,
    "id": "46b2b219",
    "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "1"
-      ]
-     },
-     "execution_count": 11,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
+   "outputs": [],
    "source": [
     "tree = TChain(\"mini\")\n",
     "tree.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361106.Zee.2lep.root\")\n",
+    "t1=tree.GetEntries()\n",
     "tree.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361107.Zmumu.2lep.root\")\n",
-    "tree.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361108.Ztautau.2lep.root\")"
+    "t2=tree.GetEntries()\n",
+    "tree.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361108.Ztautau.2lep.root\")\n",
+    "t3=tree.GetEntries()"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": 5,
+   "id": "1b0fe99d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "21848524 43971340 44153520\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(t1,t2,t3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "86501172",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "treee = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361107.Zmumu.2lep.root\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
    "id": "6b1e1b3a",
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "44153520"
+       "22122816"
       ]
      },
-     "execution_count": 12,
+     "execution_count": 3,
      "metadata": {},
      "output_type": "execute_result"
     }
    ],
    "source": [
+    "tree=treee.Get('mini')\n",
     "tree.GetEntries()"
    ]
   },
@@ -97,7 +118,7 @@
     {
      "data": {
       "text/plain": [
-       "<TFileRecreate b'signal.root' at 0x7fd047e49940>"
+       "<TFileRecreate b'signal.root' at 0x7f3dcd64c310>"
       ]
      },
      "execution_count": 6,
@@ -138,10 +159,60 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Initial entries: 1000000\n",
-      "Final entries: 68\n",
-      "Finished in 2 min 21 s\n",
-      "Success closing\n"
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "Initial entries: 10\n",
+      "Final entries: 0\n",
+      "Finished in 0 min 0 s\n",
+      "Successful close\n"
      ]
     }
    ],
@@ -158,6 +229,163 @@
     "index1=0\n",
     "index2=0\n",
     "for event in tree:\n",
+    "    k=k+1\n",
+    "    goodlep=0\n",
+    "    if(tree.trigE or tree.trigM):\n",
+    "        if(tree.lep_n==2):\n",
+    "            for j in range(tree.lep_n):\n",
+    "                if((tree.lep_pt[j]>25000.) and (tree.lep_ptcone30[j]/tree.lep_pt[j] < 0.15) and (tree.lep_etcone20[j]/tree.lep_pt[j] < 0.15)):\n",
+    "                    #Electron in F zone\n",
+    "                    if(tree.lep_type[j]==11 and abs(tree.lep_eta[j])<2.47 and (abs(tree.lep_eta[j])<1.37 or abs(tree.lep_eta[j])>1.52)):\n",
+    "                        theta = 2*np.arctan(np.exp(-tree.lep_eta[j]))\n",
+    "                        if(tree.lep_trackd0pvunbiased[j]/tree.lep_tracksigd0pvunbiased[j] < 5 and abs(tree.lep_z0[j]*np.sin(theta))<0.5):\n",
+    "                            goodlep+=1\n",
+    "                            index1=j\n",
+    "                    if(tree.lep_type[j]==13 and abs(tree.lep_eta[j]<2.5)):\n",
+    "                        theta = 2*np.arctan(np.exp(-tree.lep_eta[j]))\n",
+    "                        if(tree.lep_trackd0pvunbiased[j]/tree.lep_tracksigd0pvunbiased[j] < 3 and abs(tree.lep_z0[j]*np.sin(theta))<0.5):\n",
+    "                            goodlep+=1\n",
+    "                            index2=j\n",
+    "            if(goodlep==2):\n",
+    "                if(tree.jet_n==0):\n",
+    "                    if(tree.lep_charge[index1]*tree.lep_charge[index2] < 0 and tree.lep_type[index1]==tree.lep_type[index2]):\n",
+    "                        if(tree.lep_pt[index1]>tree.lep_pt[index2]):\n",
+    "                            leadlepton.SetPtEtaPhiE(tree.lep_pt[index1], tree.lep_eta[index1], tree.lep_phi[index1], tree.lep_E[index1])\n",
+    "                            subleadlepton.SetPtEtaPhiE(tree.lep_pt[index2], tree.lep_eta[index2], tree.lep_phi[index2], tree.lep_E[index2])\n",
+    "                        else:\n",
+    "                            leadlepton.SetPtEtaPhiE(tree.lep_pt[index2], tree.lep_eta[index2], tree.lep_phi[index2], tree.lep_E[index2])\n",
+    "                            subleadlepton.SetPtEtaPhiE(tree.lep_pt[index1], tree.lep_eta[index1], tree.lep_phi[index1], tree.lep_E[index1])\n",
+    "                        lepton12=leadlepton+subleadlepton\n",
+    "                        invmass=lepton12.M()/1000.\n",
+    "                        if(abs(invmass-91.18)<25.):\n",
+    "                            ptlead=leadlepton.Pt()/1000.\n",
+    "                            ptsub=subleadlepton.Pt()/1000.\n",
+    "                            invM.append(invmass)\n",
+    "                            leadpt.append(ptlead)\n",
+    "                            subleadpt.append(ptsub)\n",
+    "                            kf+=1\n",
+    "    if k==10: break\n",
+    "#roof.close()\n",
+    "end = time.time()\n",
+    "duration = end-start\n",
+    "print('Initial entries:', k)\n",
+    "print('Final entries:', kf)\n",
+    "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
+    "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
+    "#roof.close()\n",
+    "print('Successful close')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c272e6fd",
+   "metadata": {},
+   "source": [
+    "## Now the background section"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "673447f0",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "1"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "treeb = TChain(\"mini\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361106.Zee.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363356.ZqqZll.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363358.WqqZll.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363359.WpqqWmlv.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363360.WplvWmqq.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363489.WlvZqq.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363490.llll.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363491.lllv.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363492.llvv.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363493.lvvv.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410011.single_top_tchan.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410012.single_antitop_tchan.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410013.single_top_wtchan.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410014.single_antitop_wtchan.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361100.Wplusenu.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361101.Wplusmunu.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361102.Wplustaunu.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361103.Wminusenu.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361104.Wminusmunu.2lep.root\")\n",
+    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361105.Wminustaunu.2lep.root\")  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "11dbe01a",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "36654095"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "treeb.GetEntries()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d61295fd",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "roofb = uproot3.recreate(\"RootFiles/background.root\")\n",
+    "roofb"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4d3de78d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "roofb[\"signal\"] = uproot3.newtree({\"mll\": np.float32, \"lead\": np.float32, \"sublead\": np.float32})"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b91f2764",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "start = time.time()\n",
+    "invM=[]\n",
+    "leadpt=[]\n",
+    "subleadpt=[]\n",
+    "leadlepton = ROOT.TLorentzVector()\n",
+    "subleadlepton = ROOT.TLorentzVector()\n",
+    "lepton12 = ROOT.TLorentzVector()\n",
+    "k=0\n",
+    "kf=0\n",
+    "index1=0\n",
+    "index2=0\n",
+    "for event in treeb:\n",
     "    k=k+1\n",
     "    goodlep=0\n",
     "    if(tree.trigE or tree.trigM):\n",
@@ -192,73 +420,16 @@
     "                            leadpt.append(ptlead)\n",
     "                            subleadpt.append(ptsub)\n",
     "                            kf+=1\n",
-    "    if k==1000000: break\n",
-    "#roof.close()\n",
+    "    #if k==1000000: break\n",
     "end = time.time()\n",
     "duration = end-start\n",
     "print('Initial entries:', k)\n",
     "print('Final entries:', kf)\n",
     "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
-    "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
-    "#roof.close()\n",
+    "roofb[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
+    "roofb.close()\n",
     "print('Success closing')"
    ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "c272e6fd",
-   "metadata": {},
-   "source": [
-    "## Now the background section"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "673447f0",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "treeb = TChain(\"mini\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361106.Zee.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363356.ZqqZll.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363358.WqqZll.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363359.WpqqWmlv.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363360.WplvWmqq.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363489.WlvZqq.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363490.llll.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363491.lllv.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363492.llvv.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_363493.lvvv.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410011.single_top_tchan.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410012.single_antitop_tchan.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410013.single_top_wtchan.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_410014.single_antitop_wtchan.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361100.Wplusenu.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361101.Wplusmunu.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361102.Wplustaunu.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361103.Wminusenu.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361104.Wminusmunu.2lep.root\")\n",
-    "treeb.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361105.Wminustaunu.2lep.root\")  "
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "11dbe01a",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "treeb.GetEntries()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "d61295fd",
-   "metadata": {},
-   "outputs": [],
-   "source": []
   }
  ],
  "metadata": {

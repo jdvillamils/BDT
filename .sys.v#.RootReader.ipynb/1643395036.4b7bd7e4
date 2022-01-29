@@ -3,7 +3,7 @@
   {
    "cell_type": "code",
    "execution_count": 1,
-   "id": "2026ef6c",
+   "id": "2e50689c",
    "metadata": {},
    "outputs": [
     {
@@ -15,27 +15,45 @@
     }
    ],
    "source": [
-    "import ROOT"
+    "import root_pandas as rp\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "import numpy as np"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
-   "id": "7f1e10ee",
-   "metadata": {},
+   "execution_count": 3,
+   "id": "abd2929c",
+   "metadata": {
+    "scrolled": true
+   },
    "outputs": [],
    "source": [
-    "%jsroot on"
+    "sig=rp.read_root('RootFiles/signal.root','signal')"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "55e8aaa5",
+   "execution_count": 4,
+   "id": "672e16ae",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "4625\n"
+     ]
+    }
+   ],
    "source": [
-    "f = ROOT.TFile.Open(\"mcdata.root\")"
+    "rep=sig['lead']\n",
+    "k=0\n",
+    "for element in rep:\n",
+    "    k=k+1\n",
+    "   # print(element)\n",
+    "print(k)"
    ]
   }
  ],

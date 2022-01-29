@@ -10,7 +10,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 19,
    "id": "726c3cc0",
    "metadata": {},
    "outputs": [],
@@ -20,7 +20,8 @@
     "import time\n",
     "import uproot3\n",
     "import numpy as np\n",
-    "import root_pandas as rp"
+    "import root_pandas as rp\n",
+    "import infofile"
    ]
   },
   {
@@ -45,45 +46,79 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 37,
    "id": "46b2b219",
    "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/plain": [
-       "1"
-      ]
-     },
-     "execution_count": 4,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
+   "outputs": [],
    "source": [
     "tree = TChain(\"mini\")\n",
     "tree.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361106.Zee.2lep.root\")\n",
+    "t1=tree.GetEntries()\n",
     "tree.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361107.Zmumu.2lep.root\")\n",
-    "tree.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361108.Ztautau.2lep.root\")"
+    "t2=tree.GetEntries()\n",
+    "tree.Add(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361108.Ztautau.2lep.root\")\n",
+    "t3=tree.GetEntries()"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
-   "id": "6b1e1b3a",
+   "execution_count": 42,
+   "id": "e6f3c09a",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [],
+   "source": [
+    "samplesSig = [t1,t2,t3]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "78883cd5",
    "metadata": {},
    "outputs": [
     {
-     "data": {
-      "text/plain": [
-       "44153520"
-      ]
-     },
-     "execution_count": 5,
-     "metadata": {},
-     "output_type": "execute_result"
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Finished first samples, time taken 0 min 5 s\n",
+      "Approx time for finishing is 0 min 14 s\n",
+      "going in 0 min 8 s\n",
+      "Finished in 0 min 14 s\n"
+     ]
     }
    ],
+   "source": [
+    "start = time.time()\n",
+    "for k in range(100000000):\n",
+    "    if k==40000000:\n",
+    "        xd=time.time()\n",
+    "        taked=xd-start\n",
+    "        tre=100000000*taked/k\n",
+    "        print(\"Finished first samples, time taken {} min {} s\".format(int(taked//60),int(taked%60)))\n",
+    "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60)))\n",
+    "    if k==60000000:\n",
+    "        xd=time.time()\n",
+    "        taked=xd-start\n",
+    "        print(\"going in {} min {} s\".format(int(taked//60),int(taked%60)))\n",
+    "end=time.time()\n",
+    "duration=end-start\n",
+    "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "21edc60f",
+   "metadata": {},
+   "source": [
+    "treee = ROOT.TFile.Open(\"https://atlas-opendata.web.cern.ch/atlas-opendata/samples/2020/2lep/MC/mc_361107.Zmumu.2lep.root\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "78b4242b",
+   "metadata": {},
    "source": [
     "tree.GetEntries()"
    ]
@@ -125,27 +160,91 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "roof[\"signal\"] = uproot3.newtree({\"mll\": np.float32, \"lead\": np.float32, \"sublead\": np.float32})"
+    "roof[\"signal\"] = uproot3.newtree({\"mll\": np.float32, \"lead\": np.float32, \"sublead\": np.float32, \"weight\": np.float32})"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 13,
    "id": "1c55beb7",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "paso\n",
+      "trige 0\n",
+      "trigm 1\n",
+      "Initial entries: 10\n",
+      "Final entries: 0\n",
+      "Finished in 0 min 0 s\n",
+      "Successful close\n"
+     ]
+    }
+   ],
    "source": [
     "start = time.time()\n",
     "invM=[]\n",
     "leadpt=[]\n",
     "subleadpt=[]\n",
+    "weights=[]\n",
     "leadlepton = ROOT.TLorentzVector()\n",
     "subleadlepton = ROOT.TLorentzVector()\n",
     "lepton12 = ROOT.TLorentzVector()\n",
     "k=0\n",
     "kf=0\n",
+    "lumi=10\n",
     "index1=0\n",
     "index2=0\n",
+    "Print(\"Running a total of \",samplesSig[2],\"e\")\n",
     "for event in tree:\n",
     "    k=k+1\n",
     "    goodlep=0\n",
@@ -153,6 +252,7 @@
     "        if(tree.lep_n==2):\n",
     "            for j in range(tree.lep_n):\n",
     "                if((tree.lep_pt[j]>25000.) and (tree.lep_ptcone30[j]/tree.lep_pt[j] < 0.15) and (tree.lep_etcone20[j]/tree.lep_pt[j] < 0.15)):\n",
+    "                    #Electron in F zone\n",
     "                    if(tree.lep_type[j]==11 and abs(tree.lep_eta[j])<2.47 and (abs(tree.lep_eta[j])<1.37 or abs(tree.lep_eta[j])>1.52)):\n",
     "                        theta = 2*np.arctan(np.exp(-tree.lep_eta[j]))\n",
     "                        if(tree.lep_trackd0pvunbiased[j]/tree.lep_tracksigd0pvunbiased[j] < 5 and abs(tree.lep_z0[j]*np.sin(theta))<0.5):\n",
@@ -165,13 +265,13 @@
     "                            index2=j\n",
     "            if(goodlep==2):\n",
     "                if(tree.jet_n==0):\n",
-    "                    if(tree.lep_charge[index1]*tree.lep_charge[index2]<0 and tree.lep_type[index1]!=tree.lep_type[index2]):\n",
+    "                    if(tree.lep_charge[index1]*tree.lep_charge[index2] < 0 and tree.lep_type[index1]==tree.lep_type[index2]):\n",
     "                        if(tree.lep_pt[index1]>tree.lep_pt[index2]):\n",
     "                            leadlepton.SetPtEtaPhiE(tree.lep_pt[index1], tree.lep_eta[index1], tree.lep_phi[index1], tree.lep_E[index1])\n",
     "                            subleadlepton.SetPtEtaPhiE(tree.lep_pt[index2], tree.lep_eta[index2], tree.lep_phi[index2], tree.lep_E[index2])\n",
     "                        else:\n",
-    "                            leadlepton.SetPtEtaPhiE(tree.lep_pt[index2]/1000., tree.lep_eta[index2], tree.lep_phi[index2], tree.lep_E[index2]/1000.)\n",
-    "                            subleadlepton.SetPtEtaPhiE(tree.lep_pt[index1]/1000., tree.lep_eta[index1], tree.lep_phi[index1], tree.lep_E[index1]/1000.)\n",
+    "                            leadlepton.SetPtEtaPhiE(tree.lep_pt[index2], tree.lep_eta[index2], tree.lep_phi[index2], tree.lep_E[index2])\n",
+    "                            subleadlepton.SetPtEtaPhiE(tree.lep_pt[index1], tree.lep_eta[index1], tree.lep_phi[index1], tree.lep_E[index1])\n",
     "                        lepton12=leadlepton+subleadlepton\n",
     "                        invmass=lepton12.M()/1000.\n",
     "                        if(abs(invmass-91.18)<25.):\n",
@@ -180,17 +280,33 @@
     "                            invM.append(invmass)\n",
     "                            leadpt.append(ptlead)\n",
     "                            subleadpt.append(ptsub)\n",
+    "                            if(k<=samplesSig[0]):\n",
+    "                                sample='Zee'\n",
+    "                            if(k>samplesSig[0] and k<=samplesSig[1]):\n",
+    "                                sample='Zmumu'\n",
+    "                            if(k>samplesSig[1] and k<=samplesSig[2]):\n",
+    "                                sample='Ztautau'\n",
+    "                            info = infofile.infos[sample]\n",
+    "                            xsec_weight = (lumi*1000*info[\"xsec\"])/(info[\"sumw\"]*info[\"red_eff\"])\n",
+    "                            weight=xsec_weight*tree.mcWeight*tree.scaleFactor_PILEUP*tree.scaleFactor_ELE*tree.scaleFactor_MUON*tree.scaleFactor_LepTRIGGER\n",
+    "                            weights.append(weight)\n",
     "                            kf+=1\n",
-    "    #if k==1000000: break\n",
+    "    #if k==10: break\n",
+    "    if(k=10000000):\n",
+    "        xd=time.time()\n",
+    "        taked=xd-start\n",
+    "        tre=sampleSig[t3]*taked/k\n",
+    "        print(\"Finished first samples, time taken {} min {} s\".format(int(taked//60),int(taked%60)))\n",
+    "        print(\"Approx time for finishing is {} min {} s\".format(int(tre//60),int(tre%60))) \n",
     "#roof.close()\n",
     "end = time.time()\n",
     "duration = end-start\n",
     "print('Initial entries:', k)\n",
     "print('Final entries:', kf)\n",
     "print(\"Finished in {} min {} s\".format(int(duration//60),int(duration%60)))\n",
-    "roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt})\n",
-    "roof.close()\n",
-    "print('Success closing')"
+    "#roof[\"signal\"].extend({\"mll\": invM, \"lead\": leadpt, \"sublead\": subleadpt, \"weight\": weights})\n",
+    "#roof.close()\n",
+    "print('Successful close')"
    ]
   },
   {
