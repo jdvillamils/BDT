@@ -15,8 +15,8 @@
 
 int SplitSimulatedData(void){
  
-    TChain* sigchain = new TChain("Signal");
-    TChain* bacchain = new TChain("Background");
+    TChain* sigchain = new TChain("signal");
+    TChain* bacchain = new TChain("background");
     bacchain->AddFile("RootFiles/background.root");
     sigchain->AddFile("RootFiles/signal.root");
     
@@ -38,20 +38,18 @@ int SplitSimulatedData(void){
     bacchain->SetBranchAddress("sublead", &subleadb);
     bacchain->SetBranchAddress("weight", &weightb);
     
-    TFile *target = new TFile("RootFiles/simulated.root","RECREATE");
+    TFile *target = new TFile("RootFiles/splitMC.root","RECREATE");
     
-    TTree *sigtest = new TTree("SignalTest","Signal for test");
-    TTree *backtest = new TTree("BackgroundTest","Background for test");
+    TTree *mctest = new TTree("MCTest","MC for test");
     TTree *sigtrain = new TTree("SignalTrain","Signal for train");
     TTree *backtrain = new TTree("BackgroundTrain","Background for train");
+    TTree *sigtest = new TTree("SignalTest", "Signal for testing");
+    TTree *backtest = new TTree("BackgroundTest", "Background for test");
     
-    Float_t mllste;
-    Float_t mllbte;
-    Float_t leadste;
-    Float_t leadbte;
-    Float_t subleadste;
-    Float_t subleadbte;
-    Float_t weightste;
+    Float_t mllte;
+    Float_t leadte;
+    Float_t subleadte;
+    Float_t weightte;
     Float_t weightbte;
     Float_t mllstr;
     Float_t mllbtr;
@@ -61,27 +59,37 @@ int SplitSimulatedData(void){
     Float_t subleadbtr;
     Float_t weightstr;
     Float_t weightbtr;
+    Float_t mllste;
+    Float_t mllbte;
+    Float_t leadste;
+    Float_t leadbte;
+    Float_t subleadste;
+    Float_t subleadbte;
+    Float_t weightste;
     
-    sigtest->Branch("mll", &mllste);
-    sigtest->Branch("lead", &leadste);
-    sigtest->Branch("sublead", &subleadste);
-    sigtest->Branch("weight", &weightste);
+    mctest->Branch("mll", &mllte);
+    mctest->Branch("lead", &leadte);
+    mctest->Branch("sublead", &subleadte);
+    mctest->Branch("weight", &weightte);
     sigtrain->Branch("mll", &mllstr);
     sigtrain->Branch("lead", &leadstr);
     sigtrain->Branch("sublead", &subleadstr);
     sigtrain->Branch("weight", &weightstr);
-    
-    backtest->Branch("mll", &mllbte);
-    backtest->Branch("lead", &leadbte);
-    backtest->Branch("sublead", &subleadbte);
-    backtest->Branch("weight", &weightbte);
     backtrain->Branch("mll", &mllbtr);
     backtrain->Branch("lead", &leadbtr);
     backtrain->Branch("sublead", &subleadbtr);
     backtrain->Branch("weight", &weightbtr);
+    sigtest->Branch("mll", &mllste);
+    sigtest->Branch("lead", &leadste);
+    sigtest->Branch("sublead", &subleadste);
+    sigtest->Branch("weight", &weightste);
+    backtest->Branch("mll",  &mllbte);
+    backtest->Branch("lead",  &leadbte);
+    backtest->Branch("sublead",  &subleadbte);
+    backtest->Branch("weight",  &weightbte);
     
     int nentries, nbytes, k;
-    int counter1=0
+    int counter1=0;
 
     nentries = (Int_t)sigchain->GetEntries();
     for (k = 0; k < nentries; k++)
@@ -99,20 +107,30 @@ int SplitSimulatedData(void){
         }
         if(counter1==2)
         {
+            mllte=mlls;
             mllste=mlls;
+            leadte=leads;
             leadste=leads;
+            subleadte=subleads;
             subleadste=subleads;
+            weightte=weights;
             weightste=weights;
+            mctest->Fill();
             sigtest->Fill();
         }
         if(counter1==3)
         {
+            mllte=mlls;
             mllste=mlls;
+            leadte=leads;
             leadste=leads;
+            subleadte=subleads;
             subleadste=subleads;
+            weightte=weights;
             weightste=weights;
+            mctest->Fill();
             sigtest->Fill();
-            counter1==0;
+            counter1=0;
         }
         
     }
@@ -135,26 +153,37 @@ int SplitSimulatedData(void){
         }
         if(counter2==2)
         {
-            mllbte=mllb;
-            leadstb=leadb;
-            subleadstb=subleadb;
-            weightstb=weightb;
+            mllte=mllb;
+            mllste=mllb;
+            leadte=leadb;
+            leadbte=leadb;
+            subleadte=subleadb;
+            subleadbte=subleadb;
+            weightte=weightb;
+            weightbte=weightb;
+            mctest->Fill();
             backtest->Fill();
         }
         if(counter2==3)
         {
-            mllbte=mllb;
+            mllte=mllb;
+            mllste=mllb;
+            leadte=leadb;
             leadbte=leadb;
+            subleadte=subleadb;
             subleadbte=subleadb;
+            weightte=weightb;
             weightbte=weightb;
+            mctest->Fill();
             backtest->Fill();
-            counter2==0;
+            counter2=0;
         }
     }
-    sigtest->Write();
-    backtest->Write();
+    mctest->Write();
     sigtrain->Write();
     backtrain->Write();
+    sigtest->Write();
+    backtest->Write();
     target->Close();
     return 0;
 
